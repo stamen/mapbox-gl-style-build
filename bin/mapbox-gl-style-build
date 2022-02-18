@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const path = require('path');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const { format } = require('mapbox-gl-style-format');
+
+const { buildStyle } = require('../dist/main');
+
+const argv = yargs(hideBin(process.argv))
+  .usage('Usage: $0 indir outdir')
+  .option('style-dir', {
+    alias: 'styleDir',
+    default: 'templates/styles',
+    describe: 'The input style directory',
+    type: 'string'
+  })
+  .option('layer-dir', {
+    alias: 'layerDir',
+    default: 'templates/layers',
+    describe: 'The input layer directory',
+    type: 'string'
+  })
+  .option('out-dir', {
+    alias: 'outDir',
+    default: 'build',
+    describe: 'The output directory',
+    type: 'string'
+  })
+  .option('v', {
+    alias: 'verbose',
+    default: false,
+    describe: 'Produce verbose output',
+    type: 'boolean'
+  })
+  .example(`$0
+\t--style-dir=templates/styles
+\t--layer-dir=templates/layers
+\t--out-dir=build`)
+  .parse();
+
+const buildStyles = (styleDir, layerDir, outputDir, options = {}) => {
+  const verbose = options?.verbose ?? false;
+  fs.readdir(styleDir, (err, files) => {
+    if (err) {
+      throw new Error(`Couldn't open style directory (${styleDir}), does it exist?`);
+    }
+
+    files.forEach(file => {
+      if (!file.match(/\.js$/)) return;
+
+      const name = file.replace(/\.js$/, '');
+
+      const styleOutputDir = path.resolve(outputDir, name);
+      if (!fs.existsSync(styleOutputDir)){
+        fs.mkdirSync(styleOutputDir, { recursive: true });
+      }
+
+      try {
+        const builtStyle = format(buildStyle(name, styleDir, layerDir, options));
+        fs.writeFileSync(path.resolve(styleOutputDir, 'style.json'), builtStyle);
+      }
+      catch (e) {
+        // We catch errors here rather than the default, which
+        // prints stack traces
+        console.error(e.message);
+        process.exit(1);
+      }
+    });
+  });
+};
+
+const { styleDir, layerDir, outDir, verbose } = argv;
+buildStyles(styleDir, layerDir, outDir, { verbose });
