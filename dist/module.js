@@ -190,7 +190,28 @@ const $5c3f8fbf0bc952bf$export$a6e5f510497b7388 = (name, styleDir, layerDir, opt
 };
 
 
+const $b4af227894133974$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
+;
+const $b4af227894133974$var$merge = (current, extender)=>{
+    const merged = JSON.parse(JSON.stringify(current));
+    Object.keys(extender).forEach((k)=>{
+        // Handle nested variables
+        if ($b4af227894133974$var$isObject(current[k]) && $b4af227894133974$var$isObject(extender[k])) merged[k] = $b4af227894133974$var$merge(current[k], extender[k]);
+        else merged[k] = JSON.parse(JSON.stringify(extender[k]));
+    });
+    return merged;
+};
+const $b4af227894133974$export$567f04859746aee = (...variableGroups)=>{
+    let combined = {
+    };
+    variableGroups.forEach((variableGroup)=>{
+        combined = $b4af227894133974$var$merge(combined, variableGroup);
+    });
+    return combined;
+};
 
 
-export {$5c3f8fbf0bc952bf$export$a6e5f510497b7388 as buildStyle};
+
+
+export {$5c3f8fbf0bc952bf$export$a6e5f510497b7388 as buildStyle, $b4af227894133974$export$567f04859746aee as combineVariables};
 //# sourceMappingURL=module.js.map

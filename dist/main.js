@@ -10,6 +10,7 @@ function $parcel$interopDefault(a) {
 }
 
 $parcel$export(module.exports, "buildStyle", () => $787eebfbd67e2373$export$a6e5f510497b7388);
+$parcel$export(module.exports, "combineVariables", () => $2ad1fb18aaf57afe$export$567f04859746aee);
 
 
 
@@ -195,6 +196,27 @@ const $787eebfbd67e2373$export$a6e5f510497b7388 = (name, styleDir, layerDir, opt
     });
     if (Object.keys(validationMessages).length > 0) $787eebfbd67e2373$var$logValidationMessages(name, validationMessages);
     return styleJson;
+};
+
+
+const $2ad1fb18aaf57afe$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
+;
+const $2ad1fb18aaf57afe$var$merge = (current, extender)=>{
+    const merged = JSON.parse(JSON.stringify(current));
+    Object.keys(extender).forEach((k)=>{
+        // Handle nested variables
+        if ($2ad1fb18aaf57afe$var$isObject(current[k]) && $2ad1fb18aaf57afe$var$isObject(extender[k])) merged[k] = $2ad1fb18aaf57afe$var$merge(current[k], extender[k]);
+        else merged[k] = JSON.parse(JSON.stringify(extender[k]));
+    });
+    return merged;
+};
+const $2ad1fb18aaf57afe$export$567f04859746aee = (...variableGroups)=>{
+    let combined = {
+    };
+    variableGroups.forEach((variableGroup)=>{
+        combined = $2ad1fb18aaf57afe$var$merge(combined, variableGroup);
+    });
+    return combined;
 };
 
 
