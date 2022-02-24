@@ -12,15 +12,21 @@
   },
   "author": "Stamen Design",
   "license": "ISC",
+  "jest": {
+    "clearMocks": true,
+    "testEnvironment": "node",
+    "collectCoverage": false
+  },
   "dependencies": {
     "chalk": "4.1.2",
     "mapbox-gl-style-format": "git+https://github.com/stamen/mapbox-gl-style-format#v0.1.1",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.16.0",
+    "@babel/core": "^7.17.5",
+    "@babel/preset-env": "^7.16.11",
     "@parcel/babel-preset-env": "^2.0.1",
-    "babel-jest": "^27.3.1",
+    "babel-jest": "^27.5.1",
     "jest": "^27.3.1",
     "parcel": "^2.0.1"
   },
