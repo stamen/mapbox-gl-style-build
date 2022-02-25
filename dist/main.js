@@ -10,6 +10,7 @@ function $parcel$interopDefault(a) {
 }
 
 $parcel$export(module.exports, "buildStyle", () => $787eebfbd67e2373$export$a6e5f510497b7388);
+$parcel$export(module.exports, "mergeVariables", () => $5d86828d3cc45dbd$export$10aa94554223adba);
 
 
 
@@ -195,6 +196,31 @@ const $787eebfbd67e2373$export$a6e5f510497b7388 = (name, styleDir, layerDir, opt
     });
     if (Object.keys(validationMessages).length > 0) $787eebfbd67e2373$var$logValidationMessages(name, validationMessages);
     return styleJson;
+};
+
+
+const $5d86828d3cc45dbd$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
+;
+/**
+ * Merge the current object of variables with an extender object. Variables
+ * defined in extender will override variables defined in the current variables,
+ * if there is overlap. Nested variables are taken into account.
+ * @param {Object} current - the original variable object
+ * @param {Object} extender - the extender variable object, containing overrides
+ * @returns {Object} - the merged variables
+ */ const $5d86828d3cc45dbd$var$merge = (current, extender)=>{
+    const merged = JSON.parse(JSON.stringify(current));
+    Object.keys(extender).forEach((k)=>{
+        // Handle nested variables
+        if ($5d86828d3cc45dbd$var$isObject(current[k]) && $5d86828d3cc45dbd$var$isObject(extender[k])) merged[k] = $5d86828d3cc45dbd$var$merge(current[k], extender[k]);
+        else merged[k] = JSON.parse(JSON.stringify(extender[k]));
+    });
+    return merged;
+};
+const $5d86828d3cc45dbd$export$10aa94554223adba = (...variableGroups)=>{
+    return variableGroups.reduce((acc, cur)=>$5d86828d3cc45dbd$var$merge(acc, cur)
+    , {
+    });
 };
 
 

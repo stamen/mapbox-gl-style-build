@@ -190,7 +190,32 @@ const $5c3f8fbf0bc952bf$export$a6e5f510497b7388 = (name, styleDir, layerDir, opt
 };
 
 
+const $810f112ff77b3238$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
+;
+/**
+ * Merge the current object of variables with an extender object. Variables
+ * defined in extender will override variables defined in the current variables,
+ * if there is overlap. Nested variables are taken into account.
+ * @param {Object} current - the original variable object
+ * @param {Object} extender - the extender variable object, containing overrides
+ * @returns {Object} - the merged variables
+ */ const $810f112ff77b3238$var$merge = (current, extender)=>{
+    const merged = JSON.parse(JSON.stringify(current));
+    Object.keys(extender).forEach((k)=>{
+        // Handle nested variables
+        if ($810f112ff77b3238$var$isObject(current[k]) && $810f112ff77b3238$var$isObject(extender[k])) merged[k] = $810f112ff77b3238$var$merge(current[k], extender[k]);
+        else merged[k] = JSON.parse(JSON.stringify(extender[k]));
+    });
+    return merged;
+};
+const $810f112ff77b3238$export$10aa94554223adba = (...variableGroups)=>{
+    return variableGroups.reduce((acc, cur)=>$810f112ff77b3238$var$merge(acc, cur)
+    , {
+    });
+};
 
 
-export {$5c3f8fbf0bc952bf$export$a6e5f510497b7388 as buildStyle};
+
+
+export {$5c3f8fbf0bc952bf$export$a6e5f510497b7388 as buildStyle, $810f112ff77b3238$export$10aa94554223adba as mergeVariables};
 //# sourceMappingURL=module.js.map
