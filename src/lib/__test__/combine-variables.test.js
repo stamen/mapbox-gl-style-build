@@ -1,9 +1,9 @@
-import { combineVariables } from '../combine-variables';
+import { mergeVariables } from '../combine-variables';
 
-describe('combineVariables', () => {
+describe('mergeVariables', () => {
   test('works with one object', () => {
     const variables = { backgroundLow: 'red' };
-    const actual = combineVariables(variables);
+    const actual = mergeVariables(variables);
     expect(actual).toEqual(variables);
   });
 
@@ -13,7 +13,7 @@ describe('combineVariables', () => {
       backgroundHigh: 'green'
     };
 
-    const actual = combineVariables(
+    const actual = mergeVariables(
       { backgroundLow: 'red', backgroundHigh: 'pink' },
       { backgroundHigh: 'green' }
     );
@@ -33,7 +33,7 @@ describe('combineVariables', () => {
       }
     };
 
-    const actual = combineVariables(
+    const actual = mergeVariables(
       {
         background: {
           low: 'red',
@@ -59,7 +59,7 @@ describe('combineVariables', () => {
       roadOpacity: ["interpolate", ["linear"], ["zoom"], 2, 0, 12, 1]
     };
 
-    const actual = combineVariables(
+    const actual = mergeVariables(
       {
         backgroundLow: 'red',
         backgroundHigh: 'pink',

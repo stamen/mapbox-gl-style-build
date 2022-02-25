@@ -10,7 +10,7 @@ function $parcel$interopDefault(a) {
 }
 
 $parcel$export(module.exports, "buildStyle", () => $787eebfbd67e2373$export$a6e5f510497b7388);
-$parcel$export(module.exports, "combineVariables", () => $2ad1fb18aaf57afe$export$567f04859746aee);
+$parcel$export(module.exports, "combineVariables", () => $2ad1fb18aaf57afe$exports.combineVariables);
 
 
 
@@ -210,7 +210,7 @@ const $2ad1fb18aaf57afe$var$merge = (current, extender)=>{
     });
     return merged;
 };
-const $2ad1fb18aaf57afe$export$567f04859746aee = (...variableGroups)=>{
+const $2ad1fb18aaf57afe$export$10aa94554223adba = (...variableGroups)=>{
     let combined = {
     };
     variableGroups.forEach((variableGroup)=>{

@@ -16,7 +16,7 @@ const merge = (current, extender) => {
   return merged;
 };
 
-export const combineVariables = (...variableGroups) => {
+export const mergeVariables = (...variableGroups) => {
   let combined = {};
   variableGroups.forEach(variableGroup => {
     combined = merge(combined, variableGroup);

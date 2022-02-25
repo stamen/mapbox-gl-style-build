@@ -1,11 +1,11 @@
 const sharedColors = require('../variables/colors');
-const { combineVariables } = require('../../../../dist/main');
+const { mergeVariables } = require('../../../../dist/main');
 
 module.exports.context = {
   sources: {
     root: "Example"
   },
-  colors: combineVariables(sharedColors, {
+  colors: mergeVariables(sharedColors, {
     road: 'gray'
   })
 };
