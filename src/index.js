@@ -1,7 +1,7 @@
 import { buildStyle } from "./lib/build-style";
-import { combineVariables } from "./lib/combine-variables";
+import { mergeVariables } from "./lib/merge-variables";
 
 export {
   buildStyle,
-  combineVariables
+  mergeVariables
 };

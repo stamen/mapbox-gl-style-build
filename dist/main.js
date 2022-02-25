@@ -10,7 +10,7 @@ function $parcel$interopDefault(a) {
 }
 
 $parcel$export(module.exports, "buildStyle", () => $787eebfbd67e2373$export$a6e5f510497b7388);
-$parcel$export(module.exports, "combineVariables", () => $2ad1fb18aaf57afe$exports.combineVariables);
+$parcel$export(module.exports, "mergeVariables", () => $5d86828d3cc45dbd$export$10aa94554223adba);
 
 
 
@@ -199,7 +199,7 @@ const $787eebfbd67e2373$export$a6e5f510497b7388 = (name, styleDir, layerDir, opt
 };
 
 
-const $2ad1fb18aaf57afe$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
+const $5d86828d3cc45dbd$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
 ;
 /**
  * Merge the current object of variables with an extender object. Variables
@@ -208,17 +208,17 @@ const $2ad1fb18aaf57afe$var$isObject = (v)=>typeof v === 'object' && !Array.isAr
  * @param {Object} current - the original variable object
  * @param {Object} extender - the extender variable object, containing overrides
  * @returns {Object} - the merged variables
- */ const $2ad1fb18aaf57afe$var$merge = (current, extender)=>{
+ */ const $5d86828d3cc45dbd$var$merge = (current, extender)=>{
     const merged = JSON.parse(JSON.stringify(current));
     Object.keys(extender).forEach((k)=>{
         // Handle nested variables
-        if ($2ad1fb18aaf57afe$var$isObject(current[k]) && $2ad1fb18aaf57afe$var$isObject(extender[k])) merged[k] = $2ad1fb18aaf57afe$var$merge(current[k], extender[k]);
+        if ($5d86828d3cc45dbd$var$isObject(current[k]) && $5d86828d3cc45dbd$var$isObject(extender[k])) merged[k] = $5d86828d3cc45dbd$var$merge(current[k], extender[k]);
         else merged[k] = JSON.parse(JSON.stringify(extender[k]));
     });
     return merged;
 };
-const $2ad1fb18aaf57afe$export$10aa94554223adba = (...variableGroups)=>{
-    return variableGroups.reduce((acc, cur)=>$2ad1fb18aaf57afe$var$merge(acc, cur)
+const $5d86828d3cc45dbd$export$10aa94554223adba = (...variableGroups)=>{
+    return variableGroups.reduce((acc, cur)=>$5d86828d3cc45dbd$var$merge(acc, cur)
     , {
     });
 };

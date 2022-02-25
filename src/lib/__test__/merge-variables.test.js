@@ -1,4 +1,4 @@
-import { mergeVariables } from '../combine-variables';
+import { mergeVariables } from '../merge-variables';
 
 describe('mergeVariables', () => {
   test('works with one object', () => {
