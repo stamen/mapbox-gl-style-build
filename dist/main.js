@@ -201,7 +201,14 @@ const $787eebfbd67e2373$export$a6e5f510497b7388 = (name, styleDir, layerDir, opt
 
 const $2ad1fb18aaf57afe$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
 ;
-const $2ad1fb18aaf57afe$var$merge = (current, extender)=>{
+/**
+ * Merge the current object of variables with an extender object. Variables
+ * defined in extender will override variables defined in the current variables,
+ * if there is overlap. Nested variables are taken into account.
+ * @param {Object} current - the original variable object
+ * @param {Object} extender - the extender variable object, containing overrides
+ * @returns {Object} - the merged variables
+ */ const $2ad1fb18aaf57afe$var$merge = (current, extender)=>{
     const merged = JSON.parse(JSON.stringify(current));
     Object.keys(extender).forEach((k)=>{
         // Handle nested variables
@@ -211,12 +218,9 @@ const $2ad1fb18aaf57afe$var$merge = (current, extender)=>{
     return merged;
 };
 const $2ad1fb18aaf57afe$export$10aa94554223adba = (...variableGroups)=>{
-    let combined = {
-    };
-    variableGroups.forEach((variableGroup)=>{
-        combined = $2ad1fb18aaf57afe$var$merge(combined, variableGroup);
+    return variableGroups.reduce((acc, cur)=>$2ad1fb18aaf57afe$var$merge(acc, cur)
+    , {
     });
-    return combined;
 };
 
 

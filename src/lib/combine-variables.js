@@ -1,5 +1,13 @@
 const isObject = v => typeof v === 'object' && !Array.isArray(v) && !!v;
 
+/**
+ * Merge the current object of variables with an extender object. Variables
+ * defined in extender will override variables defined in the current variables,
+ * if there is overlap. Nested variables are taken into account.
+ * @param {Object} current - the original variable object
+ * @param {Object} extender - the extender variable object, containing overrides
+ * @returns {Object} - the merged variables
+ */
 const merge = (current, extender) => {
   const merged = JSON.parse(JSON.stringify(current));
 
@@ -16,10 +24,13 @@ const merge = (current, extender) => {
   return merged;
 };
 
+
+/**
+ * Merge any number of variable objects
+ * @param {...Object} variableGroups - one or many variable objects, each 
+ * passed as a separate parameter
+ * @returns {Object} the merged variable object
+ */
 export const mergeVariables = (...variableGroups) => {
-  let combined = {};
-  variableGroups.forEach(variableGroup => {
-    combined = merge(combined, variableGroup);
-  });
-  return combined;
+  return variableGroups.reduce((acc, cur) => merge(acc, cur), {});
 };
