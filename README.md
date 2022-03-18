@@ -2,7 +2,7 @@
 
 Build [Mapbox GL styles](https://docs.mapbox.com/mapbox-gl-js/style-spec/) by composing layers.
 
-A build system lets you more easily maintain multiple stylesheet variations by removing the need to make duplicative changes across all stylesheets.
+A build system lets you more easily maintain stylesheet variations by removing the need to make duplicative changes across multiple stylesheets.
 
 ## Usage
 
@@ -67,8 +67,8 @@ To reap the greatest benefit of a build system, you should consider addressing s
 - Decide which styles will be built
 - Decide which style is the "base" or "default" style
 - Decide what the primary differentiators of your styles are to use for `context` in layers (can be style id if no larger grouping makes sense)
-- Keep layer ids for layers with the same styling/intention the same across styles
-- Make styles consistent where they can be
+- Keep layer ids for layers with the same styling/intention consistent across styles
+- Make layer styling consistent where it can be
 
 ### Workflow implications of build system
 
