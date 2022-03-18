@@ -45,8 +45,6 @@ The parameters are as follows:
  3. `yarn watch`
  4. Edit files in `src/` and they will be built into `dist/`
 
-____
-
 ## Implementation
 
 Implementation of the build system is most easily done with a combination of a custom script and manual work.
