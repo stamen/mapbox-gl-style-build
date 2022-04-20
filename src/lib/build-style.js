@@ -3,7 +3,6 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 
-
 /**
  * Determine whether a value is or contains undefined within it
  *
@@ -34,7 +33,6 @@ const findUndefined = v => {
 
   return false;
 };
-
 
 /**
  * Check built layer for validity
@@ -76,15 +74,13 @@ const extend = (baseStyle, overrides) => {
   Object.entries(overrides).forEach(([k, v]) => {
     if (k === 'layout' || k === 'paint') {
       extended[k] = { ...extended[k], ...v };
-    }
-    else {
+    } else {
       extended[k] = v;
     }
   });
 
   return extended;
 };
-
 
 /**
  * Get a useful error message when something goes wrong while building a layer
@@ -114,7 +110,6 @@ Details: ${error.message} in
 ${lineNumber}: ${layerLine}`;
 };
 
-
 /**
  * Nicely format a file load error message
  *
@@ -124,11 +119,12 @@ ${lineNumber}: ${layerLine}`;
  * @returns {string}
  */
 const getFileLoadErrorMessage = (fileType, name, path) => {
-  return `${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}, does it exist? Attempted to load from
+  return `${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(
+    name
+  )}, does it exist? Attempted to load from
 
   ${chalk.blue(path)}`;
 };
-
 
 /**
  * Nicely format and log validation messages for a style
@@ -160,12 +156,10 @@ const logValidationMessages = (style, validationMessages) => {
 const loadLayerBuilder = (name, path) => {
   try {
     return require(path).default;
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error(getFileLoadErrorMessage('layer', name, path));
   }
 };
-
 
 /**
  * Load a style, wrapped here to catch and format errors.
@@ -177,12 +171,10 @@ const loadLayerBuilder = (name, path) => {
 const loadStyle = (name, path) => {
   try {
     return require(path);
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error(getFileLoadErrorMessage('style', name, path));
   }
 };
-
 
 /**
  * Build a layer
@@ -198,14 +190,12 @@ const buildLayer = (context, name, path) => {
   let layer;
   try {
     layer = builder(context);
-  }
-  catch (error) {
+  } catch (error) {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
   }
 
   return extend(layer.baseStyle, layer.overrides);
 };
-
 
 /**
  * Build style
@@ -215,20 +205,19 @@ const buildLayer = (context, name, path) => {
  * @param {string} layerDir - the input directory that contains layers
  * @returns {Object}
  */
-export const buildStyle = (name, styleDir, layerDir, options = {}) => {
-  if (!name) {
-    throw new Error('Must provide name.');
-  }
-  if (!styleDir) {
-    throw new Error('Must provide styleDir.');
+export const buildStyle = (stylePath, layerDir, options = {}) => {
+  if (!stylePath) {
+    throw new Error('Must provide stylePath.');
   }
   if (!layerDir) {
     throw new Error('Must provide layerDir.');
   }
+
+  const name = stylePath.split('/').pop().replace(/\.js$/, '');
+
   const verbose = options?.verbose ?? false;
 
-  const stylePath = path.resolve(styleDir, `${name}.js`);
-  const { context, template } = loadStyle(name, stylePath);
+  const { context, template } = loadStyle(name, path.resolve(stylePath));
 
   const styleJson = JSON.parse(JSON.stringify(template));
 

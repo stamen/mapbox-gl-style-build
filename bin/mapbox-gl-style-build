@@ -78,16 +78,8 @@ const buildStyles = (styleDir, layerDir, outputDir, options = {}) => {
       fs.mkdirSync(styleOutputDir, { recursive: true });
     }
 
-    let nextStylePath = stylePath.split('/');
-    // Name uses pop and removes it from nextStylePath
-    // Order here matters
-    const name = nextStylePath.pop().replace(/\.js$/, '');
-    nextStylePath = nextStylePath.join('/');
-
     try {
-      const builtStyle = format(
-        buildStyle(name, nextStylePath, layerDir, options)
-      );
+      const builtStyle = format(buildStyle(stylePath, layerDir, options));
       fs.writeFileSync(path.resolve(styleOutputDir, 'style.json'), builtStyle);
     } catch (e) {
       // We catch errors here rather than the default, which
