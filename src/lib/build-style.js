@@ -213,7 +213,7 @@ export const buildStyle = (stylePath, layerDir, options = {}) => {
     throw new Error('Must provide layerDir.');
   }
 
-  const name = stylePath.split('/').pop().replace(/\.js$/, '');
+  const name = path.basename(stylePath, '.js');
 
   const verbose = options?.verbose ?? false;
 

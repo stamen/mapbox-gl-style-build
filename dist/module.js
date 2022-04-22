@@ -168,7 +168,7 @@ const $dd232d3fc18ccc7d$export$a6e5f510497b7388 = (stylePath, layerDir, options 
 })=>{
     if (!stylePath) throw new Error('Must provide stylePath.');
     if (!layerDir) throw new Error('Must provide layerDir.');
-    const name = stylePath.split('/').pop().replace(/\.js$/, '');
+    const name = $ilDKq$path.basename(stylePath, '.js');
     const verbose = options?.verbose ?? false;
     const { context: context , template: template  } = $dd232d3fc18ccc7d$var$loadStyle(name, $ilDKq$path.resolve(stylePath));
     const styleJson = JSON.parse(JSON.stringify(template));

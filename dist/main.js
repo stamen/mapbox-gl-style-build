@@ -177,7 +177,7 @@ const $d3d51e661990e06e$export$a6e5f510497b7388 = (stylePath, layerDir, options 
 })=>{
     if (!stylePath) throw new Error('Must provide stylePath.');
     if (!layerDir) throw new Error('Must provide layerDir.');
-    const name = stylePath.split('/').pop().replace(/\.js$/, '');
+    const name = ($parcel$interopDefault($imiQD$path)).basename(stylePath, '.js');
     const verbose = options?.verbose ?? false;
     const { context: context , template: template  } = $d3d51e661990e06e$var$loadStyle(name, ($parcel$interopDefault($imiQD$path)).resolve(stylePath));
     const styleJson = JSON.parse(JSON.stringify(template));

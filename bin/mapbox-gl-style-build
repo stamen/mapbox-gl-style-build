@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const fg = require('fast-glob');
 const yargs = require('yargs/yargs');
 const { hideBin } = require('yargs/helpers');
 const { format } = require('mapbox-gl-style-format');
@@ -42,37 +43,14 @@ const argv = yargs(hideBin(process.argv))
   )
   .parse();
 
-// return list of files with paths
-const getStylePaths = dirPath => {
-  let basePath = dirPath;
-  return fs.readdirSync(dirPath).reduce((acc, location) => {
-    basePath = `${dirPath}/${location}`;
-    const isDir = fs.lstatSync(basePath).isDirectory();
-
-    if (isDir) {
-      acc = acc.concat(getStylePaths(basePath));
-      return acc;
-    }
-
-    if (!location.match(/\.js$/)) return acc;
-
-    acc.push(basePath);
-
-    return acc;
-  }, []);
-};
-
-const buildStyles = (styleDir, layerDir, outputDir, options = {}) => {
+const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
   const verbose = options?.verbose ?? false;
 
-  const stylePaths = getStylePaths(styleDir);
+  const stylePaths = await fg([path.resolve(`${styleDir}/**/*.js`)]);
 
   stylePaths.forEach(stylePath => {
-    let trimmedPath = stylePath
-      .replace(`${styleDir}/`, '')
-      .replace(/\.js$/, '');
-
-    const styleOutputDir = path.resolve(outputDir, trimmedPath);
+    const { dir, name } = path.parse(path.relative(styleDir, stylePath));
+    const styleOutputDir = path.resolve(outputDir, dir, name);
 
     if (!fs.existsSync(styleOutputDir)) {
       fs.mkdirSync(styleOutputDir, { recursive: true });
