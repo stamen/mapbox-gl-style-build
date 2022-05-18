@@ -29,6 +29,12 @@ describe('modifyNumberVariables', () => {
     expect(actual).toEqual(expected);
   });
 
+  test('error on unsupported operator', () => {
+    const variables = { number: 3 };
+    const actual = () => modifyNumberVariables(variables, '%', 2, {});
+    expect(actual).toThrow('% is not a valid operator.');
+  });
+
   test('nested multiply', () => {
     const variables = {
       groupA: {

@@ -155,7 +155,7 @@ const modifyNumberVariables = (variables, operator, modifier, options = {}) => {
       break;
     }
     default: {
-      console.error(`${operator} is not a valid operator.`);
+      throw new Error(`${operator} is not a valid operator.`);
     }
   }
 
