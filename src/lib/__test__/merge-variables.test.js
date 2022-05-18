@@ -56,7 +56,7 @@ describe('mergeVariables', () => {
     const expected = {
       backgroundLow: 'red',
       backgroundHigh: 'pink',
-      roadOpacity: ["interpolate", ["linear"], ["zoom"], 2, 0, 12, 1]
+      roadOpacity: ['interpolate', ['linear'], ['zoom'], 2, 0, 12, 1]
     };
 
     const actual = mergeVariables(
@@ -66,7 +66,7 @@ describe('mergeVariables', () => {
         roadOpacity: 0.75
       },
       {
-        roadOpacity: ["interpolate", ["linear"], ["zoom"], 2, 0, 12, 1]
+        roadOpacity: ['interpolate', ['linear'], ['zoom'], 2, 0, 12, 1]
       }
     );
 
