@@ -42,7 +42,7 @@ const handleOptions = (value, options) => {
   if (round) return Math.round(value);
   if (floor) return Math.floor(value);
   if (ceil) return Math.ceil(value);
-  if (toFixed) return value.toFixed(toFixed);
+  if (toFixed !== undefined) return Number(value.toFixed(toFixed));
   return value;
 };
 

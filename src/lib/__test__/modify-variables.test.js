@@ -147,4 +147,32 @@ describe('modifyNumberVariables', () => {
     const expected = { number: 'abc' };
     expect(actual).toEqual(expected);
   });
+
+  test('handles options: round', () => {
+    const variables = { number: 3.12345 };
+    const actual = modifyNumberVariables(variables, '*', 2, { round: true });
+    const expected = { number: 6 };
+    expect(actual).toEqual(expected);
+  });
+
+  test('handles options: floor', () => {
+    const variables = { number: 3.32345 };
+    const actual = modifyNumberVariables(variables, '*', 2, { floor: true });
+    const expected = { number: 6 };
+    expect(actual).toEqual(expected);
+  });
+
+  test('handles options: ceil', () => {
+    const variables = { number: 3.12345 };
+    const actual = modifyNumberVariables(variables, '*', 2, { ceil: true });
+    const expected = { number: 7 };
+    expect(actual).toEqual(expected);
+  });
+
+  test('handles options: toFixed', () => {
+    const variables = { number: 3.12345 };
+    const actual = modifyNumberVariables(variables, '*', 2, { toFixed: 2 });
+    const expected = { number: 6.25 };
+    expect(actual).toEqual(expected);
+  });
 });
