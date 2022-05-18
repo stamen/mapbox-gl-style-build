@@ -35,33 +35,6 @@ describe('modifyNumberVariables', () => {
     expect(actual).toThrow('% is not a valid operator.');
   });
 
-  test('nested multiply', () => {
-    const variables = {
-      groupA: {
-        subGroupA: 3
-      },
-      groupB: 2,
-      groupC: {
-        subGroupC: {
-          lineWidth: 7
-        }
-      }
-    };
-    const actual = modifyNumberVariables(variables, '*', 2, {});
-    const expected = {
-      groupA: {
-        subGroupA: 6
-      },
-      groupB: 4,
-      groupC: {
-        subGroupC: {
-          lineWidth: 14
-        }
-      }
-    };
-    expect(actual).toEqual(expected);
-  });
-
   test('interpolate multiply', () => {
     const variables = {
       number: ['interpolate', ['linear'], ['zoom'], 5, 3, 10, 4]
@@ -144,6 +117,122 @@ describe('modifyNumberVariables', () => {
         12
       ]
     };
+    expect(actual).toEqual(expected);
+  });
+
+  test('nested variables multiply', () => {
+    const variables = {
+      groupA: {
+        subGroupA: 3
+      },
+      groupB: 2,
+      groupC: {
+        subGroupC: {
+          lineWidth: 7
+        }
+      }
+    };
+    const actual = modifyNumberVariables(variables, '*', 2, {});
+    const expected = {
+      groupA: {
+        subGroupA: 6
+      },
+      groupB: 4,
+      groupC: {
+        subGroupC: {
+          lineWidth: 14
+        }
+      }
+    };
+    expect(actual).toEqual(expected);
+  });
+
+  test('nested variables nested interpolate multiply', () => {
+    const variables = {
+      groupA: {
+        subGroupA: [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          5,
+          ['match', ['get', 'class'], 'primary', 3, 'secondary', 4, 5],
+          10,
+          6
+        ]
+      },
+      groupB: ['interpolate', ['linear'], ['zoom'], 5, 3, 10, 6],
+      groupC: {
+        subGroupC: {
+          lineWidth: [
+            'match',
+            ['get', 'class'],
+            'primary',
+            3,
+            'secondary',
+            4,
+            5
+          ]
+        }
+      }
+    };
+    const actual = modifyNumberVariables(variables, '*', 2, {});
+    const expected = {
+      groupA: {
+        subGroupA: [
+          'interpolate',
+          ['linear'],
+          ['zoom'],
+          5,
+          ['match', ['get', 'class'], 'primary', 6, 'secondary', 8, 10],
+          10,
+          12
+        ]
+      },
+      groupB: ['interpolate', ['linear'], ['zoom'], 5, 6, 10, 12],
+      groupC: {
+        subGroupC: {
+          lineWidth: [
+            'match',
+            ['get', 'class'],
+            'primary',
+            6,
+            'secondary',
+            8,
+            10
+          ]
+        }
+      }
+    };
+    expect(actual).toEqual(expected);
+  });
+
+  test('handles literal values not contained in variable object', () => {
+    const variable = 3;
+    const actual = modifyNumberVariables(variable, '*', 2, {});
+    const expected = 6;
+    expect(actual).toEqual(expected);
+  });
+
+  test('handles expression values not contained in variable object', () => {
+    const variable = [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      5,
+      ['match', ['get', 'class'], 'primary', 3, 'secondary', 4, 5],
+      10,
+      6
+    ];
+    const actual = modifyNumberVariables(variable, '*', 2, {});
+    const expected = [
+      'interpolate',
+      ['linear'],
+      ['zoom'],
+      5,
+      ['match', ['get', 'class'], 'primary', 6, 'secondary', 8, 10],
+      10,
+      12
+    ];
     expect(actual).toEqual(expected);
   });
 

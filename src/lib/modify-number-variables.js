@@ -110,7 +110,7 @@ const modifyValue = (propertyValue, fn, options) => {
 
 /**
  * Recurses the variables object to find the actual property values
- * @param {Object} variables - the original variable object
+ * @param {Object|Array|number} variables - the original variable object or variable
  * @param {Function} fn - function to run the value or expression output values through
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
  * @returns {Object} - the modified variables
@@ -127,7 +127,7 @@ const replaceVariables = (variables, fn, options) => {
 
 /**
  * Modify number values in variables using a math operation
- * @param {Object} variables - the original variable object
+ * @param {Object|Array|number} variables - the original variable object or variable
  * @param {string} operator - Math operation, one of - '*', '/', '+', '-'
  * @param {number} modifier - number argument to modify value by
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
