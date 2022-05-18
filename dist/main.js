@@ -266,7 +266,7 @@ const $1c55b3ddc6522c05$export$10aa94554223adba = (...variableGroups)=>{
     if (round) return Math.round(value);
     if (floor) return Math.floor(value);
     if (ceil) return Math.ceil(value);
-    if (toFixed) return value.toFixed(toFixed);
+    if (toFixed !== undefined) return Number(value.toFixed(toFixed));
     return value;
 };
 /**
@@ -320,7 +320,7 @@ const $1c55b3ddc6522c05$export$10aa94554223adba = (...variableGroups)=>{
 };
 /**
  * Recurses the variables object to find the actual property values
- * @param {Object} variables - the original variable object
+ * @param {Object|Array|number} variables - the original variable object or variable
  * @param {Function} fn - function to run the value or expression output values through
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
  * @returns {Object} - the modified variables
@@ -334,7 +334,7 @@ const $1c55b3ddc6522c05$export$10aa94554223adba = (...variableGroups)=>{
 };
 /**
  * Modify number values in variables using a math operation
- * @param {Object} variables - the original variable object
+ * @param {Object|Array|number} variables - the original variable object or variable
  * @param {string} operator - Math operation, one of - '*', '/', '+', '-'
  * @param {number} modifier - number argument to modify value by
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
@@ -358,7 +358,7 @@ const $1c55b3ddc6522c05$export$10aa94554223adba = (...variableGroups)=>{
             mathFn = $b74204178064ce0e$var$getSubtractFn(modifier);
             break;
         default:
-            console.error(`${operator} is not a valid operator.`);
+            throw new Error(`${operator} is not a valid operator.`);
     }
     nextVariables = $b74204178064ce0e$var$replaceVariables(variables, mathFn, options);
     return nextVariables;
