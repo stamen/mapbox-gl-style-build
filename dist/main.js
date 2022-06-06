@@ -243,7 +243,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  * @param {string} error - the error message
  * @returns {string}
  */ var $787eebfbd67e2373$var$getFileErrorMessage = function getFileErrorMessage(fileType, name, path, error) {
-    return "\n".concat($787eebfbd67e2373$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ". Received this error:\n\n").concat($787eebfbd67e2373$var$_chalk["default"].red(error), "\n");
+    return "\n".concat($787eebfbd67e2373$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ". Received this error:\n\n").concat($787eebfbd67e2373$var$_chalk["default"].red(error.stack), "\n");
 };
 /**
  * Nicely format and log validation messages for a style

@@ -151,7 +151,7 @@ const getFileDoesNotExistMessage = (fileType, name, path) => {
 const getFileErrorMessage = (fileType, name, path, error) => {
   return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}. Received this error:
 
-${chalk.red(error)}
+${chalk.red(error.stack)}
 `;
 };
 
