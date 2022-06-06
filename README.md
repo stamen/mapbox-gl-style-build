@@ -24,7 +24,7 @@ See the `examples` directory for examples.
 
 Once installed using your package manager:
 
-```
+```bash
 mapbox-gl-style-build
     --style-dir=templates/styles
     --layer-dir=templates/layers
@@ -41,11 +41,49 @@ The parameters are as follows:
 
  As a module, this library also exports two helper functions:
 
+**`addOverrides`:**
+ Adds overrides to a base style. Typically you can rely on `mapbox-gl-style-build` to add overrides to your layers' base styles, but sometimes it makes sense to merge overrides earlier in situations where a layer's styles are complicated.
+
+  _Example:_
+ ```js
+  // layer-template.js
+  const { addOverrides } = require('mapbox-gl-style-build');
+
+  module.exports.default = (context) => {
+    let baseStyle = {
+      "id": "example-layer",
+      "type": "fill",
+      "paint": {
+        "fill-color": "green"
+      }
+    };
+
+    let overrides = {};
+
+    if (context.rootSource = "source1") {
+      overrides = addOverrides(overrides, {
+        "paint": {
+          "fill-color": "red"
+        }
+      });
+    }
+
+    if (context.colorMode = "dark") {
+      // Add overrides to the existing overrides, if any
+      overrides = addOverrides(overrides, {
+        "paint": {
+          "fill-opacity": 0.2
+        }
+      });
+    }
+  };
+ ```
+
 **`mergeVariables`:**
  Merges a variables object with an extender object to override variable values.
  
   _Example:_
- ```
+ ```js
   // style-template.js
   const { mergeVariables, modifyNumberVariables } = require('mapbox-gl-style-build');
 
@@ -73,7 +111,7 @@ The parameters are as follows:
  - `toFixed`: number
 
  _Example:_
- ```
+ ```js
   // style-template.js
   const { mergeVariables, modifyNumberVariables } = require('mapbox-gl-style-build');
 
