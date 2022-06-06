@@ -190,7 +190,7 @@ const loadLayerBuilder = (name, path) => {
   try {
     return require(path).default;
   } catch (error) {
-    throw new Error(getFileErrorMessage('layer', name, path, error.stack));
+    throw new Error(getFileErrorMessage('layer', name, path, error));
   }
 };
 

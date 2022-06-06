@@ -272,7 +272,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     try {
         return require(path)["default"];
     } catch (error) {
-        throw new Error($787eebfbd67e2373$var$getFileErrorMessage('layer', name, path, error.stack));
+        throw new Error($787eebfbd67e2373$var$getFileErrorMessage('layer', name, path, error));
     }
 };
 /**

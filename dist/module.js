@@ -273,7 +273,7 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     try {
         return require(path)["default"];
     } catch (error) {
-        throw new Error($5c3f8fbf0bc952bf$var$getFileErrorMessage('layer', name, path, error.stack));
+        throw new Error($5c3f8fbf0bc952bf$var$getFileErrorMessage('layer', name, path, error));
     }
 };
 /**
