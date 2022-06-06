@@ -69,7 +69,9 @@ The parameters are as follows:
     }
 
     if (context.colorMode = "dark") {
-      // Add overrides to the existing overrides, if any
+      // Add overrides to the existing overrides, if any.
+      //
+      // In thise case, only fill-opacity is added to the paint object, all other properties remain
       overrides = addOverrides(overrides, {
         "paint": {
           "fill-opacity": 0.2
