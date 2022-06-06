@@ -37,6 +37,53 @@ The parameters are as follows:
  * `--out-dir`: the directory built styles will be placed within
  * `-v`: include for verbose output
 
+ ### Helper functions
+
+ As a module, this library also exports two helper functions:
+
+**`mergeVariables`:**
+ Merges a variables object with an extender object to override variable values.
+ 
+  _Example:_
+ ```
+  // style-template.js
+  const { mergeVariables, modifyNumberVariables } = require('mapbox-gl-style-build');
+
+  const textSizes = require('../variables/textSizes');
+
+  module.exports.context = {
+    textSizes: mergeVariables(textSizes, { countryLabelSize: 16 }),
+    ...
+  };
+ ```
+
+**`modifyNumberVariables`:**
+ Takes a variable or object specifying variables and applies a math function to the values. Expression values have the math function applied to all outputs within the expression.
+
+ Supports the following operations: 
+ - `*`: multiplication
+ - `/`: division
+ - `+`: addition
+ - `-`: subtraction
+
+ Also added support for passing optional options object to round the modified value in different ways:
+ - `floor`: boolean
+ - `ceil`: boolean
+ - `round`: boolean
+ - `toFixed`: number
+
+ _Example:_
+ ```
+  // style-template.js
+  const { mergeVariables, modifyNumberVariables } = require('mapbox-gl-style-build');
+
+  const textSizes = require('../variables/textSizes');
+
+  module.exports.context = {
+    textSizes: modifyNumberVariables(textSizes, '*', 2, { round: true }),
+    ...
+  };
+ ```
 
 ## Development
 

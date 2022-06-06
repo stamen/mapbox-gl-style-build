@@ -25,6 +25,12 @@ Object.defineProperty($cf838c15c8b009ba$exports, "mergeVariables", {
         return $810f112ff77b3238$exports.mergeVariables;
     }
 });
+Object.defineProperty($cf838c15c8b009ba$exports, "modifyNumberVariables", {
+    enumerable: true,
+    get: function get() {
+        return $a28de5cf82661a69$exports.modifyNumberVariables;
+    }
+});
 var $7c6da0ae3732389a$exports = {};
 "use strict";
 Object.defineProperty($7c6da0ae3732389a$exports, "__esModule", {
@@ -392,6 +398,170 @@ var $810f112ff77b3238$var$isObject = function isObject(v) {
     });
 };
 $810f112ff77b3238$exports.mergeVariables = $810f112ff77b3238$var$mergeVariables;
+
+
+var $a28de5cf82661a69$exports = {};
+"use strict";
+Object.defineProperty($a28de5cf82661a69$exports, "__esModule", {
+    value: true
+});
+$a28de5cf82661a69$exports.modifyNumberVariables = void 0;
+function $a28de5cf82661a69$var$_typeof(obj1) {
+    return $a28de5cf82661a69$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+        return typeof obj;
+    } : function(obj) {
+        return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, $a28de5cf82661a69$var$_typeof(obj1);
+}
+/**
+ * Returns a new function that divides a number by the modifier passed here
+ * @param {number} divisor - number to divide by in the output function
+ * @returns {Function} - a function that multiplies a number by the modifier passed
+ */ var $a28de5cf82661a69$var$getDivideFn = function getDivideFn(divisor) {
+    return function(num) {
+        return num / divisor;
+    };
+};
+/**
+ * Returns a new function that subtracts from a number by the modifier passed here
+ * @param {number} toSubtract - number to subtract in the output function
+ * @returns {Function} - a function that multiplies a number by the modifier passed
+ */ var $a28de5cf82661a69$var$getSubtractFn = function getSubtractFn(toSubtract) {
+    return function(num) {
+        return num - toSubtract;
+    };
+};
+/**
+ * Returns a new function that adds to a number by the modifier passed here
+ * @param {number} toAdd - number to add in the output function
+ * @returns {Function} - a function that multiplies a number by the modifier passed
+ */ var $a28de5cf82661a69$var$getAddFn = function getAddFn(toAdd) {
+    return function(num) {
+        return num + toAdd;
+    };
+};
+/**
+ * Returns a new function that multiplies a number by the modifier passed here
+ * @param {number} multiplier - number to multiply by in the output function
+ * @returns {Function} - a function that multiplies a number by the modifier passed
+ */ var $a28de5cf82661a69$var$getMultiplyFn = function getMultiplyFn(multiplier) {
+    return function(num) {
+        return num * multiplier;
+    };
+};
+/**
+ * Modifies the property value after the transform function using options
+ * @param {Array|number} value - property value of the variable
+ * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
+ * @returns {Array|number} - the modified property values from the options
+ */ var $a28de5cf82661a69$var$handleOptions = function handleOptions(value, options) {
+    var round = options.round, floor = options.floor, ceil = options.ceil, toFixed = options.toFixed;
+    if (round) return Math.round(value);
+    if (floor) return Math.floor(value);
+    if (ceil) return Math.ceil(value);
+    if (toFixed !== undefined) return Number(value.toFixed(toFixed));
+    return value;
+};
+/**
+ * Modifies the property value of the variable with the transform function
+ * @param {Array|number} propertyValue - property value of the variable
+ * @param {Function} fn - function to run the value or expression output values through
+ * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
+ * @returns {Array|number} - the modified property values
+ */ var $a28de5cf82661a69$var$modifyValue = function modifyValue(propertyValue, fn, options) {
+    if (typeof propertyValue === 'number') return $a28de5cf82661a69$var$handleOptions(fn(propertyValue), options);
+    if (!Array.isArray(propertyValue)) return propertyValue;
+    var expressionType = propertyValue[0];
+    var sliceIndex;
+    var outputCondition;
+    var fallback;
+    switch(expressionType){
+        case 'interpolate':
+        case 'interpolate-hcl':
+        case 'interpolate-lab':
+            sliceIndex = 3;
+            outputCondition = function outputCondition(i) {
+                return i % 2 !== 0;
+            };
+            break;
+        case 'step':
+            sliceIndex = 2;
+            outputCondition = function outputCondition(i) {
+                return i % 2 === 0;
+            };
+            break;
+        case 'case':
+            sliceIndex = 1;
+            outputCondition = function outputCondition(i) {
+                return i % 2 !== 0;
+            };
+            fallback = propertyValue.pop();
+            break;
+        case 'match':
+            sliceIndex = 2;
+            outputCondition = function outputCondition(i) {
+                return i % 2 !== 0;
+            };
+            fallback = propertyValue.pop();
+            break;
+    } // Rebuild modified expression
+    var nextValue = propertyValue.slice(0, sliceIndex);
+    var inputOutputs = propertyValue.slice(sliceIndex);
+    inputOutputs.forEach(function(val, i) {
+        if (outputCondition(i)) nextValue.push(modifyValue(val, fn, options));
+        else nextValue.push(val);
+    });
+    if (fallback !== undefined) nextValue.push(modifyValue(fallback, fn, options));
+    return nextValue;
+};
+/**
+ * Recurses the variables object to find the actual property values
+ * @param {Object|Array|number} variables - the original variable object or variable
+ * @param {Function} fn - function to run the value or expression output values through
+ * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
+ * @returns {Object} - the modified variables
+ */ var $a28de5cf82661a69$var$replaceVariables = function replaceVariables(variables, fn, options) {
+    if ($a28de5cf82661a69$var$_typeof(variables) !== 'object' || Array.isArray(variables)) return $a28de5cf82661a69$var$modifyValue(variables, fn, options);
+    return Object.keys(variables).reduce(function(acc, key) {
+        acc[key] = replaceVariables(variables[key], fn, options);
+        return acc;
+    }, {
+    });
+};
+/**
+ * Modify number values in variables using a math operation
+ * @param {Object|Array|number} variables - the original variable object or variable
+ * @param {string} operator - Math operation, one of - '*', '/', '+', '-'
+ * @param {number} modifier - number argument to modify value by
+ * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
+ * @returns {Object} - the modified variables
+ */ var $a28de5cf82661a69$var$modifyNumberVariables = function modifyNumberVariables(variables, operator, modifier) {
+    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
+    };
+    var nextVariables = JSON.parse(JSON.stringify(variables));
+    var mathFn = function mathFn(num) {
+        return num;
+    };
+    switch(operator){
+        case '*':
+            mathFn = $a28de5cf82661a69$var$getMultiplyFn(modifier);
+            break;
+        case '/':
+            mathFn = $a28de5cf82661a69$var$getDivideFn(modifier);
+            break;
+        case '+':
+            mathFn = $a28de5cf82661a69$var$getAddFn(modifier);
+            break;
+        case '-':
+            mathFn = $a28de5cf82661a69$var$getSubtractFn(modifier);
+            break;
+        default:
+            throw new Error("".concat(operator, " is not a valid operator."));
+    }
+    nextVariables = $a28de5cf82661a69$var$replaceVariables(variables, mathFn, options);
+    return nextVariables;
+};
+$a28de5cf82661a69$exports.modifyNumberVariables = $a28de5cf82661a69$var$modifyNumberVariables;
 
 
 

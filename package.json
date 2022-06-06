@@ -1,6 +1,6 @@
 {
   "name": "mapbox-gl-style-build",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Build Mapbox GL styles by composing layers",
   "source": "src/index.js",
   "main": "dist/main.js",
@@ -8,7 +8,8 @@
   "scripts": {
     "watch": "parcel watch",
     "build": "parcel build",
-    "test": "jest --watchAll"
+    "test": "jest --watchAll",
+    "jest-watch": "jest --watch"
   },
   "author": "Stamen Design",
   "license": "ISC",
