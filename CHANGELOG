@@ -1,0 +1,5 @@
+# CHANGELOG
+
+## Unreleased
+
+- Add better error handling when there are errors in a layer
