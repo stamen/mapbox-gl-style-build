@@ -12,7 +12,7 @@
     "jest-watch": "jest --watch"
   },
   "author": "Stamen Design",
-  "license": "ISC",
+  "license": "MIT",
   "jest": {
     "clearMocks": true,
     "testEnvironment": "node",
