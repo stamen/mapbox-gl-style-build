@@ -2,5 +2,8 @@
 
 ## Unreleased
 
+
+## 0.4.0
+
 - Export mergeOverrides helper function
 - Add better error handling when there are errors in a layer
