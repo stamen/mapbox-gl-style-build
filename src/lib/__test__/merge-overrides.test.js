@@ -110,4 +110,28 @@ describe('mergeOverrides', () => {
     const actual = mergeOverrides(base, overrides);
     expect(actual).toEqual(expected);
   });
+
+  test('works with paint overrides, partial properties', () => {
+    const base = {
+      paint: {
+        "fill-color": "green",
+        "fill-opacity": 1
+      }
+    };
+    const overrides = {
+      paint: {
+        "fill-opacity": 0.5
+      }
+    };
+
+    const expected = {
+      paint: {
+        "fill-color": "green",
+        "fill-opacity": 0.5
+      }
+    };
+
+    const actual = mergeOverrides(base, overrides);
+    expect(actual).toEqual(expected);
+  });
 });
