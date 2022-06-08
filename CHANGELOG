@@ -3,3 +3,4 @@
 ## Unreleased
 
 - Export mergeOverrides helper function
+- Add better error handling when there are errors in a layer

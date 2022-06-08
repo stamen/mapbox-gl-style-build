@@ -6,6 +6,21 @@ import chalk from 'chalk';
 import { mergeOverrides } from './merge-overrides';
 
 /**
+ * Check if a file exists
+ *
+ * @param {string} path - the file path
+ * @return {boolean} whether the file exists
+ */
+const fileExists = (path) => {
+  try {
+    fs.accessSync(path, fs.constants.R_OK);
+  } catch (e) {
+    return false;
+  }
+  return true;
+};
+
+/**
  * Determine whether a value is or contains undefined within it
  *
  * @param {*} v - the value to check
@@ -87,19 +102,33 @@ ${lineNumber}: ${layerLine}`;
 };
 
 /**
- * Nicely format a file load error message
+ * Nicely format a file does not exist error message
  *
  * @param {string} fileType - 'layer' or 'style'
  * @param {string} name - the name of the file being loaded
  * @param {string} path - the file path being loaded
  * @returns {string}
  */
-const getFileLoadErrorMessage = (fileType, name, path) => {
-  return `${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(
-    name
-  )}, does it exist? Attempted to load from
+const getFileDoesNotExistMessage = (fileType, name, path) => {
+  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}, does it exist? Attempted to load from
+  ${chalk.blue(path)}
+`;
+};
 
-  ${chalk.blue(path)}`;
+/**
+ * Nicely format a file error message
+ *
+ * @param {string} fileType - 'layer' or 'style'
+ * @param {string} name - the name of the file being loaded
+ * @param {string} path - the file path being loaded
+ * @param {string} error - the error message
+ * @returns {string}
+ */
+const getFileErrorMessage = (fileType, name, path, error) => {
+  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}. Received this error:
+
+${chalk.red(error.stack)}
+`;
 };
 
 /**
@@ -130,10 +159,14 @@ const logValidationMessages = (style, validationMessages) => {
  * @returns {function} the layer builder
  */
 const loadLayerBuilder = (name, path) => {
+  if (!fileExists(path)) {
+    throw new Error(getFileDoesNotExistMessage('layer', name, path));
+  }
+
   try {
     return require(path).default;
   } catch (error) {
-    throw new Error(getFileLoadErrorMessage('layer', name, path));
+    throw new Error(getFileErrorMessage('layer', name, path, error));
   }
 };
 
@@ -145,10 +178,14 @@ const loadLayerBuilder = (name, path) => {
  * @returns {object}
  */
 const loadStyle = (name, path) => {
+  if (!fileExists(path)) {
+    throw new Error(getFileDoesNotExistMessage('style', name, path));
+  }
+
   try {
     return require(path);
   } catch (error) {
-    throw new Error(getFileLoadErrorMessage('style', name, path));
+    throw new Error(getFileErrorMessage('style', name, path, error));
   }
 };
 

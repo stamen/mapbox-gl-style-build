@@ -199,6 +199,19 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     }, $5c3f8fbf0bc952bf$var$_typeof(obj1);
 }
 /**
+ * Check if a file exists
+ *
+ * @param {string} path - the file path
+ * @return {boolean} whether the file exists
+ */ var $5c3f8fbf0bc952bf$var$fileExists = function fileExists(path) {
+    try {
+        $5c3f8fbf0bc952bf$var$_fs["default"].accessSync(path, $5c3f8fbf0bc952bf$var$_fs["default"].constants.R_OK);
+    } catch (e) {
+        return false;
+    }
+    return true;
+};
+/**
  * Determine whether a value is or contains undefined within it
  *
  * @param {*} v - the value to check
@@ -250,14 +263,25 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     return "".concat($5c3f8fbf0bc952bf$var$_chalk["default"].red.bold('Error:'), " Couldn't build layer ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ".\n\nDetails: ").concat(error.message, " in\n  ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(path), "\n\n").concat(lineNumber, ": ").concat(layerLine);
 };
 /**
- * Nicely format a file load error message
+ * Nicely format a file does not exist error message
  *
  * @param {string} fileType - 'layer' or 'style'
  * @param {string} name - the name of the file being loaded
  * @param {string} path - the file path being loaded
  * @returns {string}
- */ var $5c3f8fbf0bc952bf$var$getFileLoadErrorMessage = function getFileLoadErrorMessage(fileType, name, path) {
-    return "".concat($5c3f8fbf0bc952bf$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ", does it exist? Attempted to load from\n\n  ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(path));
+ */ var $5c3f8fbf0bc952bf$var$getFileDoesNotExistMessage = function getFileDoesNotExistMessage(fileType, name, path) {
+    return "\n".concat($5c3f8fbf0bc952bf$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ", does it exist? Attempted to load from\n  ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(path), "\n");
+};
+/**
+ * Nicely format a file error message
+ *
+ * @param {string} fileType - 'layer' or 'style'
+ * @param {string} name - the name of the file being loaded
+ * @param {string} path - the file path being loaded
+ * @param {string} error - the error message
+ * @returns {string}
+ */ var $5c3f8fbf0bc952bf$var$getFileErrorMessage = function getFileErrorMessage(fileType, name, path, error) {
+    return "\n".concat($5c3f8fbf0bc952bf$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ". Received this error:\n\n").concat($5c3f8fbf0bc952bf$var$_chalk["default"].red(error.stack), "\n");
 };
 /**
  * Nicely format and log validation messages for a style
@@ -282,10 +306,11 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
  * @param {string} path - the file path to the layer
  * @returns {function} the layer builder
  */ var $5c3f8fbf0bc952bf$var$loadLayerBuilder = function loadLayerBuilder(name, path) {
+    if (!$5c3f8fbf0bc952bf$var$fileExists(path)) throw new Error($5c3f8fbf0bc952bf$var$getFileDoesNotExistMessage('layer', name, path));
     try {
         return require(path)["default"];
     } catch (error) {
-        throw new Error($5c3f8fbf0bc952bf$var$getFileLoadErrorMessage('layer', name, path));
+        throw new Error($5c3f8fbf0bc952bf$var$getFileErrorMessage('layer', name, path, error));
     }
 };
 /**
@@ -295,10 +320,11 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
  * @param {string} name - the style name
  * @returns {object}
  */ var $5c3f8fbf0bc952bf$var$loadStyle = function loadStyle(name, path) {
+    if (!$5c3f8fbf0bc952bf$var$fileExists(path)) throw new Error($5c3f8fbf0bc952bf$var$getFileDoesNotExistMessage('style', name, path));
     try {
         return require(path);
     } catch (error) {
-        throw new Error($5c3f8fbf0bc952bf$var$getFileLoadErrorMessage('style', name, path));
+        throw new Error($5c3f8fbf0bc952bf$var$getFileErrorMessage('style', name, path, error));
     }
 };
 /**
