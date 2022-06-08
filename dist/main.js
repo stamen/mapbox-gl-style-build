@@ -6,16 +6,16 @@ var $gXNCa$chalk = require("chalk");
 Object.defineProperty(module.exports, "__esModule", {
     value: true
 });
-Object.defineProperty(module.exports, "addOverrides", {
-    enumerable: true,
-    get: function get() {
-        return $046eba4e112f393d$exports.addOverrides;
-    }
-});
 Object.defineProperty(module.exports, "buildStyle", {
     enumerable: true,
     get: function get() {
         return $787eebfbd67e2373$exports.buildStyle;
+    }
+});
+Object.defineProperty(module.exports, "mergeOverrides", {
+    enumerable: true,
+    get: function get() {
+        return $7c018e715e9e5e4a$exports.mergeOverrides;
     }
 });
 Object.defineProperty(module.exports, "mergeVariables", {
@@ -30,13 +30,25 @@ Object.defineProperty(module.exports, "modifyNumberVariables", {
         return $420078f6f222ff92$exports.modifyNumberVariables;
     }
 });
-var $046eba4e112f393d$exports = {};
+var $787eebfbd67e2373$exports = {};
 "use strict";
-Object.defineProperty($046eba4e112f393d$exports, "__esModule", {
+Object.defineProperty($787eebfbd67e2373$exports, "__esModule", {
     value: true
 });
-$046eba4e112f393d$exports.addOverrides = void 0;
-function $046eba4e112f393d$var$ownKeys(object, enumerableOnly) {
+$787eebfbd67e2373$exports.buildStyle = void 0;
+
+var $787eebfbd67e2373$var$_fs = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$fs);
+
+var $787eebfbd67e2373$var$_path = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$path);
+
+var $787eebfbd67e2373$var$_chalk = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$chalk);
+var $7c018e715e9e5e4a$exports = {};
+"use strict";
+Object.defineProperty($7c018e715e9e5e4a$exports, "__esModule", {
+    value: true
+});
+$7c018e715e9e5e4a$exports.mergeOverrides = void 0;
+function $7c018e715e9e5e4a$var$ownKeys(object, enumerableOnly) {
     var keys = Object.keys(object);
     if (Object.getOwnPropertySymbols) {
         var symbols = Object.getOwnPropertySymbols(object);
@@ -46,19 +58,19 @@ function $046eba4e112f393d$var$ownKeys(object, enumerableOnly) {
     }
     return keys;
 }
-function $046eba4e112f393d$var$_objectSpread(target) {
+function $7c018e715e9e5e4a$var$_objectSpread(target) {
     for(var i = 1; i < arguments.length; i++){
         var source = null != arguments[i] ? arguments[i] : {
         };
-        i % 2 ? $046eba4e112f393d$var$ownKeys(Object(source), !0).forEach(function(key) {
-            $046eba4e112f393d$var$_defineProperty(target, key, source[key]);
-        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : $046eba4e112f393d$var$ownKeys(Object(source)).forEach(function(key) {
+        i % 2 ? $7c018e715e9e5e4a$var$ownKeys(Object(source), !0).forEach(function(key) {
+            $7c018e715e9e5e4a$var$_defineProperty(target, key, source[key]);
+        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : $7c018e715e9e5e4a$var$ownKeys(Object(source)).forEach(function(key) {
             Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
         });
     }
     return target;
 }
-function $046eba4e112f393d$var$_defineProperty(obj, key, value) {
+function $7c018e715e9e5e4a$var$_defineProperty(obj, key, value) {
     if (key in obj) Object.defineProperty(obj, key, {
         value: value,
         enumerable: true,
@@ -68,26 +80,26 @@ function $046eba4e112f393d$var$_defineProperty(obj, key, value) {
     else obj[key] = value;
     return obj;
 }
-function $046eba4e112f393d$var$_slicedToArray(arr, i) {
-    return $046eba4e112f393d$var$_arrayWithHoles(arr) || $046eba4e112f393d$var$_iterableToArrayLimit(arr, i) || $046eba4e112f393d$var$_unsupportedIterableToArray(arr, i) || $046eba4e112f393d$var$_nonIterableRest();
+function $7c018e715e9e5e4a$var$_slicedToArray(arr, i) {
+    return $7c018e715e9e5e4a$var$_arrayWithHoles(arr) || $7c018e715e9e5e4a$var$_iterableToArrayLimit(arr, i) || $7c018e715e9e5e4a$var$_unsupportedIterableToArray(arr, i) || $7c018e715e9e5e4a$var$_nonIterableRest();
 }
-function $046eba4e112f393d$var$_nonIterableRest() {
+function $7c018e715e9e5e4a$var$_nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function $046eba4e112f393d$var$_unsupportedIterableToArray(o, minLen) {
+function $7c018e715e9e5e4a$var$_unsupportedIterableToArray(o, minLen) {
     if (!o) return;
-    if (typeof o === "string") return $046eba4e112f393d$var$_arrayLikeToArray(o, minLen);
+    if (typeof o === "string") return $7c018e715e9e5e4a$var$_arrayLikeToArray(o, minLen);
     var n = Object.prototype.toString.call(o).slice(8, -1);
     if (n === "Object" && o.constructor) n = o.constructor.name;
     if (n === "Map" || n === "Set") return Array.from(o);
-    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return $046eba4e112f393d$var$_arrayLikeToArray(o, minLen);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return $7c018e715e9e5e4a$var$_arrayLikeToArray(o, minLen);
 }
-function $046eba4e112f393d$var$_arrayLikeToArray(arr, len) {
+function $7c018e715e9e5e4a$var$_arrayLikeToArray(arr, len) {
     if (len == null || len > arr.length) len = arr.length;
     for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
     return arr2;
 }
-function $046eba4e112f393d$var$_iterableToArrayLimit(arr, i) {
+function $7c018e715e9e5e4a$var$_iterableToArrayLimit(arr, i) {
     var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
     if (_i == null) return;
     var _arr = [];
@@ -111,11 +123,11 @@ function $046eba4e112f393d$var$_iterableToArrayLimit(arr, i) {
     }
     return _arr;
 }
-function $046eba4e112f393d$var$_arrayWithHoles(arr) {
+function $7c018e715e9e5e4a$var$_arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
 }
 /**
- * Add overrides to a baseStyle
+ * Merge overrides with a baseStyle or other overrides
  *
  * paint and layout overrides do not fully overwrite paint and layout values in
  * the baseStyle, however, they add or replaces specific properties. In this
@@ -125,31 +137,18 @@ function $046eba4e112f393d$var$_arrayWithHoles(arr) {
  * @param {object} baseStyle
  * @param {object} overrides
  * @returns {object}
- */ var $046eba4e112f393d$var$addOverrides = function addOverrides(baseStyle, overrides) {
+ */ var $7c018e715e9e5e4a$var$mergeOverrides = function mergeOverrides(baseStyle, overrides) {
     var extended = JSON.parse(JSON.stringify(baseStyle));
     Object.entries(overrides).forEach(function(_ref) {
-        var _ref2 = $046eba4e112f393d$var$_slicedToArray(_ref, 2), k = _ref2[0], v = _ref2[1];
-        if (k === 'layout' || k === 'paint') extended[k] = $046eba4e112f393d$var$_objectSpread($046eba4e112f393d$var$_objectSpread({
+        var _ref2 = $7c018e715e9e5e4a$var$_slicedToArray(_ref, 2), k = _ref2[0], v = _ref2[1];
+        if (k === 'layout' || k === 'paint') extended[k] = $7c018e715e9e5e4a$var$_objectSpread($7c018e715e9e5e4a$var$_objectSpread({
         }, extended[k]), v);
         else extended[k] = v;
     });
     return extended;
 };
-$046eba4e112f393d$exports.addOverrides = $046eba4e112f393d$var$addOverrides;
+$7c018e715e9e5e4a$exports.mergeOverrides = $7c018e715e9e5e4a$var$mergeOverrides;
 
-
-var $787eebfbd67e2373$exports = {};
-"use strict";
-Object.defineProperty($787eebfbd67e2373$exports, "__esModule", {
-    value: true
-});
-$787eebfbd67e2373$exports.buildStyle = void 0;
-
-var $787eebfbd67e2373$var$_fs = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$fs);
-
-var $787eebfbd67e2373$var$_path = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$path);
-
-var $787eebfbd67e2373$var$_chalk = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$chalk);
 
 function $787eebfbd67e2373$var$_interopRequireDefault(obj) {
     return obj && obj.__esModule ? obj : {
@@ -316,7 +315,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     } catch (error) {
         throw new Error($787eebfbd67e2373$var$getLayerBuildErrorMessage(error, name, path));
     }
-    return (0, $046eba4e112f393d$exports.addOverrides)(layer.baseStyle, layer.overrides);
+    return (0, $7c018e715e9e5e4a$exports.mergeOverrides)(layer.baseStyle, layer.overrides);
 };
 /**
  * Build style
@@ -350,6 +349,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     return styleJson;
 };
 $787eebfbd67e2373$exports.buildStyle = $787eebfbd67e2373$var$buildStyle;
+
 
 
 var $5d86828d3cc45dbd$exports = {};

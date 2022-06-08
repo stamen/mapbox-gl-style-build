@@ -41,13 +41,13 @@ The parameters are as follows:
 
  As a module, this library also exports two helper functions:
 
-**`addOverrides`:**
- Adds overrides to a base style. Typically you can rely on `mapbox-gl-style-build` to add overrides to your layers' base styles, but sometimes it makes sense to merge overrides earlier in situations where a layer's styles are complicated.
+**`mergeOverrides`:**
+ Merges overrides with a base style or other overrides. Typically you can rely on `mapbox-gl-style-build` to add overrides to your layers' base styles, but sometimes it makes sense to merge overrides earlier in situations where a layer's styles are complicated.
 
   _Example:_
  ```js
   // layer-template.js
-  const { addOverrides } = require('mapbox-gl-style-build');
+  const { mergeOverrides } = require('mapbox-gl-style-build');
 
   module.exports.default = (context) => {
     let baseStyle = {
@@ -61,7 +61,7 @@ The parameters are as follows:
     let overrides = {};
 
     if (context.rootSource = "source1") {
-      overrides = addOverrides(overrides, {
+      overrides = mergeOverrides(overrides, {
         "paint": {
           "fill-color": "red"
         }
@@ -72,7 +72,7 @@ The parameters are as follows:
       // Add overrides to the existing overrides, if any.
       //
       // In thise case, only fill-opacity is added to the paint object, all other properties remain
-      overrides = addOverrides(overrides, {
+      overrides = mergeOverrides(overrides, {
         "paint": {
           "fill-opacity": 0.2
         }

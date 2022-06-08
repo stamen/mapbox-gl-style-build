@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
 
-import { addOverrides } from './add-overrides';
+import { mergeOverrides } from './merge-overrides';
 
 /**
  * Determine whether a value is or contains undefined within it
@@ -170,7 +170,7 @@ const buildLayer = (context, name, path) => {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
   }
 
-  return addOverrides(layer.baseStyle, layer.overrides);
+  return mergeOverrides(layer.baseStyle, layer.overrides);
 };
 
 /**

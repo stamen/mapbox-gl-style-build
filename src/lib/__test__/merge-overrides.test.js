@@ -1,11 +1,11 @@
-import { addOverrides } from '../add-overrides';
+import { mergeOverrides } from '../merge-overrides';
 
-describe('addOverrides', () => {
+describe('mergeOverrides', () => {
   test('works with empty overrides', () => {
     const base = { id: 'base' };
     const overrides = {};
 
-    const actual = addOverrides(base, overrides);
+    const actual = mergeOverrides(base, overrides);
     expect(actual).toEqual(base);
   });
 
@@ -13,7 +13,7 @@ describe('addOverrides', () => {
     const base = {};
     const overrides = { id: 'overrides' };
 
-    const actual = addOverrides(base, overrides);
+    const actual = mergeOverrides(base, overrides);
     expect(actual).toEqual(overrides);
   });
 
@@ -36,7 +36,7 @@ describe('addOverrides', () => {
       }
     };
 
-    const actual = addOverrides(base, overrides);
+    const actual = mergeOverrides(base, overrides);
     expect(actual).toEqual(expected);
   });
 
@@ -59,7 +59,7 @@ describe('addOverrides', () => {
       }
     };
 
-    const actual = addOverrides(base, overrides);
+    const actual = mergeOverrides(base, overrides);
     expect(actual).toEqual(expected);
   });
 
@@ -82,7 +82,7 @@ describe('addOverrides', () => {
       }
     };
 
-    const actual = addOverrides(base, overrides);
+    const actual = mergeOverrides(base, overrides);
     expect(actual).toEqual(expected);
   });
 
@@ -107,7 +107,7 @@ describe('addOverrides', () => {
       }
     };
 
-    const actual = addOverrides(base, overrides);
+    const actual = mergeOverrides(base, overrides);
     expect(actual).toEqual(expected);
   });
 });

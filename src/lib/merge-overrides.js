@@ -1,5 +1,5 @@
 /**
- * Add overrides to a baseStyle
+ * Merge overrides with a baseStyle or other overrides
  *
  * paint and layout overrides do not fully overwrite paint and layout values in
  * the baseStyle, however, they add or replaces specific properties. In this
@@ -10,7 +10,7 @@
  * @param {object} overrides
  * @returns {object}
  */
-export const addOverrides = (baseStyle, overrides) => {
+export const mergeOverrides = (baseStyle, overrides) => {
   const extended = JSON.parse(JSON.stringify(baseStyle));
 
   Object.entries(overrides).forEach(([k, v]) => {

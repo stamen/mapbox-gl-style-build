@@ -2,4 +2,4 @@
 
 ## Unreleased
 
-- Export addOverrides to add/combine overrides
+- Export mergeOverrides helper function
