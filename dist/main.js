@@ -12,6 +12,12 @@ Object.defineProperty(module.exports, "buildStyle", {
         return $787eebfbd67e2373$exports.buildStyle;
     }
 });
+Object.defineProperty(module.exports, "mergeOverrides", {
+    enumerable: true,
+    get: function get() {
+        return $7c018e715e9e5e4a$exports.mergeOverrides;
+    }
+});
 Object.defineProperty(module.exports, "mergeVariables", {
     enumerable: true,
     get: function get() {
@@ -36,18 +42,64 @@ var $787eebfbd67e2373$var$_fs = $787eebfbd67e2373$var$_interopRequireDefault($gX
 var $787eebfbd67e2373$var$_path = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$path);
 
 var $787eebfbd67e2373$var$_chalk = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$chalk);
-function $787eebfbd67e2373$var$_interopRequireDefault(obj) {
-    return obj && obj.__esModule ? obj : {
-        "default": obj
-    };
+var $7c018e715e9e5e4a$exports = {};
+"use strict";
+Object.defineProperty($7c018e715e9e5e4a$exports, "__esModule", {
+    value: true
+});
+$7c018e715e9e5e4a$exports.mergeOverrides = void 0;
+function $7c018e715e9e5e4a$var$ownKeys(object, enumerableOnly) {
+    var keys = Object.keys(object);
+    if (Object.getOwnPropertySymbols) {
+        var symbols = Object.getOwnPropertySymbols(object);
+        enumerableOnly && (symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+        })), keys.push.apply(keys, symbols);
+    }
+    return keys;
 }
-function $787eebfbd67e2373$var$_slicedToArray(arr, i) {
-    return $787eebfbd67e2373$var$_arrayWithHoles(arr) || $787eebfbd67e2373$var$_iterableToArrayLimit(arr, i) || $787eebfbd67e2373$var$_unsupportedIterableToArray(arr, i) || $787eebfbd67e2373$var$_nonIterableRest();
+function $7c018e715e9e5e4a$var$_objectSpread(target) {
+    for(var i = 1; i < arguments.length; i++){
+        var source = null != arguments[i] ? arguments[i] : {
+        };
+        i % 2 ? $7c018e715e9e5e4a$var$ownKeys(Object(source), !0).forEach(function(key) {
+            $7c018e715e9e5e4a$var$_defineProperty(target, key, source[key]);
+        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : $7c018e715e9e5e4a$var$ownKeys(Object(source)).forEach(function(key) {
+            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+        });
+    }
+    return target;
 }
-function $787eebfbd67e2373$var$_nonIterableRest() {
+function $7c018e715e9e5e4a$var$_defineProperty(obj, key, value) {
+    if (key in obj) Object.defineProperty(obj, key, {
+        value: value,
+        enumerable: true,
+        configurable: true,
+        writable: true
+    });
+    else obj[key] = value;
+    return obj;
+}
+function $7c018e715e9e5e4a$var$_slicedToArray(arr, i) {
+    return $7c018e715e9e5e4a$var$_arrayWithHoles(arr) || $7c018e715e9e5e4a$var$_iterableToArrayLimit(arr, i) || $7c018e715e9e5e4a$var$_unsupportedIterableToArray(arr, i) || $7c018e715e9e5e4a$var$_nonIterableRest();
+}
+function $7c018e715e9e5e4a$var$_nonIterableRest() {
     throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
 }
-function $787eebfbd67e2373$var$_iterableToArrayLimit(arr, i) {
+function $7c018e715e9e5e4a$var$_unsupportedIterableToArray(o, minLen) {
+    if (!o) return;
+    if (typeof o === "string") return $7c018e715e9e5e4a$var$_arrayLikeToArray(o, minLen);
+    var n = Object.prototype.toString.call(o).slice(8, -1);
+    if (n === "Object" && o.constructor) n = o.constructor.name;
+    if (n === "Map" || n === "Set") return Array.from(o);
+    if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return $7c018e715e9e5e4a$var$_arrayLikeToArray(o, minLen);
+}
+function $7c018e715e9e5e4a$var$_arrayLikeToArray(arr, len) {
+    if (len == null || len > arr.length) len = arr.length;
+    for(var i = 0, arr2 = new Array(len); i < len; i++)arr2[i] = arr[i];
+    return arr2;
+}
+function $7c018e715e9e5e4a$var$_iterableToArrayLimit(arr, i) {
     var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
     if (_i == null) return;
     var _arr = [];
@@ -71,30 +123,37 @@ function $787eebfbd67e2373$var$_iterableToArrayLimit(arr, i) {
     }
     return _arr;
 }
-function $787eebfbd67e2373$var$_arrayWithHoles(arr) {
+function $7c018e715e9e5e4a$var$_arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
 }
-function $787eebfbd67e2373$var$ownKeys(object, enumerableOnly) {
-    var keys = Object.keys(object);
-    if (Object.getOwnPropertySymbols) {
-        var symbols = Object.getOwnPropertySymbols(object);
-        enumerableOnly && (symbols = symbols.filter(function(sym) {
-            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-        })), keys.push.apply(keys, symbols);
-    }
-    return keys;
-}
-function $787eebfbd67e2373$var$_objectSpread(target) {
-    for(var i = 1; i < arguments.length; i++){
-        var source = null != arguments[i] ? arguments[i] : {
-        };
-        i % 2 ? $787eebfbd67e2373$var$ownKeys(Object(source), !0).forEach(function(key) {
-            $787eebfbd67e2373$var$_defineProperty(target, key, source[key]);
-        }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : $787eebfbd67e2373$var$ownKeys(Object(source)).forEach(function(key) {
-            Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-        });
-    }
-    return target;
+/**
+ * Merge overrides with a baseStyle or other overrides
+ *
+ * paint and layout overrides do not fully overwrite paint and layout values in
+ * the baseStyle, however, they add or replaces specific properties. In this
+ * way, an overrides object can specify a single paint property to modify or add
+ * without overwriting all of the paint properties of the baseStyle.
+ *
+ * @param {object} baseStyle
+ * @param {object} overrides
+ * @returns {object}
+ */ var $7c018e715e9e5e4a$var$mergeOverrides = function mergeOverrides(baseStyle, overrides) {
+    var extended = JSON.parse(JSON.stringify(baseStyle));
+    Object.entries(overrides).forEach(function(_ref) {
+        var _ref2 = $7c018e715e9e5e4a$var$_slicedToArray(_ref, 2), k = _ref2[0], v = _ref2[1];
+        if (k === 'layout' || k === 'paint') extended[k] = $7c018e715e9e5e4a$var$_objectSpread($7c018e715e9e5e4a$var$_objectSpread({
+        }, extended[k]), v);
+        else extended[k] = v;
+    });
+    return extended;
+};
+$7c018e715e9e5e4a$exports.mergeOverrides = $7c018e715e9e5e4a$var$mergeOverrides;
+
+
+function $787eebfbd67e2373$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        "default": obj
+    };
 }
 function $787eebfbd67e2373$var$_toConsumableArray(arr) {
     return $787eebfbd67e2373$var$_arrayWithoutHoles(arr) || $787eebfbd67e2373$var$_iterableToArray(arr) || $787eebfbd67e2373$var$_unsupportedIterableToArray(arr) || $787eebfbd67e2373$var$_nonIterableSpread();
@@ -185,28 +244,6 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
         return "Undefined property at ".concat(JSON.stringify(undefinedProp));
     })));
     return messages;
-};
-/**
- * Extend a baseStyle with the given overrides.
- *
- * paint and layout overrides do not fully overwrite paint and layout values in
- * the baseStyle, however, they add or replaces specific properties. In this
- * way, an overrides object can specify a single paint property to modify or add
- * without overwriting all of the paint properties of the baseStyle.
- *
- * @param {object} baseStyle
- * @param {object} overrides
- * @returns {object}
- */ var $787eebfbd67e2373$var$extend = function extend(baseStyle, overrides) {
-    var extended = $787eebfbd67e2373$var$_objectSpread({
-    }, baseStyle);
-    Object.entries(overrides).forEach(function(_ref2) {
-        var _ref3 = $787eebfbd67e2373$var$_slicedToArray(_ref2, 2), k = _ref3[0], v = _ref3[1];
-        if (k === 'layout' || k === 'paint') extended[k] = $787eebfbd67e2373$var$_objectSpread($787eebfbd67e2373$var$_objectSpread({
-        }, extended[k]), v);
-        else extended[k] = v;
-    });
-    return extended;
 };
 /**
  * Get a useful error message when something goes wrong while building a layer
@@ -304,7 +341,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     } catch (error) {
         throw new Error($787eebfbd67e2373$var$getLayerBuildErrorMessage(error, name, path));
     }
-    return $787eebfbd67e2373$var$extend(layer.baseStyle, layer.overrides);
+    return (0, $7c018e715e9e5e4a$exports.mergeOverrides)(layer.baseStyle, layer.overrides);
 };
 /**
  * Build style
@@ -338,6 +375,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     return styleJson;
 };
 $787eebfbd67e2373$exports.buildStyle = $787eebfbd67e2373$var$buildStyle;
+
 
 
 var $5d86828d3cc45dbd$exports = {};
