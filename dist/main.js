@@ -392,6 +392,10 @@ const $1c55b3ddc6522c05$export$10aa94554223adba = (...variableGroups)=>{
 
 
 const $c13cf49f9eb4ca91$export$6b76883d21416ca5 = (baseLayer, variants)=>{
+    console.log({
+        baseLayer: baseLayer,
+        variants: variants
+    });
     let layer = baseLayer;
     if (!layer) layer = Object.values(variants)[0];
     let baseStyle = ($parcel$interopDefault($imiQD$jsonstringifyprettycompact))(layer, {

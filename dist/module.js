@@ -379,6 +379,10 @@ const $c77f414eaee20539$export$10aa94554223adba = (...variableGroups)=>{
 
 
 const $aff4b0b9e7672e7d$export$6b76883d21416ca5 = (baseLayer, variants)=>{
+    console.log({
+        baseLayer: baseLayer,
+        variants: variants
+    });
     let layer = baseLayer;
     if (!layer) layer = Object.values(variants)[0];
     let baseStyle = $ilDKq$jsonstringifyprettycompact(layer, {

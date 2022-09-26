@@ -61,6 +61,7 @@ for (const style of allStyles) {
   fs.writeFileSync(`${variantsDir}/${style.name}.js`, fileContent);
 }
 
+// Keep track of all created layers
 const templateCreated = new Set();
 
 // Create layer files
@@ -110,5 +111,3 @@ variants.forEach(style => {
     }
   });
 });
-
-// bin/create-layer-templates --in-dir=../lyft-collab/styles/production --out-dir=../lyft-collab/testing-out --base-path=../lyft-collab/styles/production/rider-lightmode.json
