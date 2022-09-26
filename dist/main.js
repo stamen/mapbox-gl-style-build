@@ -1,6 +1,8 @@
 var $imiQD$fs = require("fs");
 var $imiQD$path = require("path");
 var $imiQD$chalk = require("chalk");
+var $imiQD$jsonstringifyprettycompact = require("json-stringify-pretty-compact");
+var $imiQD$mapboxmapboxglstylespec = require("@mapbox/mapbox-gl-style-spec");
 
 function $parcel$export(e, n, v, s) {
   Object.defineProperty(e, n, {get: v, set: s, enumerable: true, configurable: true});
@@ -9,9 +11,12 @@ function $parcel$interopDefault(a) {
   return a && a.__esModule ? a.default : a;
 }
 
+$parcel$export(module.exports, "mergeOverrides", () => $a4d055c1a05e10fc$export$e8f23fe521397581);
 $parcel$export(module.exports, "buildStyle", () => $d3d51e661990e06e$export$a6e5f510497b7388);
 $parcel$export(module.exports, "mergeVariables", () => $1c55b3ddc6522c05$export$10aa94554223adba);
 $parcel$export(module.exports, "modifyNumberVariables", () => $b74204178064ce0e$export$84c6f462c47512cf);
+$parcel$export(module.exports, "createLayerTemplate", () => $c13cf49f9eb4ca91$export$6b76883d21416ca5);
+$parcel$export(module.exports, "createVariantTemplate", () => $c13cf49f9eb4ca91$export$65b94debc34e9714);
 
 
 
@@ -217,6 +222,7 @@ const $d3d51e661990e06e$export$a6e5f510497b7388 = (stylePath, layerDir, options 
 };
 
 
+
 const $1c55b3ddc6522c05$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
 ;
 /**
@@ -380,6 +386,105 @@ const $1c55b3ddc6522c05$export$10aa94554223adba = (...variableGroups)=>{
     }
     nextVariables = $b74204178064ce0e$var$replaceVariables(variables, mathFn, options);
     return nextVariables;
+};
+
+
+
+
+const $c13cf49f9eb4ca91$export$6b76883d21416ca5 = (baseLayer, variants)=>{
+    let layer = baseLayer;
+    if (!layer) layer = Object.values(variants)[0];
+    let baseStyle = ($parcel$interopDefault($imiQD$jsonstringifyprettycompact))(layer, {
+        indent: 2
+    }).split('\n').join('\n  ');
+    let allOverrides = '';
+    // TODO currently making the primary differentiator style id until we sort differences
+    for(const styleName in variants){
+        let overrides = {
+        };
+        if (layer && Object.keys(variants).length) {
+            let variantLayer = variants[styleName];
+            Object.entries(variantLayer).forEach(([k, v])=>{
+                if (k === 'layout' || k === 'paint') return;
+                if (JSON.stringify(v) === JSON.stringify(layer[k])) return;
+                overrides[k] = v;
+            });
+            if (variantLayer.layout) {
+                // If a property does not exist on a variant, override with the default
+                const defaultLayout = Object.keys(layer.layout || {
+                }).reduce((acc, k)=>{
+                    acc[k] = $imiQD$mapboxmapboxglstylespec.latest[`layout_${layer.type}`][k].default;
+                    return acc;
+                }, {
+                });
+                const fullLayout = {
+                    ...defaultLayout,
+                    ...variantLayer.layout
+                };
+                Object.entries(fullLayout).forEach(([k, v])=>{
+                    if (JSON.stringify(v) === JSON.stringify(layer?.layout?.[k])) return;
+                    if (!overrides.layout) overrides.layout = {
+                    };
+                    overrides.layout[k] = v;
+                });
+            }
+            if (variantLayer.paint) {
+                // If a property does not exist on a variant, override with the default
+                const defaultPaint = Object.keys(layer.paint || {
+                }).reduce((acc, k)=>{
+                    acc[k] = $imiQD$mapboxmapboxglstylespec.latest[`paint_${layer.type}`][k].default;
+                    return acc;
+                }, {
+                });
+                const fullPaint = {
+                    ...defaultPaint,
+                    ...variantLayer.paint
+                };
+                Object.entries(fullPaint).forEach(([k, v])=>{
+                    if (JSON.stringify(v) === JSON.stringify(layer?.paint?.[k])) return;
+                    if (!overrides.paint) overrides.paint = {
+                    };
+                    overrides.paint[k] = v;
+                });
+            }
+        }
+        overrides = ($parcel$interopDefault($imiQD$jsonstringifyprettycompact))(overrides, {
+            indent: 2
+        }).split('\n').join('\n    ');
+        allOverrides += `${!!allOverrides ? ' else if' : 'if'} (context.styleName === '${styleName}') {
+        overrides = ${overrides};
+    }`;
+    }
+    const fileContent = `module.exports.default = (context) => {
+        const baseStyle = ${baseStyle};
+
+        let overrides = {};
+
+        ${allOverrides}
+
+        return {
+            baseStyle,
+            overrides
+        };
+    };`;
+    return fileContent;
+};
+const $c13cf49f9eb4ca91$export$65b94debc34e9714 = (style)=>{
+    const templateStyle = {
+        ...style,
+        layers: style.layers.map((l)=>l.id
+        )
+    };
+    // TODO this seems Amazon specific
+    const fileContent = `module.exports.context = {
+  colors: {
+  },
+  styleName: '${style.name}'
+};
+
+module.exports.template = ${JSON.stringify(templateStyle, null, 2)};
+`;
+    return fileContent;
 };
 
 

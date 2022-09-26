@@ -19,8 +19,10 @@
     "collectCoverage": false
   },
   "dependencies": {
+    "@mapbox/mapbox-gl-style-spec": "^13.26.0",
     "chalk": "4.1.2",
     "fast-glob": "^3.2.11",
+    "json-stringify-pretty-compact": "^3.0.0",
     "mapbox-gl-style-format": "git+https://github.com/stamen/mapbox-gl-style-format#v0.1.1",
     "yargs": "^17.2.1"
   },
@@ -33,6 +35,7 @@
     "parcel": "^2.0.1"
   },
   "bin": {
-    "mapbox-gl-style-build": "bin/mapbox-gl-style-build"
+    "mapbox-gl-style-build": "bin/mapbox-gl-style-build",
+    "create-layer-templates": "bin/create-layer-templates"
   }
 }

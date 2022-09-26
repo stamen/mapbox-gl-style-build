@@ -1,6 +1,8 @@
 import $ilDKq$fs from "fs";
 import $ilDKq$path from "path";
 import $ilDKq$chalk from "chalk";
+import $ilDKq$jsonstringifyprettycompact from "json-stringify-pretty-compact";
+import {latest as $ilDKq$latest} from "@mapbox/mapbox-gl-style-spec";
 
 
 
@@ -207,6 +209,7 @@ const $dd232d3fc18ccc7d$export$a6e5f510497b7388 = (stylePath, layerDir, options 
 };
 
 
+
 const $c77f414eaee20539$var$isObject = (v)=>typeof v === 'object' && !Array.isArray(v) && !!v
 ;
 /**
@@ -375,5 +378,104 @@ const $c77f414eaee20539$export$10aa94554223adba = (...variableGroups)=>{
 
 
 
-export {$dd232d3fc18ccc7d$export$a6e5f510497b7388 as buildStyle, $c77f414eaee20539$export$10aa94554223adba as mergeVariables, $5248365052184b80$export$84c6f462c47512cf as modifyNumberVariables};
+const $aff4b0b9e7672e7d$export$6b76883d21416ca5 = (baseLayer, variants)=>{
+    let layer = baseLayer;
+    if (!layer) layer = Object.values(variants)[0];
+    let baseStyle = $ilDKq$jsonstringifyprettycompact(layer, {
+        indent: 2
+    }).split('\n').join('\n  ');
+    let allOverrides = '';
+    // TODO currently making the primary differentiator style id until we sort differences
+    for(const styleName in variants){
+        let overrides = {
+        };
+        if (layer && Object.keys(variants).length) {
+            let variantLayer = variants[styleName];
+            Object.entries(variantLayer).forEach(([k, v])=>{
+                if (k === 'layout' || k === 'paint') return;
+                if (JSON.stringify(v) === JSON.stringify(layer[k])) return;
+                overrides[k] = v;
+            });
+            if (variantLayer.layout) {
+                // If a property does not exist on a variant, override with the default
+                const defaultLayout = Object.keys(layer.layout || {
+                }).reduce((acc, k)=>{
+                    acc[k] = $ilDKq$latest[`layout_${layer.type}`][k].default;
+                    return acc;
+                }, {
+                });
+                const fullLayout = {
+                    ...defaultLayout,
+                    ...variantLayer.layout
+                };
+                Object.entries(fullLayout).forEach(([k, v])=>{
+                    if (JSON.stringify(v) === JSON.stringify(layer?.layout?.[k])) return;
+                    if (!overrides.layout) overrides.layout = {
+                    };
+                    overrides.layout[k] = v;
+                });
+            }
+            if (variantLayer.paint) {
+                // If a property does not exist on a variant, override with the default
+                const defaultPaint = Object.keys(layer.paint || {
+                }).reduce((acc, k)=>{
+                    acc[k] = $ilDKq$latest[`paint_${layer.type}`][k].default;
+                    return acc;
+                }, {
+                });
+                const fullPaint = {
+                    ...defaultPaint,
+                    ...variantLayer.paint
+                };
+                Object.entries(fullPaint).forEach(([k, v])=>{
+                    if (JSON.stringify(v) === JSON.stringify(layer?.paint?.[k])) return;
+                    if (!overrides.paint) overrides.paint = {
+                    };
+                    overrides.paint[k] = v;
+                });
+            }
+        }
+        overrides = $ilDKq$jsonstringifyprettycompact(overrides, {
+            indent: 2
+        }).split('\n').join('\n    ');
+        allOverrides += `${!!allOverrides ? ' else if' : 'if'} (context.styleName === '${styleName}') {
+        overrides = ${overrides};
+    }`;
+    }
+    const fileContent = `module.exports.default = (context) => {
+        const baseStyle = ${baseStyle};
+
+        let overrides = {};
+
+        ${allOverrides}
+
+        return {
+            baseStyle,
+            overrides
+        };
+    };`;
+    return fileContent;
+};
+const $aff4b0b9e7672e7d$export$65b94debc34e9714 = (style)=>{
+    const templateStyle = {
+        ...style,
+        layers: style.layers.map((l)=>l.id
+        )
+    };
+    // TODO this seems Amazon specific
+    const fileContent = `module.exports.context = {
+  colors: {
+  },
+  styleName: '${style.name}'
+};
+
+module.exports.template = ${JSON.stringify(templateStyle, null, 2)};
+`;
+    return fileContent;
+};
+
+
+
+
+export {$3b9d4e5c487c058b$export$e8f23fe521397581 as mergeOverrides, $dd232d3fc18ccc7d$export$a6e5f510497b7388 as buildStyle, $c77f414eaee20539$export$10aa94554223adba as mergeVariables, $5248365052184b80$export$84c6f462c47512cf as modifyNumberVariables, $aff4b0b9e7672e7d$export$6b76883d21416ca5 as createLayerTemplate, $aff4b0b9e7672e7d$export$65b94debc34e9714 as createVariantTemplate};
 //# sourceMappingURL=module.js.map

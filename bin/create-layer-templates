@@ -1,0 +1,114 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const { createLayerTemplate, createVariantTemplate } = require('../dist/main');
+
+const argv = yargs(hideBin(process.argv))
+  .usage('Usage: $0 indir outdir')
+  .option('in-dir', {
+    alias: 'inDir',
+    default: 'styles',
+    describe: 'The input style directory',
+    type: 'string'
+  })
+  .option('out-dir', {
+    alias: 'outDir',
+    default: 'templates',
+    describe: 'The output directory',
+    type: 'string'
+  })
+  .option('base-path', {
+    alias: 'basePath',
+    describe: 'The path to the base style',
+    type: 'string'
+  })
+  .example(
+    `$0
+\t--in-dir=styles
+\t--out-dir=templates
+\t--base-path=styles/main-style.json`
+  )
+  .parse();
+
+const { inDir, basePath, outDir } = argv;
+
+const baseStyle = JSON.parse(fs.readFileSync(basePath, 'utf-8'));
+
+const variants = [];
+
+const dirPaths = fs.readdirSync(inDir);
+
+for (const filePath of dirPaths) {
+  if (filePath === '.DS_Store') continue;
+  const style = JSON.parse(fs.readFileSync(`${inDir}/${filePath}`, 'utf-8'));
+  if (!style) continue;
+  variants.push(style);
+}
+
+// Create variant template files
+const allStyles = variants.concat([baseStyle]);
+
+for (const style of allStyles) {
+  const variantsDir = `${outDir}/variants`;
+  if (!fs.existsSync(variantsDir)) {
+    fs.mkdirSync(variantsDir, { recursive: true });
+  }
+
+  const fileContent = createVariantTemplate(style);
+
+  fs.writeFileSync(`${variantsDir}/${style.name}.js`, fileContent);
+}
+
+const templateCreated = new Set();
+
+// Create layer files
+const layersDir = `${outDir}/layers`;
+
+if (!fs.existsSync(layersDir)) {
+  fs.mkdirSync(layersDir, { recursive: true });
+}
+
+// From base style, create templates of all base layers with variants
+baseStyle.layers.forEach(layer => {
+  const variantLayers = variants.reduce((acc, s) => {
+    const match = s.layers.find(l => l.id === layer.id);
+    if (match) {
+      acc[s.name] = match;
+    }
+    return acc;
+  }, {});
+
+  templateCreated.add(layer.id);
+
+  const layerFileContent = createLayerTemplate(layer, variantLayers);
+
+  fs.writeFileSync(`${layersDir}/${layer.id}.js`, layerFileContent);
+});
+
+// From variants, create templates for all layers not in the base style
+const baseStyleLayers = baseStyle.layers.map(l => l.id);
+variants.forEach(style => {
+  style.layers.forEach(layer => {
+    if (baseStyleLayers.indexOf(layer.id) >= 0) return;
+
+    if (!templateCreated.has(layer.id)) {
+      templateCreated.add(layer.id);
+
+      const variantsForTemplates = variants.reduce((acc, s) => {
+        const vLayer = s.layers.find(l => l.id === layer.id);
+        if (vLayer) {
+          acc[s.name] = vLayer;
+        }
+        return acc;
+      }, {});
+
+      const layerFileContent = createLayerTemplate(null, variantsForTemplates);
+
+      fs.writeFileSync(`${layersDir}/${layer.id}.js`, layerFileContent);
+    }
+  });
+});
+
+// bin/create-layer-templates --in-dir=../lyft-collab/styles/production --out-dir=../lyft-collab/testing-out --base-path=../lyft-collab/styles/production/rider-lightmode.json
