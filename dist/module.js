@@ -378,11 +378,7 @@ const $c77f414eaee20539$export$10aa94554223adba = (...variableGroups)=>{
 
 
 
-const $aff4b0b9e7672e7d$export$6b76883d21416ca5 = (baseLayer, variants)=>{
-    console.log({
-        baseLayer: baseLayer,
-        variants: variants
-    });
+const $7feac53bc43fae8b$export$6b76883d21416ca5 = (baseLayer, variants)=>{
     let layer = baseLayer;
     if (!layer) layer = Object.values(variants)[0];
     let baseStyle = $ilDKq$jsonstringifyprettycompact(layer, {
@@ -460,7 +456,7 @@ const $aff4b0b9e7672e7d$export$6b76883d21416ca5 = (baseLayer, variants)=>{
     };`;
     return fileContent;
 };
-const $aff4b0b9e7672e7d$export$65b94debc34e9714 = (style)=>{
+const $7feac53bc43fae8b$export$65b94debc34e9714 = (style)=>{
     const templateStyle = {
         ...style,
         layers: style.layers.map((l)=>l.id
@@ -481,5 +477,5 @@ module.exports.template = ${JSON.stringify(templateStyle, null, 2)};
 
 
 
-export {$3b9d4e5c487c058b$export$e8f23fe521397581 as mergeOverrides, $dd232d3fc18ccc7d$export$a6e5f510497b7388 as buildStyle, $c77f414eaee20539$export$10aa94554223adba as mergeVariables, $5248365052184b80$export$84c6f462c47512cf as modifyNumberVariables, $aff4b0b9e7672e7d$export$6b76883d21416ca5 as createLayerTemplate, $aff4b0b9e7672e7d$export$65b94debc34e9714 as createVariantTemplate};
+export {$3b9d4e5c487c058b$export$e8f23fe521397581 as mergeOverrides, $dd232d3fc18ccc7d$export$a6e5f510497b7388 as buildStyle, $c77f414eaee20539$export$10aa94554223adba as mergeVariables, $5248365052184b80$export$84c6f462c47512cf as modifyNumberVariables, $7feac53bc43fae8b$export$6b76883d21416ca5 as createLayerTemplate, $7feac53bc43fae8b$export$65b94debc34e9714 as createVariantTemplate};
 //# sourceMappingURL=module.js.map

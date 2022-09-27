@@ -5,7 +5,7 @@ import { modifyNumberVariables } from './lib/modify-number-variables';
 import {
   createLayerTemplate,
   createVariantTemplate
-} from './lib/create-layer-template';
+} from './lib/create-template';
 
 export {
   mergeOverrides,

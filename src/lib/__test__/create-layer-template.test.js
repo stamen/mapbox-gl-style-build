@@ -1,9 +1,6 @@
-import {
-  createLayerTemplate,
-  createVariantTemplate
-} from '../create-layer-template';
+import { createLayerTemplate, createVariantTemplate } from '../create-template';
 
-// Remove newlines and double space indents to standardize prettified files in case we change it
+// Remove newlines and double space indents to standardize prettified files for tests to pass in case we change formatting
 const removeNewLines = text => {
   return text.replace(/(\r\n|\n|\r|\s\s)/g, '');
 };

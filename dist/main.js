@@ -15,8 +15,8 @@ $parcel$export(module.exports, "mergeOverrides", () => $a4d055c1a05e10fc$export$
 $parcel$export(module.exports, "buildStyle", () => $d3d51e661990e06e$export$a6e5f510497b7388);
 $parcel$export(module.exports, "mergeVariables", () => $1c55b3ddc6522c05$export$10aa94554223adba);
 $parcel$export(module.exports, "modifyNumberVariables", () => $b74204178064ce0e$export$84c6f462c47512cf);
-$parcel$export(module.exports, "createLayerTemplate", () => $c13cf49f9eb4ca91$export$6b76883d21416ca5);
-$parcel$export(module.exports, "createVariantTemplate", () => $c13cf49f9eb4ca91$export$65b94debc34e9714);
+$parcel$export(module.exports, "createLayerTemplate", () => $0b794c55e18208b3$export$6b76883d21416ca5);
+$parcel$export(module.exports, "createVariantTemplate", () => $0b794c55e18208b3$export$65b94debc34e9714);
 
 
 
@@ -391,11 +391,7 @@ const $1c55b3ddc6522c05$export$10aa94554223adba = (...variableGroups)=>{
 
 
 
-const $c13cf49f9eb4ca91$export$6b76883d21416ca5 = (baseLayer, variants)=>{
-    console.log({
-        baseLayer: baseLayer,
-        variants: variants
-    });
+const $0b794c55e18208b3$export$6b76883d21416ca5 = (baseLayer, variants)=>{
     let layer = baseLayer;
     if (!layer) layer = Object.values(variants)[0];
     let baseStyle = ($parcel$interopDefault($imiQD$jsonstringifyprettycompact))(layer, {
@@ -473,7 +469,7 @@ const $c13cf49f9eb4ca91$export$6b76883d21416ca5 = (baseLayer, variants)=>{
     };`;
     return fileContent;
 };
-const $c13cf49f9eb4ca91$export$65b94debc34e9714 = (style)=>{
+const $0b794c55e18208b3$export$65b94debc34e9714 = (style)=>{
     const templateStyle = {
         ...style,
         layers: style.layers.map((l)=>l.id
