@@ -140,12 +140,27 @@ _Example:_
 
 ## Implementation
 
-Implementation of the build system is most easily done with a combination of a custom script and manual work.
+Implementation of the build system is most easily done with a combination of a provided script and manual work.
 
-Based on the prerequisite decisions about primary differentiators for variants, a single use script can do the initial work of:
+Based on the prerequisite decisions about primary differentiators for variants, this script can do the initial work of:
 
 - Breaking existing styles out into the style template and layer JS files
 - Imposing a file structure on the repo
+
+```bash
+create-layer-templates
+    --in-dir=styles
+    --out-dir=templates
+    --base-path=styles/base-style.json
+```
+
+The parameters are as follows:
+
+- `--in-dir`: the style directory containing existing variant styles to break out into template files
+- `--out-dir`: the directory to build your template files to
+- `--base-path`: the name of the style in the "in-dir" that is the base style
+
+After running the implementation script, you may manually delete the initial styles directory unless reusing it for building the templates to. The script avoids this step as there may occasionally be reason to leave these pre-build-system styles for posterity.
 
 Before running your script or otherwise setting up the file structure in your repo, all style PRs should be merged and style work should stop until the new repo structure is merged.
 
