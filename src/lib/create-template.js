@@ -94,7 +94,6 @@ export const createVariantTemplate = style => {
     layers: style.layers.map(l => l.id)
   };
 
-  // TODO this seems Amazon specific
   const fileContent = `module.exports.context = {
   colors: {
   },
