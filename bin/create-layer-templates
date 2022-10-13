@@ -1,0 +1,145 @@
+#!/usr/bin/env node
+
+const fs = require('fs');
+const yargs = require('yargs/yargs');
+const { hideBin } = require('yargs/helpers');
+const { createLayerTemplate, createVariantTemplate } = require('../dist/main');
+
+const argv = yargs(hideBin(process.argv))
+  .usage('Usage: $0 indir outdir')
+  .option('in-dir', {
+    alias: 'inDir',
+    default: 'styles',
+    describe: 'The input style directory',
+    type: 'string'
+  })
+  .option('out-dir', {
+    alias: 'outDir',
+    default: 'templates',
+    describe: 'The output directory',
+    type: 'string'
+  })
+  .option('base-style-path', {
+    alias: 'baseStylePath',
+    describe: 'The path to the base style',
+    type: 'string'
+  })
+  .example(
+    `$0
+\t--in-dir=styles
+\t--out-dir=templates
+\t--base-style-path=styles/main-style.json`
+  )
+  .parse();
+
+const { inDir, baseStylePath, outDir } = argv;
+
+let baseStyle;
+try {
+  baseStyle = JSON.parse(fs.readFileSync(baseStylePath, 'utf-8'));
+} catch (err) {
+  if (!baseStylePath.endsWith('.json')) {
+    console.error(`Base style path: ${baseStylePath} is not a .json file`);
+  } else {
+    console.error(
+      `Base style path: base-style-path path ${baseStylePath} does not exist`
+    );
+  }
+  throw new Error(err);
+}
+
+const variants = [];
+
+let dirPaths;
+try {
+  dirPaths = fs.readdirSync(inDir);
+} catch (err) {
+  console.error(`In directory: in-dir path ${inDir} does not exist`);
+  throw new Error(err);
+}
+
+for (const filePath of dirPaths) {
+  if (filePath === '.DS_Store') continue;
+  let style;
+  try {
+    style = JSON.parse(fs.readFileSync(`${inDir}/${filePath}`, 'utf-8'));
+  } catch (err) {
+    if (!filePath.endsWith('.json')) {
+      console.error(
+        `In directory: ${`${inDir}/${filePath} is not a .json file`}`
+      );
+    } else {
+      console.error(
+        `In directory: There was a problem opening ${`${inDir}/${filePath}`}`
+      );
+    }
+    throw new Error(err);
+  }
+  if (!style) continue;
+  variants.push(style);
+}
+
+// Create variant template files
+const allStyles = variants.concat([baseStyle]);
+
+for (const style of allStyles) {
+  const variantsDir = `${outDir}/variants`;
+  if (!fs.existsSync(variantsDir)) {
+    fs.mkdirSync(variantsDir, { recursive: true });
+  }
+
+  const fileContent = createVariantTemplate(style);
+
+  fs.writeFileSync(`${variantsDir}/${style.name}.js`, fileContent);
+}
+
+// Keep track of all created layers
+const templateCreated = new Set();
+
+// Create layer files
+const layersDir = `${outDir}/layers`;
+
+if (!fs.existsSync(layersDir)) {
+  fs.mkdirSync(layersDir, { recursive: true });
+}
+
+// From base style, create templates of all base layers with variants
+baseStyle.layers.forEach(layer => {
+  const variantLayers = variants.reduce((acc, s) => {
+    const match = s.layers.find(l => l.id === layer.id);
+    if (match) {
+      acc[s.name] = match;
+    }
+    return acc;
+  }, {});
+
+  templateCreated.add(layer.id);
+
+  const layerFileContent = createLayerTemplate(layer, variantLayers);
+
+  fs.writeFileSync(`${layersDir}/${layer.id}.js`, layerFileContent);
+});
+
+// From variants, create templates for all layers not in the base style
+const baseStyleLayers = baseStyle.layers.map(l => l.id);
+variants.forEach(style => {
+  style.layers.forEach(layer => {
+    if (baseStyleLayers.indexOf(layer.id) >= 0) return;
+
+    if (!templateCreated.has(layer.id)) {
+      templateCreated.add(layer.id);
+
+      const variantsForTemplates = variants.reduce((acc, s) => {
+        const vLayer = s.layers.find(l => l.id === layer.id);
+        if (vLayer) {
+          acc[s.name] = vLayer;
+        }
+        return acc;
+      }, {});
+
+      const layerFileContent = createLayerTemplate(null, variantsForTemplates);
+
+      fs.writeFileSync(`${layersDir}/${layer.id}.js`, layerFileContent);
+    }
+  });
+});
