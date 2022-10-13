@@ -452,21 +452,18 @@ const $0b794c55e18208b3$export$6b76883d21416ca5 = (baseLayer, variants)=>{
             indent: 2
         }).split('\n').join('\n    ');
         allOverrides += `${!!allOverrides ? ' else if' : 'if'} (context.styleName === '${styleName}') {
-        overrides = ${overrides};
-    }`;
+      overrides = ${overrides};
+  }`;
     }
     const fileContent = `module.exports.default = (context) => {
-        const baseStyle = ${baseStyle};
-
-        let overrides = {};
-
-        ${allOverrides}
-
-        return {
-            baseStyle,
-            overrides
-        };
-    };`;
+  const baseStyle = ${baseStyle};
+  let overrides = {};
+  ${allOverrides}
+  return {
+    baseStyle,
+    overrides
+  };
+};`;
     return fileContent;
 };
 const $0b794c55e18208b3$export$65b94debc34e9714 = (style)=>{
@@ -475,7 +472,6 @@ const $0b794c55e18208b3$export$65b94debc34e9714 = (style)=>{
         layers: style.layers.map((l)=>l.id
         )
     };
-    // TODO this seems Amazon specific
     const fileContent = `module.exports.context = {
   colors: {
   },

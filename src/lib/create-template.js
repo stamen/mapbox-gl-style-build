@@ -66,8 +66,8 @@ export const createLayerTemplate = (baseLayer, variants) => {
     allOverrides += `${
       !!allOverrides ? ' else if' : 'if'
     } (context.styleName === '${styleName}') {
-        overrides = ${overrides};
-    }`;
+      overrides = ${overrides};
+  }`;
   }
 
   const fileContent = `module.exports.default = (context) => {
@@ -79,6 +79,7 @@ export const createLayerTemplate = (baseLayer, variants) => {
     overrides
   };
 };`;
+
   return fileContent;
 };
 
