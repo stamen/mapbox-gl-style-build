@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import stringifyPretty from 'json-stringify-pretty-compact';
 import { latest } from '@mapbox/mapbox-gl-style-spec';
 
@@ -73,18 +71,14 @@ export const createLayerTemplate = (baseLayer, variants) => {
   }
 
   const fileContent = `module.exports.default = (context) => {
-        const baseStyle = ${baseStyle};
-
-        let overrides = {};
-
-        ${allOverrides}
-
-        return {
-            baseStyle,
-            overrides
-        };
-    };`;
-
+  const baseStyle = ${baseStyle};
+  let overrides = {};
+  ${allOverrides}
+  return {
+    baseStyle,
+    overrides
+  };
+};`;
   return fileContent;
 };
 
