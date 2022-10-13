@@ -38,9 +38,13 @@ let baseStyle;
 try {
   baseStyle = JSON.parse(fs.readFileSync(baseStylePath, 'utf-8'));
 } catch (err) {
-  console.error(
-    `Base style path: base-style-path path ${baseStylePath} does not exist`
-  );
+  if (!baseStylePath.endsWith('.json')) {
+    console.error(`Base style path: ${baseStylePath} is not a .json file`);
+  } else {
+    console.error(
+      `Base style path: base-style-path path ${baseStylePath} does not exist`
+    );
+  }
   throw new Error(err);
 }
 
