@@ -151,14 +151,14 @@ Based on the prerequisite decisions about primary differentiators for variants, 
 create-layer-templates
     --in-dir=styles
     --out-dir=templates
-    --base-path=styles/base-style.json
+    --base-style-path=styles/base-style.json
 ```
 
 The parameters are as follows:
 
 - `--in-dir`: the style directory containing existing variant styles to break out into template files
 - `--out-dir`: the directory to build your template files to
-- `--base-path`: the name of the style in the "in-dir" that is the base style
+- `--base-style-path`: the name of the style in the "in-dir" that is the base style
 
 After running the implementation script, you may manually delete the initial styles directory unless reusing it for building the templates to. The script avoids this step as there may occasionally be reason to leave these pre-build-system styles for posterity.
 

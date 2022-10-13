@@ -28,7 +28,7 @@ const argv = yargs(hideBin(process.argv))
     `$0
 \t--in-dir=styles
 \t--out-dir=templates
-\t--base-path=styles/main-style.json`
+\t--base-style-path=styles/main-style.json`
   )
   .parse();
 
