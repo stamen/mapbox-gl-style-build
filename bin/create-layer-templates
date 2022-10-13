@@ -19,8 +19,8 @@ const argv = yargs(hideBin(process.argv))
     describe: 'The output directory',
     type: 'string'
   })
-  .option('base-path', {
-    alias: 'basePath',
+  .option('base-style-path', {
+    alias: 'baseStylePath',
     describe: 'The path to the base style',
     type: 'string'
   })
@@ -32,17 +32,45 @@ const argv = yargs(hideBin(process.argv))
   )
   .parse();
 
-const { inDir, basePath, outDir } = argv;
+const { inDir, baseStylePath, outDir } = argv;
 
-const baseStyle = JSON.parse(fs.readFileSync(basePath, 'utf-8'));
+let baseStyle;
+try {
+  baseStyle = JSON.parse(fs.readFileSync(baseStylePath, 'utf-8'));
+} catch (err) {
+  console.error(
+    `Base style path: base-style-path path ${baseStylePath} does not exist`
+  );
+  throw new Error(err);
+}
 
 const variants = [];
 
-const dirPaths = fs.readdirSync(inDir);
+let dirPaths;
+try {
+  dirPaths = fs.readdirSync(inDir);
+} catch (err) {
+  console.error(`In directory: in-dir path ${inDir} does not exist`);
+  throw new Error(err);
+}
 
 for (const filePath of dirPaths) {
   if (filePath === '.DS_Store') continue;
-  const style = JSON.parse(fs.readFileSync(`${inDir}/${filePath}`, 'utf-8'));
+  let style;
+  try {
+    style = JSON.parse(fs.readFileSync(`${inDir}/${filePath}`, 'utf-8'));
+  } catch (err) {
+    if (!filePath.endsWith('.json')) {
+      console.error(
+        `In directory: ${`${inDir}/${filePath} is not a .json file`}`
+      );
+    } else {
+      console.error(
+        `In directory: There was a problem opening ${`${inDir}/${filePath}`}`
+      );
+    }
+    throw new Error(err);
+  }
   if (!style) continue;
   variants.push(style);
 }
