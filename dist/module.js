@@ -1,14 +1,16 @@
 import $ilDKq$fs from "fs";
 import $ilDKq$path from "path";
 import $ilDKq$chalk from "chalk";
+import $ilDKq$lodashclonedeep from "lodash.clonedeep";
 import $ilDKq$jsonstringifyprettycompact from "json-stringify-pretty-compact";
 import {latest as $ilDKq$latest} from "@mapbox/mapbox-gl-style-spec";
 
 
 
 
+
 const $3b9d4e5c487c058b$export$e8f23fe521397581 = (baseStyle, overrides)=>{
-    const extended = JSON.parse(JSON.stringify(baseStyle));
+    const extended = $ilDKq$lodashclonedeep(baseStyle);
     Object.entries(overrides).forEach(([k, v])=>{
         if (k === 'layout' || k === 'paint') extended[k] = {
             ...extended[k],
@@ -182,12 +184,7 @@ ${$ilDKq$chalk.red(error.stack)}
     } catch (error) {
         throw new Error($dd232d3fc18ccc7d$var$getLayerBuildErrorMessage(error, name, path));
     }
-    // Validate before mergeOverrides removes undefined keys
-    const layerValidationMessages = $dd232d3fc18ccc7d$var$validateLayer(layer);
-    return {
-        layer: $3b9d4e5c487c058b$export$e8f23fe521397581(layer.baseStyle, layer.overrides),
-        warnings: layerValidationMessages
-    };
+    return $3b9d4e5c487c058b$export$e8f23fe521397581(layer.baseStyle, layer.overrides);
 };
 const $dd232d3fc18ccc7d$export$a6e5f510497b7388 = (stylePath, layerDir, options = {
 })=>{
@@ -203,8 +200,10 @@ const $dd232d3fc18ccc7d$export$a6e5f510497b7388 = (stylePath, layerDir, options 
     styleJson.layers = template.layers.map((layerName)=>{
         if (verbose) console.log(`  Adding layer ${$ilDKq$chalk.blue(layerName)}`);
         const layerPath = $ilDKq$path.resolve(layerDir, `${layerName}.js`);
-        const { layer: layer , warnings: warnings  } = $dd232d3fc18ccc7d$var$buildLayer(context, layerName, layerPath);
-        if (warnings.length) validationMessages[layerName] = warnings;
+        const layer = $dd232d3fc18ccc7d$var$buildLayer(context, layerName, layerPath);
+        // Collect validation messages for each layer
+        const layerValidationMessages = $dd232d3fc18ccc7d$var$validateLayer(layer);
+        if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
         return layer;
     });
     if (Object.keys(validationMessages).length > 0) $dd232d3fc18ccc7d$var$logValidationMessages(name, validationMessages);

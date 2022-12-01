@@ -11,7 +11,7 @@ import { mergeOverrides } from './merge-overrides';
  * @param {string} path - the file path
  * @return {boolean} whether the file exists
  */
-const fileExists = path => {
+const fileExists = (path) => {
   try {
     fs.accessSync(path, fs.constants.R_OK);
   } catch (e) {
@@ -110,9 +110,7 @@ ${lineNumber}: ${layerLine}`;
  * @returns {string}
  */
 const getFileDoesNotExistMessage = (fileType, name, path) => {
-  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(
-    name
-  )}, does it exist? Attempted to load from
+  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}, does it exist? Attempted to load from
   ${chalk.blue(path)}
 `;
 };
@@ -127,9 +125,7 @@ const getFileDoesNotExistMessage = (fileType, name, path) => {
  * @returns {string}
  */
 const getFileErrorMessage = (fileType, name, path, error) => {
-  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(
-    name
-  )}. Received this error:
+  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}. Received this error:
 
 ${chalk.red(error.stack)}
 `;
@@ -211,13 +207,7 @@ const buildLayer = (context, name, path) => {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
   }
 
-  // Validate before mergeOverrides removes undefined keys
-  const layerValidationMessages = validateLayer(layer);
-
-  return {
-    layer: mergeOverrides(layer.baseStyle, layer.overrides),
-    warnings: layerValidationMessages
-  };
+  return mergeOverrides(layer.baseStyle, layer.overrides);
 };
 
 /**
@@ -256,10 +246,12 @@ export const buildStyle = (stylePath, layerDir, options = {}) => {
     }
 
     const layerPath = path.resolve(layerDir, `${layerName}.js`);
-    const { layer, warnings } = buildLayer(context, layerName, layerPath);
+    const layer = buildLayer(context, layerName, layerPath);
 
-    if (warnings.length) {
-      validationMessages[layerName] = warnings;
+    // Collect validation messages for each layer
+    const layerValidationMessages = validateLayer(layer);
+    if (layerValidationMessages.length) {
+      validationMessages[layerName] = layerValidationMessages;
     }
 
     return layer;
