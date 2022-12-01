@@ -182,7 +182,12 @@ ${$ilDKq$chalk.red(error.stack)}
     } catch (error) {
         throw new Error($dd232d3fc18ccc7d$var$getLayerBuildErrorMessage(error, name, path));
     }
-    return $3b9d4e5c487c058b$export$e8f23fe521397581(layer.baseStyle, layer.overrides);
+    // Validate before mergeOverrides removes undefined keys
+    const layerValidationMessages = $dd232d3fc18ccc7d$var$validateLayer(layer);
+    return {
+        layer: $3b9d4e5c487c058b$export$e8f23fe521397581(layer.baseStyle, layer.overrides),
+        warnings: layerValidationMessages
+    };
 };
 const $dd232d3fc18ccc7d$export$a6e5f510497b7388 = (stylePath, layerDir, options = {
 })=>{
@@ -198,10 +203,8 @@ const $dd232d3fc18ccc7d$export$a6e5f510497b7388 = (stylePath, layerDir, options 
     styleJson.layers = template.layers.map((layerName)=>{
         if (verbose) console.log(`  Adding layer ${$ilDKq$chalk.blue(layerName)}`);
         const layerPath = $ilDKq$path.resolve(layerDir, `${layerName}.js`);
-        const layer = $dd232d3fc18ccc7d$var$buildLayer(context, layerName, layerPath);
-        // Collect validation messages for each layer
-        const layerValidationMessages = $dd232d3fc18ccc7d$var$validateLayer(layer);
-        if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
+        const { layer: layer , warnings: warnings  } = $dd232d3fc18ccc7d$var$buildLayer(context, layerName, layerPath);
+        if (warnings.length) validationMessages[layerName] = warnings;
         return layer;
     });
     if (Object.keys(validationMessages).length > 0) $dd232d3fc18ccc7d$var$logValidationMessages(name, validationMessages);

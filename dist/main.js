@@ -195,7 +195,12 @@ ${($parcel$interopDefault($imiQD$chalk)).red(error.stack)}
     } catch (error) {
         throw new Error($d3d51e661990e06e$var$getLayerBuildErrorMessage(error, name, path));
     }
-    return $a4d055c1a05e10fc$export$e8f23fe521397581(layer.baseStyle, layer.overrides);
+    // Validate before mergeOverrides removes undefined keys
+    const layerValidationMessages = $d3d51e661990e06e$var$validateLayer(layer);
+    return {
+        layer: $a4d055c1a05e10fc$export$e8f23fe521397581(layer.baseStyle, layer.overrides),
+        warnings: layerValidationMessages
+    };
 };
 const $d3d51e661990e06e$export$a6e5f510497b7388 = (stylePath, layerDir, options = {
 })=>{
@@ -211,10 +216,8 @@ const $d3d51e661990e06e$export$a6e5f510497b7388 = (stylePath, layerDir, options 
     styleJson.layers = template.layers.map((layerName)=>{
         if (verbose) console.log(`  Adding layer ${($parcel$interopDefault($imiQD$chalk)).blue(layerName)}`);
         const layerPath = ($parcel$interopDefault($imiQD$path)).resolve(layerDir, `${layerName}.js`);
-        const layer = $d3d51e661990e06e$var$buildLayer(context, layerName, layerPath);
-        // Collect validation messages for each layer
-        const layerValidationMessages = $d3d51e661990e06e$var$validateLayer(layer);
-        if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
+        const { layer: layer , warnings: warnings  } = $d3d51e661990e06e$var$buildLayer(context, layerName, layerPath);
+        if (warnings.length) validationMessages[layerName] = warnings;
         return layer;
     });
     if (Object.keys(validationMessages).length > 0) $d3d51e661990e06e$var$logValidationMessages(name, validationMessages);
