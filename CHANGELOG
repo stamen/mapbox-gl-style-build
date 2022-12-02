@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Fix missing validation for undefined properties bug 
+
 ## 0.5.1
 
 - Bug with bad merge missing changes in release

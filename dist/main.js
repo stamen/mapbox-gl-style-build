@@ -1,6 +1,7 @@
 var $imiQD$fs = require("fs");
 var $imiQD$path = require("path");
 var $imiQD$chalk = require("chalk");
+var $imiQD$lodashclonedeep = require("lodash.clonedeep");
 var $imiQD$jsonstringifyprettycompact = require("json-stringify-pretty-compact");
 var $imiQD$mapboxmapboxglstylespec = require("@mapbox/mapbox-gl-style-spec");
 
@@ -20,8 +21,9 @@ $parcel$export(module.exports, "createVariantTemplate", () => $0b794c55e18208b3$
 
 
 
+
 const $a4d055c1a05e10fc$export$e8f23fe521397581 = (baseStyle, overrides)=>{
-    const extended = JSON.parse(JSON.stringify(baseStyle));
+    const extended = ($parcel$interopDefault($imiQD$lodashclonedeep))(baseStyle);
     Object.entries(overrides).forEach(([k, v])=>{
         if (k === 'layout' || k === 'paint') extended[k] = {
             ...extended[k],

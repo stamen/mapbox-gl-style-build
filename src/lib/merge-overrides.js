@@ -1,3 +1,5 @@
+import cloneDeep from 'lodash.clonedeep';
+
 /**
  * Merge overrides with a baseStyle or other overrides
  *
@@ -11,7 +13,7 @@
  * @returns {object}
  */
 export const mergeOverrides = (baseStyle, overrides) => {
-  const extended = JSON.parse(JSON.stringify(baseStyle));
+  const extended = cloneDeep(baseStyle);
 
   Object.entries(overrides).forEach(([k, v]) => {
     if (k === 'layout' || k === 'paint') {
@@ -23,4 +25,3 @@ export const mergeOverrides = (baseStyle, overrides) => {
 
   return extended;
 };
-

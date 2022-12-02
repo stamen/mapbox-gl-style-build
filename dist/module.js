@@ -1,14 +1,16 @@
 import $ilDKq$fs from "fs";
 import $ilDKq$path from "path";
 import $ilDKq$chalk from "chalk";
+import $ilDKq$lodashclonedeep from "lodash.clonedeep";
 import $ilDKq$jsonstringifyprettycompact from "json-stringify-pretty-compact";
 import {latest as $ilDKq$latest} from "@mapbox/mapbox-gl-style-spec";
 
 
 
 
+
 const $3b9d4e5c487c058b$export$e8f23fe521397581 = (baseStyle, overrides)=>{
-    const extended = JSON.parse(JSON.stringify(baseStyle));
+    const extended = $ilDKq$lodashclonedeep(baseStyle);
     Object.entries(overrides).forEach(([k, v])=>{
         if (k === 'layout' || k === 'paint') extended[k] = {
             ...extended[k],
