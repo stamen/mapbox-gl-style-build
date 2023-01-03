@@ -44,12 +44,11 @@ const argv = yargs(hideBin(process.argv))
   .parse();
 
 const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
-  const verbose = options?.verbose ?? false;
-
   const stylePaths = await fg([path.resolve(`${styleDir}/**/*.js`)]);
 
-  stylePaths.forEach(stylePath => {
-    const { dir, name } = path.parse(path.relative(styleDir, stylePath));
+  stylePaths.forEach(absoluteStylePath => {
+    const relativePath = path.relative(styleDir, absoluteStylePath);
+    const { dir, name } = path.parse(relativePath);
     const styleOutputDir = path.resolve(outputDir, dir, name);
 
     if (!fs.existsSync(styleOutputDir)) {
@@ -57,7 +56,10 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
     }
 
     try {
-      const builtStyle = format(buildStyle(stylePath, layerDir, options));
+      const builtStyle = format(
+        // Passing in the relativePath as the style name so users can easily find issues
+        buildStyle(relativePath, absoluteStylePath, layerDir, options)
+      );
       fs.writeFileSync(path.resolve(styleOutputDir, 'style.json'), builtStyle);
     } catch (e) {
       // We catch errors here rather than the default, which
