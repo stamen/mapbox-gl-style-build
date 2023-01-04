@@ -11,7 +11,7 @@ import { mergeOverrides } from './merge-overrides';
  * @param {string} path - the file path
  * @return {boolean} whether the file exists
  */
-const fileExists = (path) => {
+const fileExists = path => {
   try {
     fs.accessSync(path, fs.constants.R_OK);
   } catch (e) {
@@ -110,7 +110,9 @@ ${lineNumber}: ${layerLine}`;
  * @returns {string}
  */
 const getFileDoesNotExistMessage = (fileType, name, path) => {
-  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}, does it exist? Attempted to load from
+  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(
+    name
+  )}, does it exist? Attempted to load from
   ${chalk.blue(path)}
 `;
 };
@@ -125,7 +127,9 @@ const getFileDoesNotExistMessage = (fileType, name, path) => {
  * @returns {string}
  */
 const getFileErrorMessage = (fileType, name, path, error) => {
-  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(name)}. Received this error:
+  return `\n${chalk.red.bold('Error:')} Couldn't load ${fileType} ${chalk.blue(
+    name
+  )}. Received this error:
 
 ${chalk.red(error.stack)}
 `;
@@ -213,24 +217,25 @@ const buildLayer = (context, name, path) => {
 /**
  * Build style
  *
- * @param {string} name - the name of the style to build
- * @param {string} styleDir - the input directory that contains styles
+ * @param {string} name - the name of the style being built
+ * @param {string} absoluteStylePath - the input directory that contains styles
  * @param {string} layerDir - the input directory that contains layers
  * @returns {Object}
  */
-export const buildStyle = (stylePath, layerDir, options = {}) => {
-  if (!stylePath) {
-    throw new Error('Must provide stylePath.');
+export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
+  if (!absoluteStylePath) {
+    throw new Error('Must provide absoluteStylePath.');
   }
   if (!layerDir) {
     throw new Error('Must provide layerDir.');
   }
 
-  const name = path.basename(stylePath, '.js');
-
   const verbose = options?.verbose ?? false;
 
-  const { context, template } = loadStyle(name, path.resolve(stylePath));
+  const { context, template } = loadStyle(
+    name,
+    path.resolve(absoluteStylePath)
+  );
 
   const styleJson = JSON.parse(JSON.stringify(template));
 
