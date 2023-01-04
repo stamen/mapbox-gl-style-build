@@ -2,9 +2,13 @@
 
 ## Unreleased
 
+## 0.5.3
+
+- Specify style name/location better in warnings
+
 ## 0.5.2
 
-- Fix missing validation for undefined properties bug 
+- Fix missing validation for undefined properties bug
 
 ## 0.5.1
 
