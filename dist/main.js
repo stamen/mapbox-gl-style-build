@@ -444,7 +444,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     });
     unusedContext = removeEmpty(unusedContext);
     if (Object.keys(validationMessages).length > 0 || Object.keys(unusedContext).length > 0) console.warn("Found issues in style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ":"));
-    if (Object.keys(validationMessages).length > 0) $787eebfbd67e2373$var$logLayerValidationMessages(name, validationMessages);
+    if (Object.keys(validationMessages).length > 0) $787eebfbd67e2373$var$logLayerValidationMessages(validationMessages);
     if (Object.keys(unusedContext).length > 0) $787eebfbd67e2373$var$logContextValidationMessages(unusedContext);
     return styleJson;
 };

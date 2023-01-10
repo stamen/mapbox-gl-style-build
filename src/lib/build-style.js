@@ -321,7 +321,7 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     console.warn(`Found issues in style ${chalk.blue(name)}:`);
   }
   if (Object.keys(validationMessages).length > 0) {
-    logLayerValidationMessages(name, validationMessages);
+    logLayerValidationMessages(validationMessages);
   }
   if (Object.keys(unusedContext).length > 0) {
     logContextValidationMessages(unusedContext);

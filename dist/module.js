@@ -445,7 +445,7 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     });
     unusedContext = removeEmpty(unusedContext);
     if (Object.keys(validationMessages).length > 0 || Object.keys(unusedContext).length > 0) console.warn("Found issues in style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ":"));
-    if (Object.keys(validationMessages).length > 0) $5c3f8fbf0bc952bf$var$logLayerValidationMessages(name, validationMessages);
+    if (Object.keys(validationMessages).length > 0) $5c3f8fbf0bc952bf$var$logLayerValidationMessages(validationMessages);
     if (Object.keys(unusedContext).length > 0) $5c3f8fbf0bc952bf$var$logContextValidationMessages(unusedContext);
     return styleJson;
 };
