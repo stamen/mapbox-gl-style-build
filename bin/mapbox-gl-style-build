@@ -4,6 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const fg = require('fast-glob');
 const yargs = require('yargs/yargs');
+const chalk = require('chalk');
 const { hideBin } = require('yargs/helpers');
 const { format } = require('mapbox-gl-style-format');
 
@@ -46,8 +47,8 @@ const argv = yargs(hideBin(process.argv))
 const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
   const stylePaths = await fg([path.resolve(`${styleDir}/**/*.js`)]);
 
-  let usedCount = {};
-  let unusedCount = {};
+  let usedContext = new Set();
+  let unusedContext = new Set();
   stylePaths.forEach(absoluteStylePath => {
     const relativePath = path.relative(styleDir, absoluteStylePath);
     const { dir, name } = path.parse(relativePath);
@@ -66,21 +67,9 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
       } = buildStyle(relativePath, absoluteStylePath, layerDir, options);
       builtStyle = format(builtStyle);
 
-      usedContextPaths.forEach(p => {
-        if (usedCount[p]) {
-          usedCount[p] = usedCount[p] + 1;
-        } else {
-          usedCount[p] = 1;
-        }
-      });
+      usedContextPaths.forEach(p => usedContext.add(p));
 
-      unusedContextPaths.forEach(p => {
-        if (unusedCount[p]) {
-          unusedCount[p] = unusedCount[p] + 1;
-        } else {
-          unusedCount[p] = 1;
-        }
-      });
+      unusedContextPaths.forEach(p => unusedContext.add(p));
 
       fs.writeFileSync(path.resolve(styleOutputDir, 'style.json'), builtStyle);
     } catch (e) {
@@ -91,15 +80,18 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
     }
   });
 
-  // Test example where no import happens in one file
-  const neverUsedVars = Object.entries(unusedCount).reduce((acc, kv) => {
-    const [k, v] = kv;
-    if (usedCount?.[k]) return acc;
-    acc = acc.concat([k]);
+  const neverUsedVars = [...unusedContext].reduce((acc, path) => {
+    if (usedContext.has(path)) return acc;
+    acc = acc.concat([path]);
     return acc;
   }, []);
 
-  console.log(neverUsedVars);
+  neverUsedVars.forEach(unusedVar => {
+    console.warn(`  Unused context variable ${chalk.blue(unusedVar)} found:`);
+    console.warn(`    This variable is not used in any style variant.`);
+  });
+
+  console.warn('');
 };
 
 const { styleDir, layerDir, outDir, verbose } = argv;

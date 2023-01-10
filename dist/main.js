@@ -415,11 +415,6 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
         usedContextPaths = usedContextPaths.concat((0, $787eebfbd67e2373$var$_lodash["default"])(usedContext).map(function(str) {
             return str.split('.').slice(1).join('.');
         }));
-        if (layerName.includes('shields_uae')) console.log({
-            usedContextPaths: usedContext.find(function(item) {
-                return item === 'colors.road.shieldLightYellow';
-            })
-        });
         usedContext.map(function(str) {
             return str.split('.').slice(1);
         }).forEach(function(contextPath) {
