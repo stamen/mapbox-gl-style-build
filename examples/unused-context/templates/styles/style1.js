@@ -1,14 +1,11 @@
-const sharedColors = require('../variables/colors');
-const { mergeVariables } = require('../../../../dist/main');
-
 module.exports.context = {
   sources: {
     root: 'Example'
   },
-  colors: mergeVariables(sharedColors, {
+  colors: {
     road: 'black',
     water: 'blue'
-  })
+  }
 };
 
 module.exports.template = {
@@ -22,6 +19,6 @@ module.exports.template = {
   },
   sprite: 'https://example.com/sprites/sprite',
   glyphs: 'https://example.com/{fontstack}/{range}.pbf',
-  layers: ['layer1', 'layer2'],
+  layers: ['layer2', 'layer3'],
   id: 'example-simple'
 };

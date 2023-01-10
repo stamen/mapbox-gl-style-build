@@ -155,29 +155,6 @@ const logLayerValidationMessages = validationMessages => {
 };
 
 /**
- * Nicely format and log validation messages for style context
- *
- * @param {object} unusedContext - the unused context object
- * @returns {Void}
- */
-const logContextValidationMessages = unusedContext => {
-  const getVariablePaths = (obj, prefix = '') =>
-    Object.keys(obj).reduce((acc, k) => {
-      const pre = prefix.length ? prefix + '.' : '';
-      if (typeof obj[k] === 'object')
-        Object.assign(acc, getVariablePaths(obj[k], pre + k));
-      else acc[pre + k] = obj[k];
-      return acc;
-    }, {});
-  const unusedContextPaths = Object.keys(getVariablePaths(unusedContext));
-  unusedContextPaths.forEach(path => {
-    console.warn(`  Unused context variable at ${chalk.blue(path)}.`);
-  });
-
-  console.warn('');
-};
-
-/**
  * Load the function that will build the layer.
  *
  * @param {string} name - the layer name
@@ -231,9 +208,7 @@ const buildLayer = (context, name, path) => {
   try {
     layer = builder(context);
     const fileStr = fs.readFileSync(path, 'utf8');
-    contextMatches = fileStr
-      .match(/context\.([a-zA-Z0-9]\w+(?:\.\w+)+)/g)
-      .map(str => str.split('.').slice(1));
+    contextMatches = fileStr.match(/context\.([a-zA-Z0-9]\w+(?:\.\w+)+)/g);
   } catch (error) {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
   }
@@ -290,11 +265,7 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
   };
 
   let unusedContext = cloneDeep(context);
-
-  // ----------------------------------------------------
-  // TODO Add in all variables?
-  // console.log(unusedContext);
-  // ----------------------------------------------------
+  let usedContextPaths = [];
 
   styleJson.layers = template.layers.map(layerName => {
     if (verbose) {
@@ -304,9 +275,15 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     const layerPath = path.resolve(layerDir, `${layerName}.js`);
     const { layer, usedContext } = buildLayer(context, layerName, layerPath);
 
-    usedContext.forEach(contextPath => {
-      deleteProp(unusedContext, contextPath);
-    });
+    usedContextPaths = usedContextPaths.concat(
+      cloneDeep(usedContext).map(str => str.split('.').slice(1).join('.'))
+    );
+
+    usedContext
+      .map(str => str.split('.').slice(1))
+      .forEach(contextPath => {
+        deleteProp(unusedContext, contextPath);
+      });
 
     // Collect validation messages for each layer
     const layerValidationMessages = validateLayer(layer);
@@ -319,31 +296,21 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
 
   unusedContext = removeEmpty(unusedContext);
 
-  if (
-    Object.keys(validationMessages).length > 0
-    //  || Object.keys(unusedContext).length > 0
-  ) {
-    console.warn(`Found issues in style ${chalk.blue(name)}:`);
-  }
   if (Object.keys(validationMessages).length > 0) {
+    console.warn(`Found issues in style ${chalk.blue(name)}:`);
     logLayerValidationMessages(validationMessages);
   }
-  // if (Object.keys(unusedContext).length > 0) {
-  //   logContextValidationMessages(unusedContext);
-  // }
 
-  // -------
   const getVariablePaths = (obj, prefix = '') =>
     Object.keys(obj).reduce((acc, k) => {
       const pre = prefix.length ? prefix + '.' : '';
-      if (typeof obj[k] === 'object')
+      if (isPlainObject(obj[k]))
         Object.assign(acc, getVariablePaths(obj[k], pre + k));
       else acc[pre + k] = obj[k];
       return acc;
     }, {});
 
   const unusedContextPaths = Object.keys(getVariablePaths(unusedContext));
-  // -------
 
-  return { styleJson, unusedContextPaths };
+  return { styleJson, unusedContextPaths, usedContextPaths };
 };

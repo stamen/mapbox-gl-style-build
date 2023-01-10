@@ -46,6 +46,7 @@ const argv = yargs(hideBin(process.argv))
 const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
   const stylePaths = await fg([path.resolve(`${styleDir}/**/*.js`)]);
 
+  let usedCount = {};
   let unusedCount = {};
   stylePaths.forEach(absoluteStylePath => {
     const relativePath = path.relative(styleDir, absoluteStylePath);
@@ -58,13 +59,20 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
 
     try {
       // Passing in the relativePath as the style name so users can easily find issues
-      let { styleJson: builtStyle, unusedContextPaths } = buildStyle(
-        relativePath,
-        absoluteStylePath,
-        layerDir,
-        options
-      );
+      let {
+        styleJson: builtStyle,
+        unusedContextPaths,
+        usedContextPaths
+      } = buildStyle(relativePath, absoluteStylePath, layerDir, options);
       builtStyle = format(builtStyle);
+
+      usedContextPaths.forEach(p => {
+        if (usedCount[p]) {
+          usedCount[p] = usedCount[p] + 1;
+        } else {
+          usedCount[p] = 1;
+        }
+      });
 
       unusedContextPaths.forEach(p => {
         if (unusedCount[p]) {
@@ -83,11 +91,11 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
     }
   });
 
+  // Test example where no import happens in one file
   const neverUsedVars = Object.entries(unusedCount).reduce((acc, kv) => {
     const [k, v] = kv;
-    if (v === stylePaths.length) {
-      acc = acc.concat([k]);
-    }
+    if (usedCount?.[k]) return acc;
+    acc = acc.concat([k]);
     return acc;
   }, []);
 
