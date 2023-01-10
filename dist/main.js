@@ -2,6 +2,7 @@ var $gXNCa$fs = require("fs");
 var $gXNCa$path = require("path");
 var $gXNCa$chalk = require("chalk");
 var $gXNCa$lodashclonedeep = require("lodash.clonedeep");
+var $gXNCa$lodashisplainobject = require("lodash.isplainobject");
 var $gXNCa$jsonstringifyprettycompact = require("json-stringify-pretty-compact");
 var $gXNCa$mapboxmapboxglstylespec = require("@mapbox/mapbox-gl-style-spec");
 
@@ -57,6 +58,10 @@ var $787eebfbd67e2373$var$_fs = $787eebfbd67e2373$var$_interopRequireDefault($gX
 var $787eebfbd67e2373$var$_path = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$path);
 
 var $787eebfbd67e2373$var$_chalk = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$chalk);
+
+var $787eebfbd67e2373$var$_lodash = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$lodashclonedeep);
+
+var $787eebfbd67e2373$var$_lodash2 = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$lodashisplainobject);
 var $7c018e715e9e5e4a$exports = {};
 "use strict";
 Object.defineProperty($7c018e715e9e5e4a$exports, "__esModule", {
@@ -305,18 +310,38 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     return "\n".concat($787eebfbd67e2373$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ". Received this error:\n\n").concat($787eebfbd67e2373$var$_chalk["default"].red(error.stack), "\n");
 };
 /**
- * Nicely format and log validation messages for a style
+ * Nicely format and log validation messages for style layers
  *
- * @param {string} style - the name of the style
  * @param {object} validationMessages - the validation messages, keyed by layer name
  * @returns {Void}
- */ var $787eebfbd67e2373$var$logValidationMessages = function logValidationMessages(style, validationMessages) {
-    console.warn("Found issues in style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(style), ":"));
+ */ var $787eebfbd67e2373$var$logLayerValidationMessages = function logLayerValidationMessages(validationMessages) {
     Object.keys(validationMessages).forEach(function(layer) {
         console.warn("  Layer ".concat($787eebfbd67e2373$var$_chalk["default"].blue(layer), ":"));
         validationMessages[layer].forEach(function(message) {
             console.warn("    ".concat(message));
         });
+    });
+    console.warn('');
+};
+/**
+ * Nicely format and log validation messages for style context
+ *
+ * @param {object} unusedContext - the unused context object
+ * @returns {Void}
+ */ var $787eebfbd67e2373$var$logContextValidationMessages = function logContextValidationMessages(unusedContext) {
+    var getVariablePaths1 = function getVariablePaths(obj) {
+        var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+        return Object.keys(obj).reduce(function(acc, k) {
+            var pre = prefix.length ? prefix + '.' : '';
+            if ($787eebfbd67e2373$var$_typeof(obj[k]) === 'object') Object.assign(acc, getVariablePaths(obj[k], pre + k));
+            else acc[pre + k] = obj[k];
+            return acc;
+        }, {
+        });
+    };
+    var unusedContextPaths = Object.keys(getVariablePaths1(unusedContext));
+    unusedContextPaths.forEach(function(path) {
+        console.warn("  Unused context variable at ".concat($787eebfbd67e2373$var$_chalk["default"].blue(path), "."));
     });
     console.warn('');
 };
@@ -358,12 +383,20 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  */ var $787eebfbd67e2373$var$buildLayer = function buildLayer(context, name, path) {
     var builder = $787eebfbd67e2373$var$loadLayerBuilder(name, path);
     var layer;
+    var contextMatches;
     try {
         layer = builder(context);
+        var fileStr = $787eebfbd67e2373$var$_fs["default"].readFileSync(path, 'utf8');
+        contextMatches = fileStr.match(/context.+\b/g).map(function(str) {
+            return str.split('.').slice(1);
+        });
     } catch (error) {
         throw new Error($787eebfbd67e2373$var$getLayerBuildErrorMessage(error, name, path));
     }
-    return (0, $7c018e715e9e5e4a$exports.mergeOverrides)(layer.baseStyle, layer.overrides);
+    return {
+        layer: (0, $7c018e715e9e5e4a$exports.mergeOverrides)(layer.baseStyle, layer.overrides),
+        usedContext: contextMatches
+    };
 };
 /**
  * Build style
@@ -384,15 +417,35 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     var validationMessages = {
     };
     if (verbose) console.log("Building style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(name)));
+     // Helper functions for unused context
+    var deleteProp = function deleteProp(object, path) {
+        var last = path.pop();
+        delete path.reduce(function(o, k) {
+            return o[k] || {
+            };
+        }, object)[last];
+    };
+    var removeEmpty = function removeEmpty(obj) {
+        return JSON.parse(JSON.stringify(obj, function(k, v) {
+            return (0, $787eebfbd67e2373$var$_lodash2["default"])(v) && !Object.keys(v).length ? undefined : v;
+        }));
+    };
+    var unusedContext = (0, $787eebfbd67e2373$var$_lodash["default"])(context);
     styleJson.layers = template.layers.map(function(layerName) {
         if (verbose) console.log("  Adding layer ".concat($787eebfbd67e2373$var$_chalk["default"].blue(layerName)));
         var layerPath = $787eebfbd67e2373$var$_path["default"].resolve(layerDir, "".concat(layerName, ".js"));
-        var layer = $787eebfbd67e2373$var$buildLayer(context, layerName, layerPath); // Collect validation messages for each layer
+        var _buildLayer = $787eebfbd67e2373$var$buildLayer(context, layerName, layerPath), layer = _buildLayer.layer, usedContext = _buildLayer.usedContext;
+        usedContext.forEach(function(contextPath) {
+            deleteProp(unusedContext, contextPath);
+        }); // Collect validation messages for each layer
         var layerValidationMessages = $787eebfbd67e2373$var$validateLayer(layer);
         if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
         return layer;
     });
-    if (Object.keys(validationMessages).length > 0) $787eebfbd67e2373$var$logValidationMessages(name, validationMessages);
+    unusedContext = removeEmpty(unusedContext);
+    if (Object.keys(validationMessages).length > 0 || Object.keys(unusedContext).length > 0) console.warn("Found issues in style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ":"));
+    if (Object.keys(validationMessages).length > 0) $787eebfbd67e2373$var$logLayerValidationMessages(name, validationMessages);
+    if (Object.keys(unusedContext).length > 0) $787eebfbd67e2373$var$logContextValidationMessages(unusedContext);
     return styleJson;
 };
 $787eebfbd67e2373$exports.buildStyle = $787eebfbd67e2373$var$buildStyle;

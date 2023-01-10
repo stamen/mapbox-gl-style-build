@@ -24,6 +24,7 @@
     "fast-glob": "^3.2.11",
     "json-stringify-pretty-compact": "^3.0.0",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.isplainobject": "^4.0.6",
     "mapbox-gl-style-format": "git+https://github.com/stamen/mapbox-gl-style-format#v0.1.1",
     "yargs": "^17.2.1"
   },

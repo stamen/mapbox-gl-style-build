@@ -2,6 +2,8 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
+import cloneDeep from 'lodash.clonedeep';
+import isPlainObject from 'lodash.isplainobject';
 
 import { mergeOverrides } from './merge-overrides';
 
@@ -136,20 +138,40 @@ ${chalk.red(error.stack)}
 };
 
 /**
- * Nicely format and log validation messages for a style
+ * Nicely format and log validation messages for style layers
  *
- * @param {string} style - the name of the style
  * @param {object} validationMessages - the validation messages, keyed by layer name
  * @returns {Void}
  */
-const logValidationMessages = (style, validationMessages) => {
-  console.warn(`Found issues in style ${chalk.blue(style)}:`);
-
+const logLayerValidationMessages = validationMessages => {
   Object.keys(validationMessages).forEach(layer => {
     console.warn(`  Layer ${chalk.blue(layer)}:`);
     validationMessages[layer].forEach(message => {
       console.warn(`    ${message}`);
     });
+  });
+
+  console.warn('');
+};
+
+/**
+ * Nicely format and log validation messages for style context
+ *
+ * @param {object} unusedContext - the unused context object
+ * @returns {Void}
+ */
+const logContextValidationMessages = unusedContext => {
+  const getVariablePaths = (obj, prefix = '') =>
+    Object.keys(obj).reduce((acc, k) => {
+      const pre = prefix.length ? prefix + '.' : '';
+      if (typeof obj[k] === 'object')
+        Object.assign(acc, getVariablePaths(obj[k], pre + k));
+      else acc[pre + k] = obj[k];
+      return acc;
+    }, {});
+  const unusedContextPaths = Object.keys(getVariablePaths(unusedContext));
+  unusedContextPaths.forEach(path => {
+    console.warn(`  Unused context variable at ${chalk.blue(path)}.`);
   });
 
   console.warn('');
@@ -205,13 +227,21 @@ const buildLayer = (context, name, path) => {
   const builder = loadLayerBuilder(name, path);
 
   let layer;
+  let contextMatches;
   try {
     layer = builder(context);
+    const fileStr = fs.readFileSync(path, 'utf8');
+    contextMatches = fileStr
+      .match(/context.+\b/g)
+      .map(str => str.split('.').slice(1));
   } catch (error) {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
   }
 
-  return mergeOverrides(layer.baseStyle, layer.overrides);
+  return {
+    layer: mergeOverrides(layer.baseStyle, layer.overrides),
+    usedContext: contextMatches
+  };
 };
 
 /**
@@ -245,13 +275,33 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     console.log(`Building style ${chalk.blue(name)}`);
   }
 
+  // Helper functions for unused context
+  const deleteProp = (object, path) => {
+    var last = path.pop();
+    delete path.reduce((o, k) => o[k] || {}, object)[last];
+  };
+
+  const removeEmpty = obj => {
+    return JSON.parse(
+      JSON.stringify(obj, (k, v) =>
+        isPlainObject(v) && !Object.keys(v).length ? undefined : v
+      )
+    );
+  };
+
+  let unusedContext = cloneDeep(context);
+
   styleJson.layers = template.layers.map(layerName => {
     if (verbose) {
       console.log(`  Adding layer ${chalk.blue(layerName)}`);
     }
 
     const layerPath = path.resolve(layerDir, `${layerName}.js`);
-    const layer = buildLayer(context, layerName, layerPath);
+    const { layer, usedContext } = buildLayer(context, layerName, layerPath);
+
+    usedContext.forEach(contextPath => {
+      deleteProp(unusedContext, contextPath);
+    });
 
     // Collect validation messages for each layer
     const layerValidationMessages = validateLayer(layer);
@@ -262,8 +312,19 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     return layer;
   });
 
+  unusedContext = removeEmpty(unusedContext);
+
+  if (
+    Object.keys(validationMessages).length > 0 ||
+    Object.keys(unusedContext).length > 0
+  ) {
+    console.warn(`Found issues in style ${chalk.blue(name)}:`);
+  }
   if (Object.keys(validationMessages).length > 0) {
-    logValidationMessages(name, validationMessages);
+    logLayerValidationMessages(name, validationMessages);
+  }
+  if (Object.keys(unusedContext).length > 0) {
+    logContextValidationMessages(unusedContext);
   }
 
   return styleJson;
