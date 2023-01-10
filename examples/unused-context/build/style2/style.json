@@ -7,21 +7,7 @@
   "sprite": "https://example.com/sprites/sprite",
   "glyphs": "https://example.com/{fontstack}/{range}.pbf",
   "layers": [
-    {
-      "id": "land",
-      "type": "background",
-      "paint": {
-        "background-color": [
-          "interpolate",
-          ["linear"],
-          ["zoom"],
-          8,
-          "red",
-          16,
-          "blue"
-        ]
-      }
-    },
+    {"id": "land", "type": "background", "paint": {"background-color": "red"}},
     {
       "id": "road",
       "type": "line",

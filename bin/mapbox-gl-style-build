@@ -46,6 +46,7 @@ const argv = yargs(hideBin(process.argv))
 const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
   const stylePaths = await fg([path.resolve(`${styleDir}/**/*.js`)]);
 
+  let unusedCount = {};
   stylePaths.forEach(absoluteStylePath => {
     const relativePath = path.relative(styleDir, absoluteStylePath);
     const { dir, name } = path.parse(relativePath);
@@ -56,10 +57,23 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
     }
 
     try {
-      const builtStyle = format(
-        // Passing in the relativePath as the style name so users can easily find issues
-        buildStyle(relativePath, absoluteStylePath, layerDir, options)
+      // Passing in the relativePath as the style name so users can easily find issues
+      let { styleJson: builtStyle, unusedContextPaths } = buildStyle(
+        relativePath,
+        absoluteStylePath,
+        layerDir,
+        options
       );
+      builtStyle = format(builtStyle);
+
+      unusedContextPaths.forEach(p => {
+        if (unusedCount[p]) {
+          unusedCount[p] = unusedCount[p] + 1;
+        } else {
+          unusedCount[p] = 1;
+        }
+      });
+
       fs.writeFileSync(path.resolve(styleOutputDir, 'style.json'), builtStyle);
     } catch (e) {
       // We catch errors here rather than the default, which
@@ -68,6 +82,16 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
       process.exit(1);
     }
   });
+
+  const neverUsedVars = Object.entries(unusedCount).reduce((acc, kv) => {
+    const [k, v] = kv;
+    if (v === stylePaths.length) {
+      acc = acc.concat([k]);
+    }
+    return acc;
+  }, []);
+
+  console.log(neverUsedVars);
 };
 
 const { styleDir, layerDir, outDir, verbose } = argv;

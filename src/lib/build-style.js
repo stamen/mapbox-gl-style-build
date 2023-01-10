@@ -232,7 +232,7 @@ const buildLayer = (context, name, path) => {
     layer = builder(context);
     const fileStr = fs.readFileSync(path, 'utf8');
     contextMatches = fileStr
-      .match(/context.+\b/g)
+      .match(/context\.([a-zA-Z0-9]\w+(?:\.\w+)+)/g)
       .map(str => str.split('.').slice(1));
   } catch (error) {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
@@ -291,6 +291,11 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
 
   let unusedContext = cloneDeep(context);
 
+  // ----------------------------------------------------
+  // TODO Add in all variables?
+  // console.log(unusedContext);
+  // ----------------------------------------------------
+
   styleJson.layers = template.layers.map(layerName => {
     if (verbose) {
       console.log(`  Adding layer ${chalk.blue(layerName)}`);
@@ -315,17 +320,30 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
   unusedContext = removeEmpty(unusedContext);
 
   if (
-    Object.keys(validationMessages).length > 0 ||
-    Object.keys(unusedContext).length > 0
+    Object.keys(validationMessages).length > 0
+    //  || Object.keys(unusedContext).length > 0
   ) {
     console.warn(`Found issues in style ${chalk.blue(name)}:`);
   }
   if (Object.keys(validationMessages).length > 0) {
     logLayerValidationMessages(validationMessages);
   }
-  if (Object.keys(unusedContext).length > 0) {
-    logContextValidationMessages(unusedContext);
-  }
+  // if (Object.keys(unusedContext).length > 0) {
+  //   logContextValidationMessages(unusedContext);
+  // }
 
-  return styleJson;
+  // -------
+  const getVariablePaths = (obj, prefix = '') =>
+    Object.keys(obj).reduce((acc, k) => {
+      const pre = prefix.length ? prefix + '.' : '';
+      if (typeof obj[k] === 'object')
+        Object.assign(acc, getVariablePaths(obj[k], pre + k));
+      else acc[pre + k] = obj[k];
+      return acc;
+    }, {});
+
+  const unusedContextPaths = Object.keys(getVariablePaths(unusedContext));
+  // -------
+
+  return { styleJson, unusedContextPaths };
 };

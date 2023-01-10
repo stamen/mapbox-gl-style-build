@@ -388,7 +388,7 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     try {
         layer = builder(context);
         var fileStr = $5c3f8fbf0bc952bf$var$_fs["default"].readFileSync(path, 'utf8');
-        contextMatches = fileStr.match(/context.+\b/g).map(function(str) {
+        contextMatches = fileStr.match(/context\.([a-zA-Z0-9]\w+(?:\.\w+)+)/g).map(function(str) {
             return str.split('.').slice(1);
         });
     } catch (error) {
@@ -432,6 +432,7 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
         }));
     };
     var unusedContext = (0, $5c3f8fbf0bc952bf$var$_lodash["default"])(context);
+    console.log(unusedContext);
     styleJson.layers = template.layers.map(function(layerName) {
         if (verbose) console.log("  Adding layer ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(layerName)));
         var layerPath = $5c3f8fbf0bc952bf$var$_path["default"].resolve(layerDir, "".concat(layerName, ".js"));
@@ -444,10 +445,28 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
         return layer;
     });
     unusedContext = removeEmpty(unusedContext);
-    if (Object.keys(validationMessages).length > 0 || Object.keys(unusedContext).length > 0) console.warn("Found issues in style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ":"));
+    if (Object.keys(validationMessages).length > 0 //  || Object.keys(unusedContext).length > 0
+    ) console.warn("Found issues in style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ":"));
     if (Object.keys(validationMessages).length > 0) $5c3f8fbf0bc952bf$var$logLayerValidationMessages(validationMessages);
-    if (Object.keys(unusedContext).length > 0) $5c3f8fbf0bc952bf$var$logContextValidationMessages(unusedContext);
-    return styleJson;
+     // if (Object.keys(unusedContext).length > 0) {
+    //   logContextValidationMessages(unusedContext);
+    // }
+    // -------
+    var getVariablePaths2 = function getVariablePaths(obj) {
+        var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+        return Object.keys(obj).reduce(function(acc, k) {
+            var pre = prefix.length ? prefix + '.' : '';
+            if ($5c3f8fbf0bc952bf$var$_typeof(obj[k]) === 'object') Object.assign(acc, getVariablePaths(obj[k], pre + k));
+            else acc[pre + k] = obj[k];
+            return acc;
+        }, {
+        });
+    };
+    var unusedContextPaths = Object.keys(getVariablePaths2(unusedContext)); // -------
+    return {
+        styleJson: styleJson,
+        unusedContextPaths: unusedContextPaths
+    };
 };
 $5c3f8fbf0bc952bf$exports.buildStyle = $5c3f8fbf0bc952bf$var$buildStyle;
 
