@@ -363,9 +363,10 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     var layer;
     var contextMatches;
     try {
+        var _fileStr$match;
         layer = builder(context);
         var fileStr = $787eebfbd67e2373$var$_fs["default"].readFileSync(path, 'utf8');
-        contextMatches = fileStr.match(/context\.([a-zA-Z0-9]\w+(?:\.\w+)+)/g);
+        contextMatches = (_fileStr$match = fileStr.match(/context(?:\.\w+)+/g)) !== null && _fileStr$match !== void 0 ? _fileStr$match : [];
     } catch (error) {
         throw new Error($787eebfbd67e2373$var$getLayerBuildErrorMessage(error, name, path));
     }
@@ -415,6 +416,12 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
         usedContextPaths = usedContextPaths.concat((0, $787eebfbd67e2373$var$_lodash["default"])(usedContext).map(function(str) {
             return str.split('.').slice(1).join('.');
         }));
+        if (layerName === 'land-navigation') {
+            console.log(usedContext);
+            console.log(usedContext.find(function(item) {
+                return item.includes('colorWay');
+            }));
+        }
         usedContext.map(function(str) {
             return str.split('.').slice(1);
         }).forEach(function(contextPath) {

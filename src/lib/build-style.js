@@ -208,7 +208,7 @@ const buildLayer = (context, name, path) => {
   try {
     layer = builder(context);
     const fileStr = fs.readFileSync(path, 'utf8');
-    contextMatches = fileStr.match(/context\.([a-zA-Z0-9]\w+(?:\.\w+)+)/g);
+    contextMatches = fileStr.match(/context(?:\.\w+)+/g) ?? [];
   } catch (error) {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
   }
@@ -278,7 +278,10 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     usedContextPaths = usedContextPaths.concat(
       cloneDeep(usedContext).map(str => str.split('.').slice(1).join('.'))
     );
-
+    if (layerName === 'land-navigation') {
+      console.log(usedContext);
+      console.log(usedContext.find(item => item.includes('colorWay')));
+    }
     usedContext
       .map(str => str.split('.').slice(1))
       .forEach(contextPath => {
