@@ -413,16 +413,10 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     styleJson.layers = template.layers.map(function(layerName) {
         if (verbose) console.log("  Adding layer ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(layerName)));
         var layerPath = $5c3f8fbf0bc952bf$var$_path["default"].resolve(layerDir, "".concat(layerName, ".js"));
-        var _buildLayer = $5c3f8fbf0bc952bf$var$buildLayer(context, layerName, layerPath), layer = _buildLayer.layer, usedContext = _buildLayer.usedContext;
+        var _buildLayer = $5c3f8fbf0bc952bf$var$buildLayer(context, layerName, layerPath), layer = _buildLayer.layer, usedContext = _buildLayer.usedContext; // Create path strings of used context
         usedContextPaths = usedContextPaths.concat((0, $5c3f8fbf0bc952bf$var$_lodash["default"])(usedContext).map(function(str) {
             return str.split('.').slice(1).join('.');
-        }));
-        if (layerName === 'land-navigation') {
-            console.log(usedContext);
-            console.log(usedContext.find(function(item) {
-                return item.includes('colorWay');
-            }));
-        }
+        })); // Use used context to filter context down to what is not used
         usedContext.map(function(str) {
             return str.split('.').slice(1);
         }).forEach(function(contextPath) {
@@ -436,18 +430,18 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     if (Object.keys(validationMessages).length > 0) {
         console.warn("Found issues in style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ":"));
         $5c3f8fbf0bc952bf$var$logLayerValidationMessages(validationMessages);
-    }
-    var getVariablePaths1 = function getVariablePaths(obj) {
+    } // Flattens nested object to be one level with keys using periods to represent nesting
+    var flattenObject1 = function flattenObject(obj) {
         var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
         return Object.keys(obj).reduce(function(acc, k) {
             var pre = prefix.length ? prefix + '.' : '';
-            if ((0, $5c3f8fbf0bc952bf$var$_lodash2["default"])(obj[k])) Object.assign(acc, getVariablePaths(obj[k], pre + k));
+            if ((0, $5c3f8fbf0bc952bf$var$_lodash2["default"])(obj[k])) Object.assign(acc, flattenObject(obj[k], pre + k));
             else acc[pre + k] = obj[k];
             return acc;
         }, {
         });
     };
-    var unusedContextPaths = Object.keys(getVariablePaths1(unusedContext));
+    var unusedContextPaths = Object.keys(flattenObject1(unusedContext));
     return {
         styleJson: styleJson,
         unusedContextPaths: unusedContextPaths,

@@ -275,10 +275,12 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     const layerPath = path.resolve(layerDir, `${layerName}.js`);
     const { layer, usedContext } = buildLayer(context, layerName, layerPath);
 
+    // Create path strings of used context
     usedContextPaths = usedContextPaths.concat(
       cloneDeep(usedContext).map(str => str.split('.').slice(1).join('.'))
     );
 
+    // Use used context to filter context down to what is not used
     usedContext
       .map(str => str.split('.').slice(1))
       .forEach(contextPath => {
@@ -301,16 +303,17 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     logLayerValidationMessages(validationMessages);
   }
 
-  const getVariablePaths = (obj, prefix = '') =>
+  // Flattens nested object to be one level with keys using periods to represent nesting
+  const flattenObject = (obj, prefix = '') =>
     Object.keys(obj).reduce((acc, k) => {
       const pre = prefix.length ? prefix + '.' : '';
       if (isPlainObject(obj[k]))
-        Object.assign(acc, getVariablePaths(obj[k], pre + k));
+        Object.assign(acc, flattenObject(obj[k], pre + k));
       else acc[pre + k] = obj[k];
       return acc;
     }, {});
 
-  const unusedContextPaths = Object.keys(getVariablePaths(unusedContext));
+  const unusedContextPaths = Object.keys(flattenObject(unusedContext));
 
   return { styleJson, unusedContextPaths, usedContextPaths };
 };
