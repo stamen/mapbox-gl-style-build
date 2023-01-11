@@ -278,10 +278,7 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     usedContextPaths = usedContextPaths.concat(
       cloneDeep(usedContext).map(str => str.split('.').slice(1).join('.'))
     );
-    if (layerName === 'land-navigation') {
-      console.log(usedContext);
-      console.log(usedContext.find(item => item.includes('colorWay')));
-    }
+
     usedContext
       .map(str => str.split('.').slice(1))
       .forEach(contextPath => {
