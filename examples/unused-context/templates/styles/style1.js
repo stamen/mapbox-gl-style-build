@@ -10,7 +10,7 @@ module.exports.context = {
 
 module.exports.template = {
   version: 8,
-  name: 'simple',
+  name: 'style-1',
   sources: {
     Example: {
       type: 'vector',

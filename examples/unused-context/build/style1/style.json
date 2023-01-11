@@ -1,6 +1,6 @@
 {
   "version": 8,
-  "name": "simple",
+  "name": "style-1",
   "sources": {
     "Example": {"type": "vector", "url": "https://example.com/source.json"}
   },
