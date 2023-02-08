@@ -4,7 +4,7 @@ import path from 'path';
 import chalk from 'chalk';
 import cloneDeep from 'lodash.clonedeep';
 import isPlainObject from 'lodash.isplainobject';
-
+import { removeEmpty, deleteProp } from './primitive-utils';
 import { mergeOverrides } from './merge-overrides';
 
 /**
@@ -250,20 +250,6 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     console.log(`Building style ${chalk.blue(name)}`);
   }
 
-  // Helper functions for unused context
-  const deleteProp = (object, path) => {
-    var last = path.pop();
-    delete path.reduce((o, k) => o[k] || {}, object)[last];
-  };
-
-  const removeEmpty = obj => {
-    return JSON.parse(
-      JSON.stringify(obj, (k, v) =>
-        isPlainObject(v) && !Object.keys(v).length ? undefined : v
-      )
-    );
-  };
-
   let unusedContext = cloneDeep(context);
   let usedContextPaths = [];
 
@@ -284,7 +270,7 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     usedContext
       .map(str => str.split('.').slice(1))
       .forEach(contextPath => {
-        deleteProp(unusedContext, contextPath);
+        unusedContext = deleteProp(unusedContext, contextPath);
       });
 
     // Collect validation messages for each layer

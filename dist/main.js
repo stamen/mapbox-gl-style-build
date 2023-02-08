@@ -3,6 +3,7 @@ var $gXNCa$path = require("path");
 var $gXNCa$chalk = require("chalk");
 var $gXNCa$lodashclonedeep = require("lodash.clonedeep");
 var $gXNCa$lodashisplainobject = require("lodash.isplainobject");
+var $gXNCa$lodashisempty = require("lodash.isempty");
 var $gXNCa$jsonstringifyprettycompact = require("json-stringify-pretty-compact");
 var $gXNCa$mapboxmapboxglstylespec = require("@mapbox/mapbox-gl-style-spec");
 
@@ -62,6 +63,43 @@ var $787eebfbd67e2373$var$_chalk = $787eebfbd67e2373$var$_interopRequireDefault(
 var $787eebfbd67e2373$var$_lodash = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$lodashclonedeep);
 
 var $787eebfbd67e2373$var$_lodash2 = $787eebfbd67e2373$var$_interopRequireDefault($gXNCa$lodashisplainobject);
+var $8e6a350f8ed2b618$exports = {};
+"use strict";
+Object.defineProperty($8e6a350f8ed2b618$exports, "__esModule", {
+    value: true
+});
+$8e6a350f8ed2b618$exports.removeEmpty = $8e6a350f8ed2b618$exports.deleteProp = void 0;
+
+var $8e6a350f8ed2b618$var$_lodash = $8e6a350f8ed2b618$var$_interopRequireDefault($gXNCa$lodashisplainobject);
+
+var $8e6a350f8ed2b618$var$_lodash2 = $8e6a350f8ed2b618$var$_interopRequireDefault($gXNCa$lodashisempty);
+function $8e6a350f8ed2b618$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        "default": obj
+    };
+}
+// Helper functions for unused context
+var $8e6a350f8ed2b618$var$deleteProp = function deleteProp(object, path) {
+    var last = path.pop();
+    var next = JSON.parse(JSON.stringify(object));
+    delete path.reduce(function(o, k) {
+        return o[k] || {
+        };
+    }, next)[last];
+    return next;
+};
+$8e6a350f8ed2b618$exports.deleteProp = $8e6a350f8ed2b618$var$deleteProp;
+var $8e6a350f8ed2b618$var$removeEmpty = function removeEmpty(o) {
+    for(var k in o){
+        if (!o[k] || !(0, $8e6a350f8ed2b618$var$_lodash["default"])(o[k])) continue;
+        removeEmpty(o[k]);
+        if ((0, $8e6a350f8ed2b618$var$_lodash2["default"])(o[k])) delete o[k];
+    }
+    return o;
+};
+$8e6a350f8ed2b618$exports.removeEmpty = $8e6a350f8ed2b618$var$removeEmpty;
+
+
 var $7c018e715e9e5e4a$exports = {};
 "use strict";
 Object.defineProperty($7c018e715e9e5e4a$exports, "__esModule", {
@@ -394,19 +432,6 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     var validationMessages = {
     };
     if (verbose) console.log("Building style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(name)));
-     // Helper functions for unused context
-    var deleteProp = function deleteProp(object, path) {
-        var last = path.pop();
-        delete path.reduce(function(o, k) {
-            return o[k] || {
-            };
-        }, object)[last];
-    };
-    var removeEmpty = function removeEmpty(obj) {
-        return JSON.parse(JSON.stringify(obj, function(k, v) {
-            return (0, $787eebfbd67e2373$var$_lodash2["default"])(v) && !Object.keys(v).length ? undefined : v;
-        }));
-    };
     var unusedContext = (0, $787eebfbd67e2373$var$_lodash["default"])(context);
     var usedContextPaths = [];
     styleJson.layers = template.layers.map(function(layerName) {
@@ -419,13 +444,13 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
         usedContext.map(function(str) {
             return str.split('.').slice(1);
         }).forEach(function(contextPath) {
-            deleteProp(unusedContext, contextPath);
+            unusedContext = (0, $8e6a350f8ed2b618$exports.deleteProp)(unusedContext, contextPath);
         }); // Collect validation messages for each layer
         var layerValidationMessages = $787eebfbd67e2373$var$validateLayer(layer);
         if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
         return layer;
     });
-    unusedContext = removeEmpty(unusedContext);
+    unusedContext = (0, $8e6a350f8ed2b618$exports.removeEmpty)(unusedContext);
     if (Object.keys(validationMessages).length > 0) {
         console.warn("Found issues in style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ":"));
         $787eebfbd67e2373$var$logLayerValidationMessages(validationMessages);

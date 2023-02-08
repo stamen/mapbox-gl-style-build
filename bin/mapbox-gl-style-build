@@ -80,11 +80,9 @@ const buildStyles = async (styleDir, layerDir, outputDir, options = {}) => {
     }
   });
 
-  const neverUsedVars = [...unusedContext].reduce((acc, path) => {
-    if (usedContext.has(path)) return acc;
-    acc = acc.concat([path]);
-    return acc;
-  }, []);
+  const neverUsedVars = [...unusedContext].filter(
+    path => !usedContext.has(path)
+  );
 
   neverUsedVars.forEach(unusedVar => {
     console.warn(`  Unused context variable ${chalk.blue(unusedVar)} found:`);

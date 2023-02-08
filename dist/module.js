@@ -3,6 +3,7 @@ import * as $5OpyM$path from "path";
 import * as $5OpyM$chalk from "chalk";
 import * as $5OpyM$lodashclonedeep from "lodash.clonedeep";
 import * as $5OpyM$lodashisplainobject from "lodash.isplainobject";
+import * as $5OpyM$lodashisempty from "lodash.isempty";
 import * as $5OpyM$jsonstringifyprettycompact from "json-stringify-pretty-compact";
 import {latest as $5OpyM$latest} from "@mapbox/mapbox-gl-style-spec";
 
@@ -63,6 +64,43 @@ var $5c3f8fbf0bc952bf$var$_chalk = $5c3f8fbf0bc952bf$var$_interopRequireDefault(
 var $5c3f8fbf0bc952bf$var$_lodash = $5c3f8fbf0bc952bf$var$_interopRequireDefault($5OpyM$lodashclonedeep);
 
 var $5c3f8fbf0bc952bf$var$_lodash2 = $5c3f8fbf0bc952bf$var$_interopRequireDefault($5OpyM$lodashisplainobject);
+var $40eefc352541bd70$exports = {};
+"use strict";
+Object.defineProperty($40eefc352541bd70$exports, "__esModule", {
+    value: true
+});
+$40eefc352541bd70$exports.removeEmpty = $40eefc352541bd70$exports.deleteProp = void 0;
+
+var $40eefc352541bd70$var$_lodash = $40eefc352541bd70$var$_interopRequireDefault($5OpyM$lodashisplainobject);
+
+var $40eefc352541bd70$var$_lodash2 = $40eefc352541bd70$var$_interopRequireDefault($5OpyM$lodashisempty);
+function $40eefc352541bd70$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        "default": obj
+    };
+}
+// Helper functions for unused context
+var $40eefc352541bd70$var$deleteProp = function deleteProp(object, path) {
+    var last = path.pop();
+    var next = JSON.parse(JSON.stringify(object));
+    delete path.reduce(function(o, k) {
+        return o[k] || {
+        };
+    }, next)[last];
+    return next;
+};
+$40eefc352541bd70$exports.deleteProp = $40eefc352541bd70$var$deleteProp;
+var $40eefc352541bd70$var$removeEmpty = function removeEmpty(o) {
+    for(var k in o){
+        if (!o[k] || !(0, $40eefc352541bd70$var$_lodash["default"])(o[k])) continue;
+        removeEmpty(o[k]);
+        if ((0, $40eefc352541bd70$var$_lodash2["default"])(o[k])) delete o[k];
+    }
+    return o;
+};
+$40eefc352541bd70$exports.removeEmpty = $40eefc352541bd70$var$removeEmpty;
+
+
 var $6f6b0a3fd84dd156$exports = {};
 "use strict";
 Object.defineProperty($6f6b0a3fd84dd156$exports, "__esModule", {
@@ -395,19 +433,6 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     var validationMessages = {
     };
     if (verbose) console.log("Building style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name)));
-     // Helper functions for unused context
-    var deleteProp = function deleteProp(object, path) {
-        var last = path.pop();
-        delete path.reduce(function(o, k) {
-            return o[k] || {
-            };
-        }, object)[last];
-    };
-    var removeEmpty = function removeEmpty(obj) {
-        return JSON.parse(JSON.stringify(obj, function(k, v) {
-            return (0, $5c3f8fbf0bc952bf$var$_lodash2["default"])(v) && !Object.keys(v).length ? undefined : v;
-        }));
-    };
     var unusedContext = (0, $5c3f8fbf0bc952bf$var$_lodash["default"])(context);
     var usedContextPaths = [];
     styleJson.layers = template.layers.map(function(layerName) {
@@ -420,13 +445,13 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
         usedContext.map(function(str) {
             return str.split('.').slice(1);
         }).forEach(function(contextPath) {
-            deleteProp(unusedContext, contextPath);
+            unusedContext = (0, $40eefc352541bd70$exports.deleteProp)(unusedContext, contextPath);
         }); // Collect validation messages for each layer
         var layerValidationMessages = $5c3f8fbf0bc952bf$var$validateLayer(layer);
         if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
         return layer;
     });
-    unusedContext = removeEmpty(unusedContext);
+    unusedContext = (0, $40eefc352541bd70$exports.removeEmpty)(unusedContext);
     if (Object.keys(validationMessages).length > 0) {
         console.warn("Found issues in style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ":"));
         $5c3f8fbf0bc952bf$var$logLayerValidationMessages(validationMessages);
