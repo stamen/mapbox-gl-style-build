@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Warn on unused variables
+
 ## 0.5.3
 
 - Specify style name/location better in warnings

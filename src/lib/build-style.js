@@ -2,7 +2,9 @@
 import fs from 'fs';
 import path from 'path';
 import chalk from 'chalk';
-
+import cloneDeep from 'lodash.clonedeep';
+import isPlainObject from 'lodash.isplainobject';
+import { removeEmpty, deleteProp } from './primitive-utils';
 import { mergeOverrides } from './merge-overrides';
 
 /**
@@ -136,15 +138,12 @@ ${chalk.red(error.stack)}
 };
 
 /**
- * Nicely format and log validation messages for a style
+ * Nicely format and log validation messages for style layers
  *
- * @param {string} style - the name of the style
  * @param {object} validationMessages - the validation messages, keyed by layer name
  * @returns {Void}
  */
-const logValidationMessages = (style, validationMessages) => {
-  console.warn(`Found issues in style ${chalk.blue(style)}:`);
-
+const logLayerValidationMessages = validationMessages => {
   Object.keys(validationMessages).forEach(layer => {
     console.warn(`  Layer ${chalk.blue(layer)}:`);
     validationMessages[layer].forEach(message => {
@@ -205,13 +204,19 @@ const buildLayer = (context, name, path) => {
   const builder = loadLayerBuilder(name, path);
 
   let layer;
+  let contextMatches;
   try {
     layer = builder(context);
+    const fileStr = fs.readFileSync(path, 'utf8');
+    contextMatches = fileStr.match(/context(?:\.\w+)+/g) ?? [];
   } catch (error) {
     throw new Error(getLayerBuildErrorMessage(error, name, path));
   }
 
-  return mergeOverrides(layer.baseStyle, layer.overrides);
+  return {
+    layer: mergeOverrides(layer.baseStyle, layer.overrides),
+    usedContext: contextMatches
+  };
 };
 
 /**
@@ -245,13 +250,28 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     console.log(`Building style ${chalk.blue(name)}`);
   }
 
+  let unusedContext = cloneDeep(context);
+  let usedContextPaths = [];
+
   styleJson.layers = template.layers.map(layerName => {
     if (verbose) {
       console.log(`  Adding layer ${chalk.blue(layerName)}`);
     }
 
     const layerPath = path.resolve(layerDir, `${layerName}.js`);
-    const layer = buildLayer(context, layerName, layerPath);
+    const { layer, usedContext } = buildLayer(context, layerName, layerPath);
+
+    // Create path strings of used context
+    usedContextPaths = usedContextPaths.concat(
+      cloneDeep(usedContext).map(str => str.split('.').slice(1).join('.'))
+    );
+
+    // Use used context to filter context down to what is not used
+    usedContext
+      .map(str => str.split('.').slice(1))
+      .forEach(contextPath => {
+        unusedContext = deleteProp(unusedContext, contextPath);
+      });
 
     // Collect validation messages for each layer
     const layerValidationMessages = validateLayer(layer);
@@ -262,9 +282,24 @@ export const buildStyle = (name, absoluteStylePath, layerDir, options = {}) => {
     return layer;
   });
 
+  unusedContext = removeEmpty(unusedContext);
+
   if (Object.keys(validationMessages).length > 0) {
-    logValidationMessages(name, validationMessages);
+    console.warn(`Found issues in style ${chalk.blue(name)}:`);
+    logLayerValidationMessages(validationMessages);
   }
 
-  return styleJson;
+  // Flattens nested object to be one level with keys using periods to represent nesting
+  const flattenObject = (obj, prefix = '') =>
+    Object.keys(obj).reduce((acc, k) => {
+      const pre = prefix.length ? prefix + '.' : '';
+      if (isPlainObject(obj[k]))
+        Object.assign(acc, flattenObject(obj[k], pre + k));
+      else acc[pre + k] = obj[k];
+      return acc;
+    }, {});
+
+  const unusedContextPaths = Object.keys(flattenObject(unusedContext));
+
+  return { styleJson, unusedContextPaths, usedContextPaths };
 };

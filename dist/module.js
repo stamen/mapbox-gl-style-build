@@ -2,6 +2,8 @@ import * as $5OpyM$fs from "fs";
 import * as $5OpyM$path from "path";
 import * as $5OpyM$chalk from "chalk";
 import * as $5OpyM$lodashclonedeep from "lodash.clonedeep";
+import * as $5OpyM$lodashisplainobject from "lodash.isplainobject";
+import * as $5OpyM$lodashisempty from "lodash.isempty";
 import * as $5OpyM$jsonstringifyprettycompact from "json-stringify-pretty-compact";
 import {latest as $5OpyM$latest} from "@mapbox/mapbox-gl-style-spec";
 
@@ -58,6 +60,47 @@ var $5c3f8fbf0bc952bf$var$_fs = $5c3f8fbf0bc952bf$var$_interopRequireDefault($5O
 var $5c3f8fbf0bc952bf$var$_path = $5c3f8fbf0bc952bf$var$_interopRequireDefault($5OpyM$path);
 
 var $5c3f8fbf0bc952bf$var$_chalk = $5c3f8fbf0bc952bf$var$_interopRequireDefault($5OpyM$chalk);
+
+var $5c3f8fbf0bc952bf$var$_lodash = $5c3f8fbf0bc952bf$var$_interopRequireDefault($5OpyM$lodashclonedeep);
+
+var $5c3f8fbf0bc952bf$var$_lodash2 = $5c3f8fbf0bc952bf$var$_interopRequireDefault($5OpyM$lodashisplainobject);
+var $40eefc352541bd70$exports = {};
+"use strict";
+Object.defineProperty($40eefc352541bd70$exports, "__esModule", {
+    value: true
+});
+$40eefc352541bd70$exports.removeEmpty = $40eefc352541bd70$exports.deleteProp = void 0;
+
+var $40eefc352541bd70$var$_lodash = $40eefc352541bd70$var$_interopRequireDefault($5OpyM$lodashisplainobject);
+
+var $40eefc352541bd70$var$_lodash2 = $40eefc352541bd70$var$_interopRequireDefault($5OpyM$lodashisempty);
+function $40eefc352541bd70$var$_interopRequireDefault(obj) {
+    return obj && obj.__esModule ? obj : {
+        "default": obj
+    };
+}
+// Helper functions for unused context
+var $40eefc352541bd70$var$deleteProp = function deleteProp(object, path) {
+    var last = path.pop();
+    var next = JSON.parse(JSON.stringify(object));
+    delete path.reduce(function(o, k) {
+        return o[k] || {
+        };
+    }, next)[last];
+    return next;
+};
+$40eefc352541bd70$exports.deleteProp = $40eefc352541bd70$var$deleteProp;
+var $40eefc352541bd70$var$removeEmpty = function removeEmpty(o) {
+    for(var k in o){
+        if (!o[k] || !(0, $40eefc352541bd70$var$_lodash["default"])(o[k])) continue;
+        removeEmpty(o[k]);
+        if ((0, $40eefc352541bd70$var$_lodash2["default"])(o[k])) delete o[k];
+    }
+    return o;
+};
+$40eefc352541bd70$exports.removeEmpty = $40eefc352541bd70$var$removeEmpty;
+
+
 var $6f6b0a3fd84dd156$exports = {};
 "use strict";
 Object.defineProperty($6f6b0a3fd84dd156$exports, "__esModule", {
@@ -306,13 +349,11 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     return "\n".concat($5c3f8fbf0bc952bf$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ". Received this error:\n\n").concat($5c3f8fbf0bc952bf$var$_chalk["default"].red(error.stack), "\n");
 };
 /**
- * Nicely format and log validation messages for a style
+ * Nicely format and log validation messages for style layers
  *
- * @param {string} style - the name of the style
  * @param {object} validationMessages - the validation messages, keyed by layer name
  * @returns {Void}
- */ var $5c3f8fbf0bc952bf$var$logValidationMessages = function logValidationMessages(style, validationMessages) {
-    console.warn("Found issues in style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(style), ":"));
+ */ var $5c3f8fbf0bc952bf$var$logLayerValidationMessages = function logLayerValidationMessages(validationMessages) {
     Object.keys(validationMessages).forEach(function(layer) {
         console.warn("  Layer ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(layer), ":"));
         validationMessages[layer].forEach(function(message) {
@@ -359,12 +400,19 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
  */ var $5c3f8fbf0bc952bf$var$buildLayer = function buildLayer(context, name, path) {
     var builder = $5c3f8fbf0bc952bf$var$loadLayerBuilder(name, path);
     var layer;
+    var contextMatches;
     try {
+        var _fileStr$match;
         layer = builder(context);
+        var fileStr = $5c3f8fbf0bc952bf$var$_fs["default"].readFileSync(path, 'utf8');
+        contextMatches = (_fileStr$match = fileStr.match(/context(?:\.\w+)+/g)) !== null && _fileStr$match !== void 0 ? _fileStr$match : [];
     } catch (error) {
         throw new Error($5c3f8fbf0bc952bf$var$getLayerBuildErrorMessage(error, name, path));
     }
-    return (0, $6f6b0a3fd84dd156$exports.mergeOverrides)(layer.baseStyle, layer.overrides);
+    return {
+        layer: (0, $6f6b0a3fd84dd156$exports.mergeOverrides)(layer.baseStyle, layer.overrides),
+        usedContext: contextMatches
+    };
 };
 /**
  * Build style
@@ -385,16 +433,45 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     var validationMessages = {
     };
     if (verbose) console.log("Building style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name)));
+    var unusedContext = (0, $5c3f8fbf0bc952bf$var$_lodash["default"])(context);
+    var usedContextPaths = [];
     styleJson.layers = template.layers.map(function(layerName) {
         if (verbose) console.log("  Adding layer ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(layerName)));
         var layerPath = $5c3f8fbf0bc952bf$var$_path["default"].resolve(layerDir, "".concat(layerName, ".js"));
-        var layer = $5c3f8fbf0bc952bf$var$buildLayer(context, layerName, layerPath); // Collect validation messages for each layer
+        var _buildLayer = $5c3f8fbf0bc952bf$var$buildLayer(context, layerName, layerPath), layer = _buildLayer.layer, usedContext = _buildLayer.usedContext; // Create path strings of used context
+        usedContextPaths = usedContextPaths.concat((0, $5c3f8fbf0bc952bf$var$_lodash["default"])(usedContext).map(function(str) {
+            return str.split('.').slice(1).join('.');
+        })); // Use used context to filter context down to what is not used
+        usedContext.map(function(str) {
+            return str.split('.').slice(1);
+        }).forEach(function(contextPath) {
+            unusedContext = (0, $40eefc352541bd70$exports.deleteProp)(unusedContext, contextPath);
+        }); // Collect validation messages for each layer
         var layerValidationMessages = $5c3f8fbf0bc952bf$var$validateLayer(layer);
         if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
         return layer;
     });
-    if (Object.keys(validationMessages).length > 0) $5c3f8fbf0bc952bf$var$logValidationMessages(name, validationMessages);
-    return styleJson;
+    unusedContext = (0, $40eefc352541bd70$exports.removeEmpty)(unusedContext);
+    if (Object.keys(validationMessages).length > 0) {
+        console.warn("Found issues in style ".concat($5c3f8fbf0bc952bf$var$_chalk["default"].blue(name), ":"));
+        $5c3f8fbf0bc952bf$var$logLayerValidationMessages(validationMessages);
+    } // Flattens nested object to be one level with keys using periods to represent nesting
+    var flattenObject1 = function flattenObject(obj) {
+        var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+        return Object.keys(obj).reduce(function(acc, k) {
+            var pre = prefix.length ? prefix + '.' : '';
+            if ((0, $5c3f8fbf0bc952bf$var$_lodash2["default"])(obj[k])) Object.assign(acc, flattenObject(obj[k], pre + k));
+            else acc[pre + k] = obj[k];
+            return acc;
+        }, {
+        });
+    };
+    var unusedContextPaths = Object.keys(flattenObject1(unusedContext));
+    return {
+        styleJson: styleJson,
+        unusedContextPaths: unusedContextPaths,
+        usedContextPaths: usedContextPaths
+    };
 };
 $5c3f8fbf0bc952bf$exports.buildStyle = $5c3f8fbf0bc952bf$var$buildStyle;
 
