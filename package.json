@@ -19,7 +19,7 @@
     "collectCoverage": false
   },
   "dependencies": {
-    "@mapbox/mapbox-gl-style-spec": "^13.26.0",
+    "@mapbox/mapbox-gl-style-spec": "^13.28.0",
     "chalk": "4.1.2",
     "fast-glob": "^3.2.11",
     "json-stringify-pretty-compact": "^3.0.0",
