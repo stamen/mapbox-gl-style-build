@@ -26,7 +26,7 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.isempty": "^4.4.0",
     "lodash.isplainobject": "^4.0.6",
-    "mapbox-gl-style-format": "git+https://github.com/stamen/mapbox-gl-style-format#435b7fb",
+    "mapbox-gl-style-format": "github:stamen/mapbox-gl-style-format#435b7fb",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
