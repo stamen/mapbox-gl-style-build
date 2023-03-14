@@ -83,8 +83,7 @@ var $8e6a350f8ed2b618$var$deleteProp = function deleteProp(object, path) {
     var last = path.pop();
     var next = JSON.parse(JSON.stringify(object));
     delete path.reduce(function(o, k) {
-        return o[k] || {
-        };
+        return o[k] || {};
     }, next)[last];
     return next;
 };
@@ -102,6 +101,14 @@ $8e6a350f8ed2b618$exports.removeEmpty = $8e6a350f8ed2b618$var$removeEmpty;
 
 var $7c018e715e9e5e4a$exports = {};
 "use strict";
+function $7c018e715e9e5e4a$var$_typeof(obj) {
+    "@babel/helpers - typeof";
+    return $7c018e715e9e5e4a$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+        return typeof obj;
+    } : function(obj) {
+        return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, $7c018e715e9e5e4a$var$_typeof(obj);
+}
 Object.defineProperty($7c018e715e9e5e4a$exports, "__esModule", {
     value: true
 });
@@ -125,8 +132,7 @@ function $7c018e715e9e5e4a$var$ownKeys(object, enumerableOnly) {
 }
 function $7c018e715e9e5e4a$var$_objectSpread(target) {
     for(var i = 1; i < arguments.length; i++){
-        var source = null != arguments[i] ? arguments[i] : {
-        };
+        var source = null != arguments[i] ? arguments[i] : {};
         i % 2 ? $7c018e715e9e5e4a$var$ownKeys(Object(source), !0).forEach(function(key) {
             $7c018e715e9e5e4a$var$_defineProperty(target, key, source[key]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : $7c018e715e9e5e4a$var$ownKeys(Object(source)).forEach(function(key) {
@@ -136,6 +142,7 @@ function $7c018e715e9e5e4a$var$_objectSpread(target) {
     return target;
 }
 function $7c018e715e9e5e4a$var$_defineProperty(obj, key, value) {
+    key = $7c018e715e9e5e4a$var$_toPropertyKey(key);
     if (key in obj) Object.defineProperty(obj, key, {
         value: value,
         enumerable: true,
@@ -144,6 +151,20 @@ function $7c018e715e9e5e4a$var$_defineProperty(obj, key, value) {
     });
     else obj[key] = value;
     return obj;
+}
+function $7c018e715e9e5e4a$var$_toPropertyKey(arg) {
+    var key = $7c018e715e9e5e4a$var$_toPrimitive(arg, "string");
+    return $7c018e715e9e5e4a$var$_typeof(key) === "symbol" ? key : String(key);
+}
+function $7c018e715e9e5e4a$var$_toPrimitive(input, hint) {
+    if ($7c018e715e9e5e4a$var$_typeof(input) !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+        var res = prim.call(input, hint || "default");
+        if ($7c018e715e9e5e4a$var$_typeof(res) !== "object") return res;
+        throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
 }
 function $7c018e715e9e5e4a$var$_slicedToArray(arr, i) {
     return $7c018e715e9e5e4a$var$_arrayWithHoles(arr) || $7c018e715e9e5e4a$var$_iterableToArrayLimit(arr, i) || $7c018e715e9e5e4a$var$_unsupportedIterableToArray(arr, i) || $7c018e715e9e5e4a$var$_nonIterableRest();
@@ -165,28 +186,25 @@ function $7c018e715e9e5e4a$var$_arrayLikeToArray(arr, len) {
     return arr2;
 }
 function $7c018e715e9e5e4a$var$_iterableToArrayLimit(arr, i) {
-    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-    if (_i == null) return;
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _s, _e;
-    try {
-        for(_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true){
-            _arr.push(_s.value);
-            if (i && _arr.length === i) break;
-        }
-    } catch (err) {
-        _d = true;
-        _e = err;
-    } finally{
+    var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+    if (null != _i) {
+        var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1;
         try {
-            if (!_n && _i["return"] != null) _i["return"]();
+            if (_x = (_i = _i.call(arr)).next, 0 === i) {
+                if (Object(_i) !== _i) return;
+                _n = !1;
+            } else for(; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+        } catch (err) {
+            _d = !0, _e = err;
         } finally{
-            if (_d) throw _e;
+            try {
+                if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+            } finally{
+                if (_d) throw _e;
+            }
         }
+        return _arr;
     }
-    return _arr;
 }
 function $7c018e715e9e5e4a$var$_arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
@@ -206,8 +224,7 @@ function $7c018e715e9e5e4a$var$_arrayWithHoles(arr) {
     var extended = (0, $7c018e715e9e5e4a$var$_lodash["default"])(baseStyle);
     Object.entries(overrides).forEach(function(_ref) {
         var _ref2 = $7c018e715e9e5e4a$var$_slicedToArray(_ref, 2), k = _ref2[0], v = _ref2[1];
-        if (k === 'layout' || k === 'paint') extended[k] = $7c018e715e9e5e4a$var$_objectSpread($7c018e715e9e5e4a$var$_objectSpread({
-        }, extended[k]), v);
+        if (k === "layout" || k === "paint") extended[k] = $7c018e715e9e5e4a$var$_objectSpread($7c018e715e9e5e4a$var$_objectSpread({}, extended[k]), v);
         else extended[k] = v;
     });
     return extended;
@@ -246,6 +263,7 @@ function $787eebfbd67e2373$var$_arrayLikeToArray(arr, len) {
     return arr2;
 }
 function $787eebfbd67e2373$var$_defineProperty(obj, key, value) {
+    key = $787eebfbd67e2373$var$_toPropertyKey(key);
     if (key in obj) Object.defineProperty(obj, key, {
         value: value,
         enumerable: true,
@@ -255,12 +273,27 @@ function $787eebfbd67e2373$var$_defineProperty(obj, key, value) {
     else obj[key] = value;
     return obj;
 }
-function $787eebfbd67e2373$var$_typeof(obj1) {
+function $787eebfbd67e2373$var$_toPropertyKey(arg) {
+    var key = $787eebfbd67e2373$var$_toPrimitive(arg, "string");
+    return $787eebfbd67e2373$var$_typeof(key) === "symbol" ? key : String(key);
+}
+function $787eebfbd67e2373$var$_toPrimitive(input, hint) {
+    if ($787eebfbd67e2373$var$_typeof(input) !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+        var res = prim.call(input, hint || "default");
+        if ($787eebfbd67e2373$var$_typeof(res) !== "object") return res;
+        throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
+}
+function $787eebfbd67e2373$var$_typeof(obj) {
+    "@babel/helpers - typeof";
     return $787eebfbd67e2373$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $787eebfbd67e2373$var$_typeof(obj1);
+    }, $787eebfbd67e2373$var$_typeof(obj);
 }
 /**
  * Check if a file exists
@@ -280,16 +313,18 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  *
  * @param {*} v - the value to check
  * @returns {boolean|array}
- */ var $787eebfbd67e2373$var$findUndefined = function findUndefined(v1) {
-    if (v1 == undefined) return true; // For objects and arrays, we want to know the keys/indices
+ */ var $787eebfbd67e2373$var$findUndefined = function findUndefined(v) {
+    if (v == undefined) return true;
+    // For objects and arrays, we want to know the keys/indices
     // that contain undefined values
-    if ($787eebfbd67e2373$var$_typeof(v1) === 'object' || Array.isArray(v1)) {
-        var undefinedValues = Object.keys(v1).map(function(key) {
-            var undefinedProps = findUndefined(v1[key]);
-            if (!undefinedProps) return null; // This is the leaf node, just return the key
-            if (typeof undefinedProps === 'boolean') return key; // Undefined properties are deeper, include key and further branches
-            return $787eebfbd67e2373$var$_defineProperty({
-            }, key, undefinedProps);
+    if ($787eebfbd67e2373$var$_typeof(v) === "object" || Array.isArray(v)) {
+        var undefinedValues = Object.keys(v).map(function(key) {
+            var undefinedProps = findUndefined(v[key]);
+            if (!undefinedProps) return null;
+            // This is the leaf node, just return the key
+            if (typeof undefinedProps === "boolean") return key;
+            // Undefined properties are deeper, include key and further branches
+            return $787eebfbd67e2373$var$_defineProperty({}, key, undefinedProps);
         }).filter(function(v) {
             return !!v;
         });
@@ -320,11 +355,13 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  * @param {string} path - the file path to the layer
  * @returns {string}
  */ var $787eebfbd67e2373$var$getLayerBuildErrorMessage = function getLayerBuildErrorMessage(error, name, path) {
-    var stack = error.stack; // Get first "at" line of stack trace, split : to get line number
-    var lineNumber = stack.split('\n')[1].split(':')[1]; // Load file and get the line at the given lineNumber
-    var layerFile = $787eebfbd67e2373$var$_fs["default"].readFileSync(path, 'utf8');
-    var layerLine = layerFile.split('\n')[lineNumber - 1];
-    return "".concat($787eebfbd67e2373$var$_chalk["default"].red.bold('Error:'), " Couldn't build layer ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ".\n\nDetails: ").concat(error.message, " in\n  ").concat($787eebfbd67e2373$var$_chalk["default"].blue(path), "\n\n").concat(lineNumber, ": ").concat(layerLine);
+    var stack = error.stack;
+    // Get first "at" line of stack trace, split : to get line number
+    var lineNumber = stack.split("\n")[1].split(":")[1];
+    // Load file and get the line at the given lineNumber
+    var layerFile = $787eebfbd67e2373$var$_fs["default"].readFileSync(path, "utf8");
+    var layerLine = layerFile.split("\n")[lineNumber - 1];
+    return "".concat($787eebfbd67e2373$var$_chalk["default"].red.bold("Error:"), " Couldn't build layer ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ".\n\nDetails: ").concat(error.message, " in\n  ").concat($787eebfbd67e2373$var$_chalk["default"].blue(path), "\n\n").concat(lineNumber, ": ").concat(layerLine);
 };
 /**
  * Nicely format a file does not exist error message
@@ -334,7 +371,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  * @param {string} path - the file path being loaded
  * @returns {string}
  */ var $787eebfbd67e2373$var$getFileDoesNotExistMessage = function getFileDoesNotExistMessage(fileType, name, path) {
-    return "\n".concat($787eebfbd67e2373$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ", does it exist? Attempted to load from\n  ").concat($787eebfbd67e2373$var$_chalk["default"].blue(path), "\n");
+    return "\n".concat($787eebfbd67e2373$var$_chalk["default"].red.bold("Error:"), " Couldn't load ").concat(fileType, " ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ", does it exist? Attempted to load from\n  ").concat($787eebfbd67e2373$var$_chalk["default"].blue(path), "\n");
 };
 /**
  * Nicely format a file error message
@@ -345,7 +382,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  * @param {string} error - the error message
  * @returns {string}
  */ var $787eebfbd67e2373$var$getFileErrorMessage = function getFileErrorMessage(fileType, name, path, error) {
-    return "\n".concat($787eebfbd67e2373$var$_chalk["default"].red.bold('Error:'), " Couldn't load ").concat(fileType, " ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ". Received this error:\n\n").concat($787eebfbd67e2373$var$_chalk["default"].red(error.stack), "\n");
+    return "\n".concat($787eebfbd67e2373$var$_chalk["default"].red.bold("Error:"), " Couldn't load ").concat(fileType, " ").concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ". Received this error:\n\n").concat($787eebfbd67e2373$var$_chalk["default"].red(error.stack), "\n");
 };
 /**
  * Nicely format and log validation messages for style layers
@@ -359,7 +396,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
             console.warn("    ".concat(message));
         });
     });
-    console.warn('');
+    console.warn("");
 };
 /**
  * Load the function that will build the layer.
@@ -368,11 +405,11 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  * @param {string} path - the file path to the layer
  * @returns {function} the layer builder
  */ var $787eebfbd67e2373$var$loadLayerBuilder = function loadLayerBuilder(name, path) {
-    if (!$787eebfbd67e2373$var$fileExists(path)) throw new Error($787eebfbd67e2373$var$getFileDoesNotExistMessage('layer', name, path));
+    if (!$787eebfbd67e2373$var$fileExists(path)) throw new Error($787eebfbd67e2373$var$getFileDoesNotExistMessage("layer", name, path));
     try {
         return require(path)["default"];
     } catch (error) {
-        throw new Error($787eebfbd67e2373$var$getFileErrorMessage('layer', name, path, error));
+        throw new Error($787eebfbd67e2373$var$getFileErrorMessage("layer", name, path, error));
     }
 };
 /**
@@ -382,11 +419,11 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  * @param {string} name - the style name
  * @returns {object}
  */ var $787eebfbd67e2373$var$loadStyle = function loadStyle(name, path) {
-    if (!$787eebfbd67e2373$var$fileExists(path)) throw new Error($787eebfbd67e2373$var$getFileDoesNotExistMessage('style', name, path));
+    if (!$787eebfbd67e2373$var$fileExists(path)) throw new Error($787eebfbd67e2373$var$getFileDoesNotExistMessage("style", name, path));
     try {
         return require(path);
     } catch (error) {
-        throw new Error($787eebfbd67e2373$var$getFileErrorMessage('style', name, path, error));
+        throw new Error($787eebfbd67e2373$var$getFileErrorMessage("style", name, path, error));
     }
 };
 /**
@@ -403,7 +440,7 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     try {
         var _fileStr$match;
         layer = builder(context);
-        var fileStr = $787eebfbd67e2373$var$_fs["default"].readFileSync(path, 'utf8');
+        var fileStr = $787eebfbd67e2373$var$_fs["default"].readFileSync(path, "utf8");
         contextMatches = (_fileStr$match = fileStr.match(/context(?:\.\w+)+/g)) !== null && _fileStr$match !== void 0 ? _fileStr$match : [];
     } catch (error) {
         throw new Error($787eebfbd67e2373$var$getLayerBuildErrorMessage(error, name, path));
@@ -422,30 +459,31 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
  * @returns {Object}
  */ var $787eebfbd67e2373$var$buildStyle = function buildStyle(name, absoluteStylePath, layerDir) {
     var _options$verbose;
-    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
-    };
-    if (!absoluteStylePath) throw new Error('Must provide absoluteStylePath.');
-    if (!layerDir) throw new Error('Must provide layerDir.');
+    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
+    if (!absoluteStylePath) throw new Error("Must provide absoluteStylePath.");
+    if (!layerDir) throw new Error("Must provide layerDir.");
     var verbose = (_options$verbose = options === null || options === void 0 ? void 0 : options.verbose) !== null && _options$verbose !== void 0 ? _options$verbose : false;
     var _loadStyle = $787eebfbd67e2373$var$loadStyle(name, $787eebfbd67e2373$var$_path["default"].resolve(absoluteStylePath)), context = _loadStyle.context, template = _loadStyle.template;
     var styleJson = JSON.parse(JSON.stringify(template));
-    var validationMessages = {
-    };
+    var validationMessages = {};
     if (verbose) console.log("Building style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(name)));
     var unusedContext = (0, $787eebfbd67e2373$var$_lodash["default"])(context);
     var usedContextPaths = [];
     styleJson.layers = template.layers.map(function(layerName) {
         if (verbose) console.log("  Adding layer ".concat($787eebfbd67e2373$var$_chalk["default"].blue(layerName)));
         var layerPath = $787eebfbd67e2373$var$_path["default"].resolve(layerDir, "".concat(layerName, ".js"));
-        var _buildLayer = $787eebfbd67e2373$var$buildLayer(context, layerName, layerPath), layer = _buildLayer.layer, usedContext = _buildLayer.usedContext; // Create path strings of used context
+        var _buildLayer = $787eebfbd67e2373$var$buildLayer(context, layerName, layerPath), layer = _buildLayer.layer, usedContext = _buildLayer.usedContext;
+        // Create path strings of used context
         usedContextPaths = usedContextPaths.concat((0, $787eebfbd67e2373$var$_lodash["default"])(usedContext).map(function(str) {
-            return str.split('.').slice(1).join('.');
-        })); // Use used context to filter context down to what is not used
+            return str.split(".").slice(1).join(".");
+        }));
+        // Use used context to filter context down to what is not used
         usedContext.map(function(str) {
-            return str.split('.').slice(1);
+            return str.split(".").slice(1);
         }).forEach(function(contextPath) {
             unusedContext = (0, $8e6a350f8ed2b618$exports.deleteProp)(unusedContext, contextPath);
-        }); // Collect validation messages for each layer
+        });
+        // Collect validation messages for each layer
         var layerValidationMessages = $787eebfbd67e2373$var$validateLayer(layer);
         if (layerValidationMessages.length) validationMessages[layerName] = layerValidationMessages;
         return layer;
@@ -454,18 +492,18 @@ function $787eebfbd67e2373$var$_typeof(obj1) {
     if (Object.keys(validationMessages).length > 0) {
         console.warn("Found issues in style ".concat($787eebfbd67e2373$var$_chalk["default"].blue(name), ":"));
         $787eebfbd67e2373$var$logLayerValidationMessages(validationMessages);
-    } // Flattens nested object to be one level with keys using periods to represent nesting
-    var flattenObject1 = function flattenObject(obj) {
-        var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+    }
+    // Flattens nested object to be one level with keys using periods to represent nesting
+    var flattenObject = function flattenObject(obj) {
+        var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
         return Object.keys(obj).reduce(function(acc, k) {
-            var pre = prefix.length ? prefix + '.' : '';
+            var pre = prefix.length ? prefix + "." : "";
             if ((0, $787eebfbd67e2373$var$_lodash2["default"])(obj[k])) Object.assign(acc, flattenObject(obj[k], pre + k));
             else acc[pre + k] = obj[k];
             return acc;
-        }, {
-        });
+        }, {});
     };
-    var unusedContextPaths = Object.keys(flattenObject1(unusedContext));
+    var unusedContextPaths = Object.keys(flattenObject(unusedContext));
     return {
         styleJson: styleJson,
         unusedContextPaths: unusedContextPaths,
@@ -482,15 +520,16 @@ Object.defineProperty($5d86828d3cc45dbd$exports, "__esModule", {
     value: true
 });
 $5d86828d3cc45dbd$exports.mergeVariables = void 0;
-function $5d86828d3cc45dbd$var$_typeof(obj1) {
+function $5d86828d3cc45dbd$var$_typeof(obj) {
+    "@babel/helpers - typeof";
     return $5d86828d3cc45dbd$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $5d86828d3cc45dbd$var$_typeof(obj1);
+    }, $5d86828d3cc45dbd$var$_typeof(obj);
 }
 var $5d86828d3cc45dbd$var$isObject = function isObject(v) {
-    return $5d86828d3cc45dbd$var$_typeof(v) === 'object' && !Array.isArray(v) && !!v;
+    return $5d86828d3cc45dbd$var$_typeof(v) === "object" && !Array.isArray(v) && !!v;
 };
 /**
  * Merge the current object of variables with an extender object. Variables
@@ -517,8 +556,7 @@ var $5d86828d3cc45dbd$var$isObject = function isObject(v) {
     for(var _len = arguments.length, variableGroups = new Array(_len), _key = 0; _key < _len; _key++)variableGroups[_key] = arguments[_key];
     return variableGroups.reduce(function(acc, cur) {
         return $5d86828d3cc45dbd$var$merge(acc, cur);
-    }, {
-    });
+    }, {});
 };
 $5d86828d3cc45dbd$exports.mergeVariables = $5d86828d3cc45dbd$var$mergeVariables;
 
@@ -529,12 +567,13 @@ Object.defineProperty($420078f6f222ff92$exports, "__esModule", {
     value: true
 });
 $420078f6f222ff92$exports.modifyNumberVariables = void 0;
-function $420078f6f222ff92$var$_typeof(obj1) {
+function $420078f6f222ff92$var$_typeof(obj) {
+    "@babel/helpers - typeof";
     return $420078f6f222ff92$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $420078f6f222ff92$var$_typeof(obj1);
+    }, $420078f6f222ff92$var$_typeof(obj);
 }
 /**
  * Returns a new function that divides a number by the modifier passed here
@@ -592,42 +631,43 @@ function $420078f6f222ff92$var$_typeof(obj1) {
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
  * @returns {Array|number} - the modified property values
  */ var $420078f6f222ff92$var$modifyValue = function modifyValue(propertyValue, fn, options) {
-    if (typeof propertyValue === 'number') return $420078f6f222ff92$var$handleOptions(fn(propertyValue), options);
+    if (typeof propertyValue === "number") return $420078f6f222ff92$var$handleOptions(fn(propertyValue), options);
     if (!Array.isArray(propertyValue)) return propertyValue;
     var expressionType = propertyValue[0];
     var sliceIndex;
     var outputCondition;
     var fallback;
     switch(expressionType){
-        case 'interpolate':
-        case 'interpolate-hcl':
-        case 'interpolate-lab':
+        case "interpolate":
+        case "interpolate-hcl":
+        case "interpolate-lab":
             sliceIndex = 3;
             outputCondition = function outputCondition(i) {
                 return i % 2 !== 0;
             };
             break;
-        case 'step':
+        case "step":
             sliceIndex = 2;
             outputCondition = function outputCondition(i) {
                 return i % 2 === 0;
             };
             break;
-        case 'case':
+        case "case":
             sliceIndex = 1;
             outputCondition = function outputCondition(i) {
                 return i % 2 !== 0;
             };
             fallback = propertyValue.pop();
             break;
-        case 'match':
+        case "match":
             sliceIndex = 2;
             outputCondition = function outputCondition(i) {
                 return i % 2 !== 0;
             };
             fallback = propertyValue.pop();
             break;
-    } // Rebuild modified expression
+    }
+    // Rebuild modified expression
     var nextValue = propertyValue.slice(0, sliceIndex);
     var inputOutputs = propertyValue.slice(sliceIndex);
     inputOutputs.forEach(function(val, i) {
@@ -644,12 +684,11 @@ function $420078f6f222ff92$var$_typeof(obj1) {
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
  * @returns {Object} - the modified variables
  */ var $420078f6f222ff92$var$replaceVariables = function replaceVariables(variables, fn, options) {
-    if ($420078f6f222ff92$var$_typeof(variables) !== 'object' || Array.isArray(variables)) return $420078f6f222ff92$var$modifyValue(variables, fn, options);
+    if ($420078f6f222ff92$var$_typeof(variables) !== "object" || Array.isArray(variables)) return $420078f6f222ff92$var$modifyValue(variables, fn, options);
     return Object.keys(variables).reduce(function(acc, key) {
         acc[key] = replaceVariables(variables[key], fn, options);
         return acc;
-    }, {
-    });
+    }, {});
 };
 /**
  * Modify number values in variables using a math operation
@@ -659,23 +698,22 @@ function $420078f6f222ff92$var$_typeof(obj1) {
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
  * @returns {Object} - the modified variables
  */ var $420078f6f222ff92$var$modifyNumberVariables = function modifyNumberVariables(variables, operator, modifier) {
-    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {
-    };
+    var options = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : {};
     var nextVariables = JSON.parse(JSON.stringify(variables));
     var mathFn = function mathFn(num) {
         return num;
     };
     switch(operator){
-        case '*':
+        case "*":
             mathFn = $420078f6f222ff92$var$getMultiplyFn(modifier);
             break;
-        case '/':
+        case "/":
             mathFn = $420078f6f222ff92$var$getDivideFn(modifier);
             break;
-        case '+':
+        case "+":
             mathFn = $420078f6f222ff92$var$getAddFn(modifier);
             break;
-        case '-':
+        case "-":
             mathFn = $420078f6f222ff92$var$getSubtractFn(modifier);
             break;
         default:
@@ -689,6 +727,14 @@ $420078f6f222ff92$exports.modifyNumberVariables = $420078f6f222ff92$var$modifyNu
 
 var $427613dabbfda056$exports = {};
 "use strict";
+function $427613dabbfda056$var$_typeof(obj) {
+    "@babel/helpers - typeof";
+    return $427613dabbfda056$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
+        return typeof obj;
+    } : function(obj) {
+        return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
+    }, $427613dabbfda056$var$_typeof(obj);
+}
 Object.defineProperty($427613dabbfda056$exports, "__esModule", {
     value: true
 });
@@ -713,8 +759,7 @@ function $427613dabbfda056$var$ownKeys(object, enumerableOnly) {
 }
 function $427613dabbfda056$var$_objectSpread(target) {
     for(var i = 1; i < arguments.length; i++){
-        var source = null != arguments[i] ? arguments[i] : {
-        };
+        var source = null != arguments[i] ? arguments[i] : {};
         i % 2 ? $427613dabbfda056$var$ownKeys(Object(source), !0).forEach(function(key) {
             $427613dabbfda056$var$_defineProperty(target, key, source[key]);
         }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : $427613dabbfda056$var$ownKeys(Object(source)).forEach(function(key) {
@@ -724,6 +769,7 @@ function $427613dabbfda056$var$_objectSpread(target) {
     return target;
 }
 function $427613dabbfda056$var$_defineProperty(obj, key, value) {
+    key = $427613dabbfda056$var$_toPropertyKey(key);
     if (key in obj) Object.defineProperty(obj, key, {
         value: value,
         enumerable: true,
@@ -732,6 +778,20 @@ function $427613dabbfda056$var$_defineProperty(obj, key, value) {
     });
     else obj[key] = value;
     return obj;
+}
+function $427613dabbfda056$var$_toPropertyKey(arg) {
+    var key = $427613dabbfda056$var$_toPrimitive(arg, "string");
+    return $427613dabbfda056$var$_typeof(key) === "symbol" ? key : String(key);
+}
+function $427613dabbfda056$var$_toPrimitive(input, hint) {
+    if ($427613dabbfda056$var$_typeof(input) !== "object" || input === null) return input;
+    var prim = input[Symbol.toPrimitive];
+    if (prim !== undefined) {
+        var res = prim.call(input, hint || "default");
+        if ($427613dabbfda056$var$_typeof(res) !== "object") return res;
+        throw new TypeError("@@toPrimitive must return a primitive value.");
+    }
+    return (hint === "string" ? String : Number)(input);
 }
 function $427613dabbfda056$var$_slicedToArray(arr, i) {
     return $427613dabbfda056$var$_arrayWithHoles(arr) || $427613dabbfda056$var$_iterableToArrayLimit(arr, i) || $427613dabbfda056$var$_unsupportedIterableToArray(arr, i) || $427613dabbfda056$var$_nonIterableRest();
@@ -753,28 +813,25 @@ function $427613dabbfda056$var$_arrayLikeToArray(arr, len) {
     return arr2;
 }
 function $427613dabbfda056$var$_iterableToArrayLimit(arr, i) {
-    var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"];
-    if (_i == null) return;
-    var _arr = [];
-    var _n = true;
-    var _d = false;
-    var _s, _e;
-    try {
-        for(_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true){
-            _arr.push(_s.value);
-            if (i && _arr.length === i) break;
-        }
-    } catch (err) {
-        _d = true;
-        _e = err;
-    } finally{
+    var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"];
+    if (null != _i) {
+        var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1;
         try {
-            if (!_n && _i["return"] != null) _i["return"]();
+            if (_x = (_i = _i.call(arr)).next, 0 === i) {
+                if (Object(_i) !== _i) return;
+                _n = !1;
+            } else for(; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0);
+        } catch (err) {
+            _d = !0, _e = err;
         } finally{
-            if (_d) throw _e;
+            try {
+                if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return;
+            } finally{
+                if (_d) throw _e;
+            }
         }
+        return _arr;
     }
-    return _arr;
 }
 function $427613dabbfda056$var$_arrayWithHoles(arr) {
     if (Array.isArray(arr)) return arr;
@@ -784,72 +841,62 @@ var $427613dabbfda056$var$createLayerTemplate = function createLayerTemplate(bas
     if (!layer) layer = Object.values(variants)[0];
     var baseStyle = (0, $427613dabbfda056$var$_jsonStringifyPrettyCompact["default"])(layer, {
         indent: 2
-    }).split('\n').join('\n  ');
-    var allOverrides = ''; // TODO currently making the primary differentiator style id until we sort differences
-    var _loop = function _loop(styleName) {
-        var overrides = {
-        };
+    }).split("\n").join("\n  ");
+    var allOverrides = "";
+    // TODO currently making the primary differentiator style id until we sort differences
+    var _loop = function _loop() {
+        var overrides = {};
         if (layer && Object.keys(variants).length) {
             var variantLayer = variants[styleName];
             Object.entries(variantLayer).forEach(function(_ref) {
                 var _ref2 = $427613dabbfda056$var$_slicedToArray(_ref, 2), k = _ref2[0], v = _ref2[1];
-                if (k === 'layout' || k === 'paint') return;
+                if (k === "layout" || k === "paint") return;
                 if (JSON.stringify(v) === JSON.stringify(layer[k])) return;
                 overrides[k] = v;
             });
             if (variantLayer.layout) {
                 // If a property does not exist on a variant, override with the default
-                var defaultLayout = Object.keys(layer.layout || {
-                }).reduce(function(acc, k) {
+                var defaultLayout = Object.keys(layer.layout || {}).reduce(function(acc, k) {
                     acc[k] = $gXNCa$mapboxmapboxglstylespec.latest["layout_".concat(layer.type)][k]["default"];
                     return acc;
-                }, {
-                });
-                var fullLayout = $427613dabbfda056$var$_objectSpread($427613dabbfda056$var$_objectSpread({
-                }, defaultLayout), variantLayer.layout);
+                }, {});
+                var fullLayout = $427613dabbfda056$var$_objectSpread($427613dabbfda056$var$_objectSpread({}, defaultLayout), variantLayer.layout);
                 Object.entries(fullLayout).forEach(function(_ref3) {
                     var _layer, _layer$layout;
                     var _ref4 = $427613dabbfda056$var$_slicedToArray(_ref3, 2), k = _ref4[0], v = _ref4[1];
                     if (JSON.stringify(v) === JSON.stringify((_layer = layer) === null || _layer === void 0 ? void 0 : (_layer$layout = _layer.layout) === null || _layer$layout === void 0 ? void 0 : _layer$layout[k])) return;
-                    if (!overrides.layout) overrides.layout = {
-                    };
+                    if (!overrides.layout) overrides.layout = {};
                     overrides.layout[k] = v;
                 });
             }
             if (variantLayer.paint) {
                 // If a property does not exist on a variant, override with the default
-                var defaultPaint = Object.keys(layer.paint || {
-                }).reduce(function(acc, k) {
+                var defaultPaint = Object.keys(layer.paint || {}).reduce(function(acc, k) {
                     acc[k] = $gXNCa$mapboxmapboxglstylespec.latest["paint_".concat(layer.type)][k]["default"];
                     return acc;
-                }, {
-                });
-                var fullPaint = $427613dabbfda056$var$_objectSpread($427613dabbfda056$var$_objectSpread({
-                }, defaultPaint), variantLayer.paint);
+                }, {});
+                var fullPaint = $427613dabbfda056$var$_objectSpread($427613dabbfda056$var$_objectSpread({}, defaultPaint), variantLayer.paint);
                 Object.entries(fullPaint).forEach(function(_ref5) {
                     var _layer2, _layer2$paint;
                     var _ref6 = $427613dabbfda056$var$_slicedToArray(_ref5, 2), k = _ref6[0], v = _ref6[1];
                     if (JSON.stringify(v) === JSON.stringify((_layer2 = layer) === null || _layer2 === void 0 ? void 0 : (_layer2$paint = _layer2.paint) === null || _layer2$paint === void 0 ? void 0 : _layer2$paint[k])) return;
-                    if (!overrides.paint) overrides.paint = {
-                    };
+                    if (!overrides.paint) overrides.paint = {};
                     overrides.paint[k] = v;
                 });
             }
         }
         overrides = (0, $427613dabbfda056$var$_jsonStringifyPrettyCompact["default"])(overrides, {
             indent: 2
-        }).split('\n').join('\n    ');
-        allOverrides += "".concat(!!allOverrides ? ' else if' : 'if', " (context.styleName === '").concat(styleName, "') {\n      overrides = ").concat(overrides, ";\n  }");
+        }).split("\n").join("\n    ");
+        allOverrides += "".concat(!!allOverrides ? " else if" : "if", " (context.styleName === '").concat(styleName, "') {\n      overrides = ").concat(overrides, ";\n  }");
     };
-    for(var styleName1 in variants)_loop(styleName1);
+    for(var styleName in variants)_loop();
     var fileContent = "module.exports.default = (context) => {\n  const baseStyle = ".concat(baseStyle, ";\n  let overrides = {};\n  ").concat(allOverrides, "\n  return {\n    baseStyle,\n    overrides\n  };\n};");
     return fileContent;
 };
 $427613dabbfda056$exports.createLayerTemplate = $427613dabbfda056$var$createLayerTemplate;
 var $427613dabbfda056$var$createVariantTemplate = function createVariantTemplate(style) {
-    var templateStyle = $427613dabbfda056$var$_objectSpread($427613dabbfda056$var$_objectSpread({
-    }, style), {
-    }, {
+    var templateStyle = $427613dabbfda056$var$_objectSpread($427613dabbfda056$var$_objectSpread({}, style), {}, {
         layers: style.layers.map(function(l) {
             return l.id;
         })
