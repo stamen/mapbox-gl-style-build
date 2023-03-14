@@ -3650,9 +3650,9 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-"mapbox-gl-style-format@git+https://github.com/stamen/mapbox-gl-style-format#e6cadb4":
-  version "0.2.0"
-  resolved "git+https://github.com/stamen/mapbox-gl-style-format#e6cadb48c759aebe785515dad14a6bf33310c521"
+"mapbox-gl-style-format@git+https://github.com/stamen/mapbox-gl-style-format#435b7fb":
+  version "0.2.1"
+  resolved "git+https://github.com/stamen/mapbox-gl-style-format#435b7fb4009a20a5d8903e539858651531844dc1"
   dependencies:
     "@mapbox/mapbox-gl-style-spec" "^13.28.0"
     json-stringify-pretty-compact "^3.0.0"
