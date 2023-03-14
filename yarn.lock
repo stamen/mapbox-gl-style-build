@@ -3645,9 +3645,9 @@ makeerror@1.0.12:
   dependencies:
     tmpl "1.0.5"
 
-"mapbox-gl-style-format@git+https://github.com/stamen/mapbox-gl-style-format#f23dbbc":
+"mapbox-gl-style-format@git+https://github.com/stamen/mapbox-gl-style-format#346442e":
   version "0.2.0"
-  resolved "git+https://github.com/stamen/mapbox-gl-style-format#f23dbbc71e485573793450e3bb2a9973be86d0b2"
+  resolved "git+https://github.com/stamen/mapbox-gl-style-format#346442e972b5f91b7d072e93b1e5ee5cc81e2bd5"
   dependencies:
     "@mapbox/mapbox-gl-style-spec" "^13.28.0"
     json-stringify-pretty-compact "^3.0.0"
@@ -3850,7 +3850,7 @@ p-try@^2.0.0:
   resolved "https://registry.yarnpkg.com/p-try/-/p-try-2.2.0.tgz#cb2868540e313d61de58fafbe35ce9004d5540e6"
   integrity sha512-R4nPAVTAU0B9D35/Gk3uJf/7XYbQcyohSKdvAxIRSNghFl4e71hVoGnBNQz9cWaXxO2I10KTC+3jMdvvoKw6dQ==
 
-parcel@^2.0.1:
+parcel@^2.8.3:
   version "2.8.3"
   resolved "https://registry.yarnpkg.com/parcel/-/parcel-2.8.3.tgz#1ff71d7317274fd367379bc7310a52c6b75d30c2"
   integrity sha512-5rMBpbNE72g6jZvkdR5gS2nyhwIXaJy8i65osOqs/+5b7zgf3eMKgjSsDrv6bhz3gzifsba6MBJiZdBckl+vnA==
