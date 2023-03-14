@@ -1,0 +1,17 @@
+on: [push]
+jobs:
+  check-versions-matrix:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        version: [16, 18]
+    steps:
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.version }}
+      - uses: actions/checkout@v3
+      - id: install
+        shell: bash
+        run: |
+          echo $(npm -v)
+          npm install
