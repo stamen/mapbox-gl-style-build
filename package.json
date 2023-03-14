@@ -26,7 +26,7 @@
     "lodash.clonedeep": "^4.5.0",
     "lodash.isempty": "^4.4.0",
     "lodash.isplainobject": "^4.0.6",
-    "mapbox-gl-style-format": "git+https://github.com/stamen/mapbox-gl-style-format#1fdcc76",
+    "mapbox-gl-style-format": "git+https://github.com/stamen/mapbox-gl-style-format#0518910",
     "yargs": "^17.2.1"
   },
   "devDependencies": {
@@ -35,7 +35,7 @@
     "@parcel/babel-preset-env": "^2.0.1",
     "babel-jest": "^27.5.1",
     "jest": "^27.3.1",
-    "parcel": "^2.8.3"
+    "parcel": "2.6.0"
   },
   "bin": {
     "mapbox-gl-style-build": "bin/mapbox-gl-style-build",

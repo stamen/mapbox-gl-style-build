@@ -89,10 +89,10 @@ var $40eefc352541bd70$var$deleteProp = function deleteProp(object, path) {
     return next;
 };
 $40eefc352541bd70$exports.deleteProp = $40eefc352541bd70$var$deleteProp;
-var $40eefc352541bd70$var$removeEmpty = function removeEmpty(o) {
+var $40eefc352541bd70$var$removeEmpty = function removeEmpty1(o) {
     for(var k in o){
         if (!o[k] || !(0, $40eefc352541bd70$var$_lodash["default"])(o[k])) continue;
-        removeEmpty(o[k]);
+        removeEmpty1(o[k]);
         if ((0, $40eefc352541bd70$var$_lodash2["default"])(o[k])) delete o[k];
     }
     return o;
@@ -102,13 +102,13 @@ $40eefc352541bd70$exports.removeEmpty = $40eefc352541bd70$var$removeEmpty;
 
 var $6f6b0a3fd84dd156$exports = {};
 "use strict";
-function $6f6b0a3fd84dd156$var$_typeof(obj) {
+function $6f6b0a3fd84dd156$var$_typeof(obj1) {
     "@babel/helpers - typeof";
     return $6f6b0a3fd84dd156$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $6f6b0a3fd84dd156$var$_typeof(obj);
+    }, $6f6b0a3fd84dd156$var$_typeof(obj1);
 }
 Object.defineProperty($6f6b0a3fd84dd156$exports, "__esModule", {
     value: true
@@ -288,13 +288,13 @@ function $5c3f8fbf0bc952bf$var$_toPrimitive(input, hint) {
     }
     return (hint === "string" ? String : Number)(input);
 }
-function $5c3f8fbf0bc952bf$var$_typeof(obj) {
+function $5c3f8fbf0bc952bf$var$_typeof(obj1) {
     "@babel/helpers - typeof";
     return $5c3f8fbf0bc952bf$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $5c3f8fbf0bc952bf$var$_typeof(obj);
+    }, $5c3f8fbf0bc952bf$var$_typeof(obj1);
 }
 /**
  * Check if a file exists
@@ -314,13 +314,13 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj) {
  *
  * @param {*} v - the value to check
  * @returns {boolean|array}
- */ var $5c3f8fbf0bc952bf$var$findUndefined = function findUndefined(v) {
-    if (v == undefined) return true;
+ */ var $5c3f8fbf0bc952bf$var$findUndefined = function findUndefined1(v1) {
+    if (v1 == undefined) return true;
     // For objects and arrays, we want to know the keys/indices
     // that contain undefined values
-    if ($5c3f8fbf0bc952bf$var$_typeof(v) === "object" || Array.isArray(v)) {
-        var undefinedValues = Object.keys(v).map(function(key) {
-            var undefinedProps = findUndefined(v[key]);
+    if ($5c3f8fbf0bc952bf$var$_typeof(v1) === "object" || Array.isArray(v1)) {
+        var undefinedValues = Object.keys(v1).map(function(key) {
+            var undefinedProps = findUndefined1(v1[key]);
             if (!undefinedProps) return null;
             // This is the leaf node, just return the key
             if (typeof undefinedProps === "boolean") return key;
@@ -495,7 +495,7 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj) {
         $5c3f8fbf0bc952bf$var$logLayerValidationMessages(validationMessages);
     }
     // Flattens nested object to be one level with keys using periods to represent nesting
-    var flattenObject = function flattenObject(obj) {
+    var flattenObject1 = function flattenObject(obj) {
         var prefix = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : "";
         return Object.keys(obj).reduce(function(acc, k) {
             var pre = prefix.length ? prefix + "." : "";
@@ -504,7 +504,7 @@ function $5c3f8fbf0bc952bf$var$_typeof(obj) {
             return acc;
         }, {});
     };
-    var unusedContextPaths = Object.keys(flattenObject(unusedContext));
+    var unusedContextPaths = Object.keys(flattenObject1(unusedContext));
     return {
         styleJson: styleJson,
         unusedContextPaths: unusedContextPaths,
@@ -521,13 +521,13 @@ Object.defineProperty($810f112ff77b3238$exports, "__esModule", {
     value: true
 });
 $810f112ff77b3238$exports.mergeVariables = void 0;
-function $810f112ff77b3238$var$_typeof(obj) {
+function $810f112ff77b3238$var$_typeof(obj1) {
     "@babel/helpers - typeof";
     return $810f112ff77b3238$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $810f112ff77b3238$var$_typeof(obj);
+    }, $810f112ff77b3238$var$_typeof(obj1);
 }
 var $810f112ff77b3238$var$isObject = function isObject(v) {
     return $810f112ff77b3238$var$_typeof(v) === "object" && !Array.isArray(v) && !!v;
@@ -539,11 +539,11 @@ var $810f112ff77b3238$var$isObject = function isObject(v) {
  * @param {Object} current - the original variable object
  * @param {Object} extender - the extender variable object, containing overrides
  * @returns {Object} - the merged variables
- */ var $810f112ff77b3238$var$merge = function merge(current, extender) {
+ */ var $810f112ff77b3238$var$merge = function merge1(current, extender) {
     var merged = JSON.parse(JSON.stringify(current));
     Object.keys(extender).forEach(function(k) {
         // Handle nested variables
-        if ($810f112ff77b3238$var$isObject(current[k]) && $810f112ff77b3238$var$isObject(extender[k])) merged[k] = merge(current[k], extender[k]);
+        if ($810f112ff77b3238$var$isObject(current[k]) && $810f112ff77b3238$var$isObject(extender[k])) merged[k] = merge1(current[k], extender[k]);
         else merged[k] = JSON.parse(JSON.stringify(extender[k]));
     });
     return merged;
@@ -568,13 +568,13 @@ Object.defineProperty($a28de5cf82661a69$exports, "__esModule", {
     value: true
 });
 $a28de5cf82661a69$exports.modifyNumberVariables = void 0;
-function $a28de5cf82661a69$var$_typeof(obj) {
+function $a28de5cf82661a69$var$_typeof(obj1) {
     "@babel/helpers - typeof";
     return $a28de5cf82661a69$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $a28de5cf82661a69$var$_typeof(obj);
+    }, $a28de5cf82661a69$var$_typeof(obj1);
 }
 /**
  * Returns a new function that divides a number by the modifier passed here
@@ -631,7 +631,7 @@ function $a28de5cf82661a69$var$_typeof(obj) {
  * @param {Function} fn - function to run the value or expression output values through
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
  * @returns {Array|number} - the modified property values
- */ var $a28de5cf82661a69$var$modifyValue = function modifyValue(propertyValue, fn, options) {
+ */ var $a28de5cf82661a69$var$modifyValue = function modifyValue1(propertyValue, fn, options) {
     if (typeof propertyValue === "number") return $a28de5cf82661a69$var$handleOptions(fn(propertyValue), options);
     if (!Array.isArray(propertyValue)) return propertyValue;
     var expressionType = propertyValue[0];
@@ -672,10 +672,10 @@ function $a28de5cf82661a69$var$_typeof(obj) {
     var nextValue = propertyValue.slice(0, sliceIndex);
     var inputOutputs = propertyValue.slice(sliceIndex);
     inputOutputs.forEach(function(val, i) {
-        if (outputCondition(i)) nextValue.push(modifyValue(val, fn, options));
+        if (outputCondition(i)) nextValue.push(modifyValue1(val, fn, options));
         else nextValue.push(val);
     });
-    if (fallback !== undefined) nextValue.push(modifyValue(fallback, fn, options));
+    if (fallback !== undefined) nextValue.push(modifyValue1(fallback, fn, options));
     return nextValue;
 };
 /**
@@ -684,10 +684,10 @@ function $a28de5cf82661a69$var$_typeof(obj) {
  * @param {Function} fn - function to run the value or expression output values through
  * @param {Object} [options] - options object with keys: round?: boolean, floor?: boolean, ceil?: boolean, toFixed?: number
  * @returns {Object} - the modified variables
- */ var $a28de5cf82661a69$var$replaceVariables = function replaceVariables(variables, fn, options) {
+ */ var $a28de5cf82661a69$var$replaceVariables = function replaceVariables1(variables, fn, options) {
     if ($a28de5cf82661a69$var$_typeof(variables) !== "object" || Array.isArray(variables)) return $a28de5cf82661a69$var$modifyValue(variables, fn, options);
     return Object.keys(variables).reduce(function(acc, key) {
-        acc[key] = replaceVariables(variables[key], fn, options);
+        acc[key] = replaceVariables1(variables[key], fn, options);
         return acc;
     }, {});
 };
@@ -728,13 +728,13 @@ $a28de5cf82661a69$exports.modifyNumberVariables = $a28de5cf82661a69$var$modifyNu
 
 var $3248a428367b7c32$exports = {};
 "use strict";
-function $3248a428367b7c32$var$_typeof(obj) {
+function $3248a428367b7c32$var$_typeof(obj1) {
     "@babel/helpers - typeof";
     return $3248a428367b7c32$var$_typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(obj) {
         return typeof obj;
     } : function(obj) {
         return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj;
-    }, $3248a428367b7c32$var$_typeof(obj);
+    }, $3248a428367b7c32$var$_typeof(obj1);
 }
 Object.defineProperty($3248a428367b7c32$exports, "__esModule", {
     value: true
