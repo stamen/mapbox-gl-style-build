@@ -2,7 +2,10 @@
 
 ## Unreleased
 
+## 0.6.0
+
 - Warn on unused variables
+- Update for compatibility with node 18
 
 ## 0.5.3
 
